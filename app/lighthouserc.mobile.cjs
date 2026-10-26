@@ -8,7 +8,7 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run preview',
-      startServerReadyPattern: 'Local',
+      startServerReadyPattern: 'Accepting connections',
       url: ['http://localhost:4173/'],
       numberOfRuns: 3,
       // bez "preset" = mobilny profil

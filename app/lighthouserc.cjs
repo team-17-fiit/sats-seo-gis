@@ -2,17 +2,15 @@
 // Lighthouse CI - DESKTOP profil (prahy kvality)
 // -----------------------------------------------------------------------------
 // Spusti sa cez:  npm run lhci   (v priecinku app/, po npm run build)
-// .cjs namiesto .json, aby sa dali pisat komentare (package.json ma "type":"module").
+// Meria zbuilovany staticky web z out/ servirovany cez `npm run preview` (serve).
 // =============================================================================
 module.exports = {
   ci: {
     collect: {
-      // Server, ktory Lighthouse spusti sam. Servíruje hotovy build z dist/.
       startServerCommand: 'npm run preview',
       // Text vo vystupe servera, podla ktoreho vie, ze uz bezi.
-      startServerReadyPattern: 'Local',
+      startServerReadyPattern: 'Accepting connections',
       url: ['http://localhost:4173/'],
-      // 3 behy a medián - jeden beh je kolisavy.
       numberOfRuns: 3,
       settings: { preset: 'desktop' },
     },
