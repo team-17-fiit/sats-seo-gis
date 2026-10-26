@@ -18,14 +18,16 @@ test('mapa sa načíta po kliknutí', async ({ page }) => {
 test.describe('bez JavaScriptu (pohľad crawlera)', () => {
   test.use({ javaScriptEnabled: false });
 
-  test('zoznam vrcholov obsahuje odkazy a podstránka má schema.org', async ({ page }) => {
+  test('zoznam vrcholov obsahuje odkazy a podstránka má schema.org', async ({ page, request }) => {
     await page.goto('/');
     const first = page.locator('#peak-list a').first();
     await expect(first).toBeVisible();
     const href = await first.getAttribute('href');
-    await page.goto(href);
-    await expect(page.locator('h1')).toBeVisible();
-    await expect(page.locator('link[rel="canonical"]')).toHaveCount(1);
-    await expect(page.locator('script[type="application/ld+json"]', { hasText: '"Mountain"' })).toHaveCount(1);
+
+    // Surové HTML podstránky, tak ako ho dostane crawler (žiadny prehliadač, žiadny JS).
+    const html = await (await request.get(href)).text();
+    expect(html).toMatch(/<h1>[^<]+<\/h1>/);
+    expect(html).toMatch(/<link rel="canonical" href="[^"]+"/);
+    expect(html).toContain('"@type":"Mountain"');
   });
 });
