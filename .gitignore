@@ -5,3 +5,18 @@ test-results
 playwright-report
 .next/
 .env*.local
+# --- doplnene restrukturalizaciou ---
+node_modules/
+app/dist/
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.pbf
+*.pmtiles
+.lighthouseci/
+playwright-report/
+test-results/.lighthouseci-mobile/
+app/.next/
+app/out/
+next-env.d.ts

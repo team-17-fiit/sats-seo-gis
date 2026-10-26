@@ -1,3 +1,13 @@
+# =============================================================================
+# CI - hlavna kontrola kvality (quality gate)
+# -----------------------------------------------------------------------------
+# Kedy bezi:  pri kazdom pushi do main a pri kazdom Pull Requeste do main.
+# Co robi:    nainstaluje zavislosti, zbuilduje aplikaciu, spusti E2E testy
+#             (Playwright) a Lighthouse CI (prahy z app/lighthouserc.cjs).
+# Ak nieco zlyha, PR sa nema mergovat (nastav v GitHub: Settings > Branches).
+# Tazke testy (viac prehliadacov, mobilny Lighthouse) su zamerne mimo:
+# bezia rucne v heavy-gis.yml, aby rychle iteracie neboli pomale.
+# =============================================================================
 name: CI
 
 on:
@@ -6,23 +16,54 @@ on:
   pull_request:
     branches: [ main ]
 
+# Ak pushnes novy commit do toho isteho PR, stary beh sa zrusi (setri minuty).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
-  build:
+  quality-gate:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app   # frontend je v priecinku app/
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Node.js 20 + npm cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+      - name: Install (npm ci = presne podla lockfile)
+        run: npm ci
 
-    - name: Run basic check
-      run: echo "CI pipeline pre SATS-SEO-GIS je pripravena!"
+      - name: Build
+        run: npm run build
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E testy (Playwright, desktop)
+        run: npm run test:e2e -- --project=desktop
+
+      - name: Lighthouse CI (desktop, prahy >= 80)
+        run: npm run lhci
+
+      - name: Upload reportov (aj pri zlyhani)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-reports
+          path: |
+            app/playwright-report
+            app/.lighthouseci
+          if-no-files-found: ignore
+          retention-days: 14

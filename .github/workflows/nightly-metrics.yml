@@ -1,0 +1,50 @@
+# =============================================================================
+# Nightly metrics - nocny zber metrik pre dashboard
+# -----------------------------------------------------------------------------
+# Kedy bezi:  kazdu noc o 02:00 UTC a rucne cez "Run workflow".
+# Co robi:    zbuilduje app a zmeria Lighthouse (desktop aj mobil). Vysledky
+#             uklada ako artefakty (30 dni). Neskor: poslat do metrics dashboardu.
+# TODO:       pridat PageSpeed Insights API (kluc ulozit do GitHub Secrets
+#             ako PSI_API_KEY) a WebPageTest, vysledky zapisovat do dashboardu.
+# =============================================================================
+name: Nightly metrics
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Lighthouse desktop
+        run: npm run lhci
+        continue-on-error: true   # nocny zber ma zbierat data, nie padat
+      - name: Lighthouse mobil
+        run: npm run lhci:mobile
+        continue-on-error: true
+      - name: Upload metrik
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-lighthouse
+          path: |
+            app/.lighthouseci
+            app/.lighthouseci-mobile
+          if-no-files-found: ignore
+          retention-days: 30

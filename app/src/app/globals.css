@@ -1,7 +1,8 @@
-:root{--ink:#14221b;--bg:#eef2ee;--forest:#1f4d3a;--line:#c9d3cb}
-@media (prefers-color-scheme:dark){:root{--ink:#e6eee8;--bg:#101a14;--forest:#6fb792;--line:#2b3a31}}
+:root{--ink:#14221b;--bg:#eef2ee;--forest:#1f4d3a;--line:#c9d3cb;--link:#1565c0}
+@media (prefers-color-scheme:dark){:root{--ink:#e6eee8;--bg:#101a14;--forest:#6fb792;--line:#2b3a31;--link:#8ec5ff}}
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--link)}
 .top{max-width:960px;margin:0 auto;padding:1.5rem 1rem 1rem}
 .top h1{margin:.4rem 0 .2rem;font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15}
 .top p{margin:0;max-width:60ch}
@@ -13,5 +14,11 @@ main{max-width:960px;margin:0 auto;padding:0 1rem 2rem}
 .map-box{position:relative;height:min(65vh,520px);min-height:320px;border:1px solid var(--line);
   background:linear-gradient(135deg,#d7e3da,#bcd0c2);display:grid;place-items:center;overflow:hidden}
 #load-map{font:inherit;font-weight:600;padding:.8rem 1.2rem;border:0;background:var(--forest);color:#fff;cursor:pointer}
+#load-map:disabled{cursor:progress}
 #load-map:focus-visible{outline:3px solid #ffb300;outline-offset:2px}
 .peaks h2{margin-top:2rem}
+.peak-detail dl{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1rem;margin:1rem 0}
+.peak-detail dt{font-weight:600}
+.peak-detail dd{margin:0}
+/* Tmavý režim: svetlozelené tlačidlo s bielym textom má kontrast ~2,4:1 (WCAG chce 4,5:1). */
+@media (prefers-color-scheme:dark){#load-map{color:#0b1a12}}

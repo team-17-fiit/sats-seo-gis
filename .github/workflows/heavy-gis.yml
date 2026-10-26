@@ -1,0 +1,74 @@
+# =============================================================================
+# Heavy GIS suite - tazke testy, spustane LEN RUCNE
+# -----------------------------------------------------------------------------
+# Kedy bezi:  iba rucne (GitHub > Actions > Heavy GIS suite > Run workflow).
+# Co robi:    1) E2E na viacerych prehliadacoch (Chrome, Firefox, Safari/WebKit
+#                a mobilny profil Pixel 7)
+#             2) Lighthouse CI v mobilnom profile
+# Preco zvlast: tieto testy su pomale; pri rychlych iteraciach ich preskocis
+#               (poziadavka zadania: manualne workflow_dispatch triggery).
+# TODO: sem pridat kontrolu renderovania dlazdic a WebPageTest/PSI.
+# =============================================================================
+name: Heavy GIS suite
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [ desktop, firefox, webkit, mobile ]
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e -- --project=${{ matrix.project }}
+      - name: Upload reportu
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ matrix.project }}
+          path: app/playwright-report
+          if-no-files-found: ignore
+          retention-days: 14
+
+  lighthouse-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lhci:mobile
+      - name: Upload reportu
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-mobile
+          path: app/.lighthouseci-mobile
+          if-no-files-found: ignore
+          retention-days: 14
