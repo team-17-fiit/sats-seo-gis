@@ -2,11 +2,11 @@
   "name": "sats-seo-gis",
   "private": true,
   "scripts": {
-    "install:app": "npm --prefix app install",
     "dev": "npm --prefix app run dev",
     "build": "npm --prefix app run build",
     "preview": "npm --prefix app run preview",
     "test:e2e": "npm --prefix app run test:e2e",
-    "lhci": "npm --prefix app run lhci"
+    "lhci": "npm --prefix app run lhci",
+    "lhci:mobile": "npm --prefix app run lhci:mobile"
   }
 }

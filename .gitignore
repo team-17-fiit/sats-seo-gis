@@ -16,4 +16,4 @@ data/processed/*
 *.pmtiles
 .lighthouseci/
 playwright-report/
-test-results/
+test-results/.lighthouseci-mobile/
