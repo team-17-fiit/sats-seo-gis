@@ -65,4 +65,4 @@ cd app && npm run lint && npm run test:unit   # web
 
 Viac: [architektúra](docs/architecture/ARCHITECTURE.md) · [ako prispievať](CONTRIBUTING.md) · [Definition of Done](docs/methodology/definition-of-done.md)
 
-Plné prostredie s databázou (Docker + PostGIS, import skutočných dát) je opísané v [architektúre, sekcia 7](docs/architecture/ARCHITECTURE.md#7-nasadenie).
+Plné prostredie s databázou (Docker + PostGIS, import skutočných dát) je opísané v [architektúre](docs/architecture/ARCHITECTURE.md).
