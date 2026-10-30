@@ -68,7 +68,7 @@ backend-lint: ## ruff
 	cd $(BACKEND) && ruff check . && ruff format --check .
 
 backend-test: ## pytest (DB testy sa bez PostGIS preskočia)
-	cd $(BACKEND) && $(PY) -m pytest -q
+	cd $(BACKEND) && pytest -q
 
 app-lint: ## ESLint + TypeScript
 	npm --prefix app run lint && npm --prefix app run typecheck
