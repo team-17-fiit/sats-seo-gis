@@ -1,99 +1,112 @@
 # SATS-SEO-GIS
 
-Interaktívna mapa aktívneho turizmu na Slovensku (React + Next.js + MapLibre GL JS) s dôrazom na SEO a Core Web Vitals.
-Projekt vzniká v rámci Team Project (FIIT STU) a nadväzuje na H2020 projekt rurAllure.
-Architektúra: [`docs/architecture/ARCHITECTURE.md`](docs/architecture/ARCHITECTURE.md),
-rozhodnutie o frontende: [`docs/adr/0001-frontend-framework.md`](docs/adr/0001-frontend-framework.md).
+Interaktívna mapa aktívneho turizmu na Slovensku – tematické trasy, vrcholy a miesta – s dôrazom na SEO
+a Core Web Vitals. Team Project (FIIT STU) nadväzujúci na H2020 projekt rurAllure.
 
-**Aktuálny stav:** statický web generovaný pri builde. Úvodná stránka a stránka každého vrcholu
-(`/vrcholy/<slug>/`) sú hotové HTML so schema.org dátami, sitemapou a robots.txt. Interaktívna mapa sa
-stiahne až po kliknutí na tlačidlo, aby ťažký MapLibre nezhoršoval LCP a TBT.
+| | |
+|---|---|
+| Frontend | React + Next.js 15 (statický export), MapLibre GL za `MapAdapter`, PWA manifest |
+| API | Python 3.12 + FastAPI, REST `/api/v1`, OpenAPI na `/docs` |
+| Dáta | PostgreSQL 16 + PostGIS, ETL v Pythone (osm2pgsql flex, Natural Earth, GeoNames, rurAllure) |
+| Kvalita | ESLint, Vitest, ruff, pytest, Playwright, Lighthouse CI, dátové kontrakty – všetko v CI |
 
-## Spustenie
+Architektúra: [`docs/architecture/ARCHITECTURE.md`](docs/architecture/ARCHITECTURE.md) ·
+ADR: [`docs/adr/`](docs/adr/README.md) · Ako prispievať: [`CONTRIBUTING.md`](CONTRIBUTING.md) ·
+Metodiky a DoD: [`docs/methodology/`](docs/methodology/README.md) ·
+Licencie dát: [`docs/planning/data-licence-register.md`](docs/planning/data-licence-register.md)
+
+## Rýchly štart (bez Dockeru, ~2 minúty)
+
+Kostra beží aj bez databázy – API aj web čítajú kurátorské dáta zo súborov.
 
 ```bash
+# 1) API – http://localhost:8000/docs
+cd backend
+pip install -r requirements-dev.txt
+REPOSITORY=file uvicorn app.main:app --reload --port 8000
+
+# 2) web – http://localhost:3000  (v druhom termináli)
 cd app
-npm install
-npm run dev                        # vývojový server na http://localhost:3000
-npm run build && npm run preview   # statický build (out/) na http://localhost:4173
-npx playwright install chromium    # jednorazovo
-npm run test:e2e                   # E2E testy
-npm run lhci                       # Lighthouse CI, desktop (prah 80 %)
-npm run lhci:mobile                # Lighthouse CI, mobil
+npm ci
+NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 ```
 
-Príkazy `dev`, `build`, `preview`, `test:e2e`, `lhci` fungujú aj z koreňa repozitára.
-Adresu nasadenej stránky nastav premennou `NEXT_PUBLIC_SITE_URL` (inak je `https://example.com`),
-používa sa v canonical, Open Graph a sitemap.
+Stránky: `/` (mapa + trasy + vrcholy), `/trasy/`, `/trasy/<slug>/`, `/vrcholy/<slug>/`.
+API: `/api/v1/health`, `/api/v1/paths`, `/api/v1/paths/{slug}`, `/api/v1/pois?near=48.17,16.98&r=2000`, `/api/v1/pois/{slug}`.
+
+## Plné prostredie s PostGIS
+
+Predpoklady: Docker, Python 3.12, Node 20+, `osm2pgsql` (apt/brew).
+
+```bash
+cp .env.example .env
+make db               # PostGIS v Dockeri na localhost:5432 (migrácie sa aplikujú pri prvom štarte)
+make data-fixtures    # ETL nad malými vzorkami (sekundy) + dátové kontrakty
+#   alebo skutočné dáta:
+make fetch            # stiahne OSM SR (~350 MB), Natural Earth, GeoNames do data/raw/
+make data             # migrate → load_* → seed_paths → promote → validate → export_static
+REPOSITORY=postgis make api
+make dev
+```
+
+`make help` vypíše všetky ciele.
+
+## Testy a kvalita
+
+```bash
+make lint             # ruff + ESLint + tsc
+make test             # pytest + Vitest (bez DB)
+TEST_DATABASE_URL=postgresql://satsgis:satsgis@localhost:5432/satsgis \
+  (cd backend && pytest -m db)          # integrácia s PostGIS
+cd app && npm run build && npm run test:e2e   # Playwright (najprv: npx playwright install chromium)
+cd app && npm run lhci                         # Lighthouse CI (prah 80 %)
+```
+
+| Workflow | Kedy | Čo |
+|---|---|---|
+| `ci.yml` | push/PR do `main` | `app-lint-unit`, `backend-lint-unit`, `data-contract` (PostGIS), `quality-gate` (build, E2E, LHCI) |
+| `heavy-gis.yml` | ručne | E2E v 4 prehliadačoch + mobilný Lighthouse |
+| `nightly-metrics.yml` | každú noc | Lighthouse meranie pre dashboard |
 
 ## Štruktúra repozitára
 
 ```
 .
-├── app/                              # frontend (React + Next.js, statický export)
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── layout.tsx            # <html lang="sk">, spoločné meta, JSON-LD WebSite
-│   │   │   ├── page.tsx              # úvodná stránka: mapa + zoznam vrcholov s odkazmi
-│   │   │   ├── vrcholy/[slug]/page.tsx  # podstránka vrcholu (SSG) + JSON-LD Mountain
-│   │   │   ├── sitemap.ts            # generuje sitemap.xml
-│   │   │   ├── robots.ts             # generuje robots.txt
-│   │   │   └── globals.css           # štýly, svetlý/tmavý režim, pevná výška mapy (bez CLS)
-│   │   ├── components/
-│   │   │   ├── MapLoader.tsx         # klientsky komponent: tlačidlo + lazy načítanie mapy
-│   │   │   ├── Stripes.tsx           # dekoratívne pásiky v hlavičke
-│   │   │   └── JsonLd.tsx            # vloženie schema.org dát
-│   │   └── lib/
-│   │       ├── peaks.ts              # načítanie vrcholov z peaks.geojson pri builde, slug
-│   │       ├── peakMap.ts            # MapLibre mapa (importuje sa až po kliknutí)
-│   │       └── site.ts               # SITE_URL a názov webu
-│   ├── public/data/peaks.geojson     # dáta vrcholov (názov, výška, bod)
-│   ├── tests/map.spec.js             # Playwright E2E testy
-│   ├── next.config.mjs               # output: 'export', trailingSlash
-│   ├── tsconfig.json                 # TypeScript konfigurácia
-│   ├── package.json                  # závislosti a npm skripty
-│   ├── playwright.config.js          # konfigurácia E2E
-│   ├── lighthouserc.cjs              # Lighthouse CI desktop + prahy
-│   └── lighthouserc.mobile.cjs       # Lighthouse CI mobil
-├── backend/                          # Partner API (fáza 2)
-├── data/                             # dátová pipeline (NIE statické súbory aplikácie)
-│   ├── raw/  processed/  pipeline/
-├── docs/                             # architecture/, adr/, minutes/, planning/
-├── .github/workflows/                # ci.yml, heavy-gis.yml, nightly-metrics.yml
-├── package.json                      # tenký wrapper: deleguje príkazy do app/
-└── README.md
+├── app/                         # Next.js – web + PWA (localhost:3000)
+│   ├── src/app/                 # routy: /, /trasy/, /trasy/[slug]/, /vrcholy/[slug]/, sitemap, robots, manifest
+│   ├── src/components/          # MapLoader (mapa na klik), NearbyPois (z API), JsonLd, Stripes
+│   ├── src/lib/map/             # MapAdapter + MapLibre / StaticImage / Fake implementácie
+│   ├── src/lib/                 # paths.ts, peaks.ts, api.ts, site.ts (+ *.test.ts)
+│   ├── public/data/             # paths.json (export z DB), peaks.geojson
+│   └── tests/                   # Playwright E2E
+├── backend/
+│   ├── app/                     # FastAPI: api/v1, repositories (PostGIS | File), models
+│   ├── pipelines/               # ETL: fetch, load_osm, load_natural_earth, load_geonames,
+│   │                            #      load_rurallure, seed_paths, promote, validate, export_static
+│   └── tests/                   # pytest (unit + @db integrácia)
+├── data/
+│   ├── db/migrations/           # SQL schéma (canonical, staging, quarantine, marts)
+│   ├── db/checks.sql            # dátové kontrakty
+│   ├── osm/flex.lua             # osm2pgsql flex štýl
+│   ├── seed/paths.json          # 7 tematických trás + zastávky
+│   ├── fixtures/                # syntetické vzorky každého zdroja
+│   ├── raw/ processed/          # mimo git
+│   └── SOURCES.md
+├── docs/                        # adr/, architecture/, methodology/, minutes/, planning/
+├── docker-compose.yml  Makefile  .env.example
+└── .github/                     # workflows, šablóny PR a issues
 ```
 
-> Pozor na dva rôzne `data`: `app/public/data/` sú súbory, ktoré aplikácia číta (pri builde aj v prehliadači),
-> kým `/data/` v koreni je pipeline na spracovanie dát. Výsledok pipeline sa exportuje do `app/public/data/`.
+> Dva rôzne `data`: `app/public/data/` číta web (build aj prehliadač); `/data/` v koreni je dátová pipeline.
+> Pipeline zapisuje výsledok do `app/public/data/` cez `make export`.
 
-## Ako to funguje
+## Stav (šprint 1-1Z)
 
-1. `next build` prečíta `public/data/peaks.geojson` (`lib/peaks.ts`) a vygeneruje HTML pre úvodnú stránku
-   a pre každý vrchol, plus `sitemap.xml` a `robots.txt`. Výstup je v `app/out/`.
-2. Prehliadač dostane hotové HTML (rýchly LCP, obsah vidí aj crawler bez JavaScriptu).
-3. Kliknutím na tlačidlo sa dynamicky stiahne `lib/peakMap.ts` s MapLibre a vykreslí sa mapa.
-4. Nový vrchol pridáš do `peaks.geojson`, po builde má vlastnú stránku aj záznam v sitemape.
+Hotové: schéma a ETL nad fixtures, API kostra, stránky trás, MapAdapter, PWA manifest, CI s lint/unit/kontraktmi.
+Ďalej (2-2Z): beh nad plným OSM PBF, Wikidata obohatenie, stránky POI, hreflang, presná geometria trás z OSM.
+Detail: [`docs/minutes/2026-10-30-sprint-1-review.md`](docs/minutes/2026-10-30-sprint-1-review.md).
 
-## Čo robia súbory (konfigurácia a CI)
+## Licencie
 
-| Súbor | Účel |
-|---|---|
-| `app/next.config.mjs` | Zapína statický export (`out/`) a URL s lomkou na konci. |
-| `app/playwright.config.js` | Kde sú testy, ako sa spustí aplikácia a na akých zariadeniach sa testuje. |
-| `app/lighthouserc.cjs` | Prahy kvality (desktop): Performance a SEO ≥ 80 % a CLS ≤ 0,1 sú chyby, LCP, TBT a Accessibility varovania. |
-| `app/lighthouserc.mobile.cjs` | To isté pre mobil, zatiaľ len varovania. |
-| `app/tests/map.spec.js` | Test titulku a description, test načítania mapy po kliknutí, test obsahu bez JavaScriptu (zoznam, odkazy, schema.org). |
-| `.github/workflows/ci.yml` | Pri push/PR do `main`: build, E2E (desktop), Lighthouse CI. |
-| `.github/workflows/heavy-gis.yml` | Len ručne: E2E v 4 prehliadačoch + mobilný Lighthouse. |
-| `.github/workflows/nightly-metrics.yml` | Každú noc: Lighthouse meranie, výsledky ako artefakty. |
-| `package.json` (koreň) | Skratky na príkazy v `app/`. |
-
-## Ďalšie kroky
-
-1. Nahradiť `example.com` skutočnou doménou (`NEXT_PUBLIC_SITE_URL`).
-2. Nahradiť približné súradnice vrcholov dátami z OSM (`natural=peak`) cez `data/pipeline/`.
-3. Web manifest + service worker (PWA, offline).
-4. Podstránky pre trasy a ďalšie kategórie POI.
-5. PostGIS + PMTiles namiesto externého štýlu OpenFreeMap.
-6. PSI API + metrics dashboard.
+Kód: MIT podľa tab. R.1 dokumentácie (súbor `LICENSE` treba doplniť). Dáta: © OpenStreetMap contributors (ODbL), GeoNames (CC BY 4.0), Natural Earth (public domain),
+rurAllure (CC BY 4.0), kurátorské dáta tímu (CC BY 4.0) – pozri licenčný register.

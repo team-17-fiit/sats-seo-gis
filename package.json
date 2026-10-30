@@ -7,6 +7,9 @@
     "preview": "npm --prefix app run preview",
     "test:e2e": "npm --prefix app run test:e2e",
     "lhci": "npm --prefix app run lhci",
-    "lhci:mobile": "npm --prefix app run lhci:mobile"
+    "lhci:mobile": "npm --prefix app run lhci:mobile",
+    "lint": "npm --prefix app run lint",
+    "test:unit": "npm --prefix app run test:unit",
+    "typecheck": "npm --prefix app run typecheck"
   }
 }
