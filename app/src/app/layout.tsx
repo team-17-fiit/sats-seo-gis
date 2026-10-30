@@ -5,7 +5,7 @@ import JsonLd from '@/components/JsonLd';
 import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 const DESCRIPTION =
-  'Interaktívna mapa najvyšších vrcholov Slovenska pre turistov a horolezcov. Rýchla, prehľadná a otvorená.';
+  'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -15,6 +15,8 @@ export const metadata: Metadata = {
   },
   description: DESCRIPTION,
   alternates: { canonical: '/' },
+  icons: { apple: '/icons/icon-192.png' },
+  appleWebApp: { capable: true, title: 'SATS-GIS', statusBarStyle: 'default' },
   openGraph: {
     title: 'Aktívny turizmus na Slovensku',
     description: 'Interaktívna mapa vrcholov a trás.',

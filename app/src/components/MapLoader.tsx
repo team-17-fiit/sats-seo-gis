@@ -1,46 +1,72 @@
 'use client';
 // Kontajner mapy s pevnou výškou (bez layout shiftu) a tlačidlom, ktoré mapu načíta až na požiadanie.
+// Mapu kreslí výhradne cez MapAdapter (ADR-0003) – komponent nevie, či je to MapLibre alebo statický náhľad.
 // Kontrakt pre E2E testy: tlačidlo "Zobraziť interaktívnu mapu", #map canvas, #map[data-ready="true"].
 import { useEffect, useRef, useState } from 'react';
+import type { LayerSpec, LngLat, MapAdapter } from '@/lib/map';
 
-type Status = 'idle' | 'loading' | 'map' | 'ready' | 'error';
+type Status = 'idle' | 'loading' | 'ready' | 'error';
 
-export default function MapLoader() {
+type Props = {
+  layers: LayerSpec[];
+  center?: LngLat;
+  zoom?: number;
+  label?: string;
+};
+
+export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, label = 'Mapa' }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<{ remove(): void } | null>(null);
+  const mapRef = useRef<MapAdapter | null>(null);
   const [hydrated, setHydrated] = useState(false);
   const [status, setStatus] = useState<Status>('idle');
+  const [kind, setKind] = useState<string>();
 
   useEffect(() => {
     setHydrated(true); // tlačidlo je do hydratácie vypnuté, aby klik nepadol "do prázdna"
-    return () => { mapRef.current?.remove(); mapRef.current = null; };
+    return () => {
+      mapRef.current?.destroy();
+      mapRef.current = null;
+    };
   }, []);
 
   async function load() {
     if (!boxRef.current) return;
     setStatus('loading');
     try {
-      const { createPeakMap } = await import('@/lib/peakMap');
-      mapRef.current = createPeakMap(boxRef.current, () => setStatus('ready'));
-      setStatus('map');
+      const { createMap } = await import('@/lib/map/createMap');
+      const map = await createMap();
+      mapRef.current = map;
+      setKind(map.kind);
+      await map.mount(boxRef.current, { center, zoom });
+      layers.forEach((l) => map.addLayer(l));
+      setStatus('ready');
     } catch (err) {
-      // napr. chýba WebGL alebo výpadok siete: vráť tlačidlo, nech sa dá skúsiť znova
-      console.error('Mapu sa nepodarilo načítať:', err);
+      // napr. výpadok siete pri sťahovaní štýlu: vráť tlačidlo, nech sa dá skúsiť znova
+      console.warn('Mapu sa nepodarilo načítať:', err);
+      mapRef.current?.destroy();
+      mapRef.current = null;
       setStatus('error');
     }
   }
 
-  const showButton = status === 'idle' || status === 'loading' || status === 'error';
-  const label =
+  const showButton = status !== 'ready';
+  const text =
     status === 'loading' ? 'Načítavam mapu…'
     : status === 'error' ? 'Mapu sa nepodarilo načítať – skúsiť znova'
     : 'Zobraziť interaktívnu mapu';
 
   return (
-    <div id="map" ref={boxRef} className="map-box" data-ready={status === 'ready' ? 'true' : undefined}>
+    <div
+      id="map"
+      ref={boxRef}
+      className="map-box"
+      aria-label={label}
+      data-ready={status === 'ready' ? 'true' : undefined}
+      data-adapter={kind}
+    >
       {showButton && (
         <button id="load-map" type="button" onClick={load} disabled={!hydrated || status === 'loading'}>
-          {label}
+          {text}
         </button>
       )}
     </div>
