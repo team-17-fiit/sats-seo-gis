@@ -55,6 +55,14 @@ cd app && npm run lint && npm run test:unit   # web
 
 ## Kde čo je
 
+Na každodennú prácu ti stačia **tri miesta**:
+
+- `app/src/app/` – stránky webu
+- `backend/app/` – API
+- `data/seed/paths.json` – trasy a ich zastávky
+
+Celý repozitár:
+
 | Priečinok | Obsah |
 |---|---|
 | `app/` | web – stránky `/trasy/`, `/vrcholy/`, mapa |
