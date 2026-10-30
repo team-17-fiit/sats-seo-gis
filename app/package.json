@@ -1,12 +1,15 @@
 {
   "name": "sats-seo-gis",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "preview": "serve out -l 4173 --no-clipboard",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "lhci": "lhci autorun",
     "lhci:mobile": "lhci autorun --config=./lighthouserc.mobile.cjs"
@@ -18,12 +21,19 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@lhci/cli": "^0.14.0",
+    "@next/eslint-plugin-next": "^15.5.28",
     "@playwright/test": "^1.48.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^15.15.0",
     "serve": "^14.2.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.72.1",
+    "vitest": "^3.2.7"
   }
 }
