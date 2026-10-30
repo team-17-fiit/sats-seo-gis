@@ -13,6 +13,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 markers = [
     "db: test potrebuje bežiacu PostGIS (DATABASE_URL); bez nej sa preskočí",
 ]
