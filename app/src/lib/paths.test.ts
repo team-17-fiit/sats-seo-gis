@@ -14,7 +14,7 @@ const sample: TrailPath = {
 
 describe('paths data', () => {
   it('exported paths.json contains the seven thematic paths with stops', () => {
-    // vyžaduje app/public/data/paths.json (make export / make export-seed)
+    // vyžaduje app/public/data/paths.json (python -m pipelines.export_static --from-seed)
     const paths = getPaths();
     expect(paths).toHaveLength(7);
     expect(paths.every((p) => p.stops.length > 0)).toBe(true);

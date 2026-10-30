@@ -1,6 +1,6 @@
 # Dátové zdroje – odkazy na stiahnutie
 
-Surové súbory sa sťahujú do `data/raw/` (mimo git) príkazom `make fetch`.
+Surové súbory sa sťahujú do `data/raw/` (mimo git) príkazom `python -m pipelines.fetch` (z priečinka `backend/`).
 `pipelines.fetch` po stiahnutí zapíše SHA256 do `data/raw/CHECKSUMS.txt`; overené súčty sem prepíšte pri dataset freeze.
 Licencie: [docs/planning/data-licence-register.md](../docs/planning/data-licence-register.md).
 
