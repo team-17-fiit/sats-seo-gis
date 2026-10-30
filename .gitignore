@@ -23,3 +23,11 @@ next-env.d.ts
 app/out/
 app/.next/
 next-env.d.ts
+
+# lokalna konfiguracia
+.env
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.venv/

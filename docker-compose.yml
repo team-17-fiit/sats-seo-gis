@@ -1,0 +1,41 @@
+# =============================================================================
+# Lokálne prostredie: PostGIS + API
+#   docker compose up -d db          # len databáza (localhost:5432)
+#   docker compose up -d             # databáza + API (localhost:8000)
+# Migrácie sa pri prvom štarte DB aplikujú automaticky (initdb.d);
+# neskôr ich aplikuje `make migrate` (idempotentné).
+# =============================================================================
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: satsgis-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-satsgis}
+      POSTGRES_USER: ${POSTGRES_USER:-satsgis}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-satsgis}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./data/db/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: ./backend
+    container_name: satsgis-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      REPOSITORY: postgis
+      DATABASE_URL: postgresql://${POSTGRES_USER:-satsgis}:${POSTGRES_PASSWORD:-satsgis}@db:5432/${POSTGRES_DB:-satsgis}
+      CORS_ORIGINS: http://localhost:3000,http://localhost:4173
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
