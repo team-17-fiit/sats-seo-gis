@@ -60,7 +60,7 @@ def main() -> None:
     args = parser.parse_args()
     path = FIXTURES_DIR / "geonames" / "SK.txt" if args.fixture else RAW_DIR / "SK.zip"
     if not path.exists():
-        sys.exit(f"Chýba {path}. Spusť `make fetch` alebo použi --fixture.")
+        sys.exit(f"Chýba {path}. Spusť `python -m pipelines.fetch` alebo použi --fixture.")
 
     rows = list(parse(read_lines(path)))
     with connect() as conn, conn.cursor() as cur:

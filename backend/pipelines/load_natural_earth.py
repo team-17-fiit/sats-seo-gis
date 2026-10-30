@@ -56,7 +56,7 @@ def main() -> None:
         ]
         missing = [str(p) for p, _ in inputs if not p.exists()]
         if missing:
-            sys.exit(f"Chýba: {missing}. Spusť `make fetch` alebo použi --fixture.")
+            sys.exit(f"Chýba: {missing}. Spusť `python -m pipelines.fetch` alebo použi --fixture.")
 
     with connect() as conn, conn.cursor() as cur:
         total = sum(load(cur, path, level) for path, level in inputs)

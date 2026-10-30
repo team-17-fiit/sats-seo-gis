@@ -45,7 +45,7 @@ def main() -> None:
     else:
         src = RAW_DIR / "slovakia-latest.osm.pbf"
         if not src.exists():
-            sys.exit(f"Chýba {src}. Spusť `make fetch` alebo použi --fixture.")
+            sys.exit(f"Chýba {src}. Spusť `python -m pipelines.fetch` alebo použi --fixture.")
 
     run_osm2pgsql(src)
     with connect() as conn, conn.cursor() as cur:

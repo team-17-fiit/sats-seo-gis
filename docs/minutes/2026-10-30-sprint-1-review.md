@@ -64,5 +64,5 @@
 | Založiť GitHub Projects board podľa `docs/methodology/tasks.md` | G | 2026-11-02 |
 | Zapnúť ochranu `main` (required checks) | D | 2026-11-02 |
 | Doplniť DOI DS1/DS6 a overiť ich licenciu | C | 2026-11-05 |
-| Spustiť `make fetch && make data` nad plným PBF, zapísať K10 | C | 2026-11-06 |
+| Stiahnuť a naimportovať plné OSM dáta (`python -m pipelines.fetch`, `load_osm`, `promote`), zapísať K10 | C | 2026-11-06 |
 | Zapísať K1–K4 baseline z CI | D | 2026-11-03 |

@@ -1,5 +1,5 @@
-// Tematické trasy pre SSG. Zdroj: public/data/paths.json, ktorý vyrába `make export`
-// (pipelines.export_static z PostGIS, alebo --from-seed bez DB). Číta sa len pri builde.
+// Tematické trasy pre SSG. Zdroj: public/data/paths.json, ktorý vyrába `python -m pipelines.export_static`
+// (z PostGIS, alebo s --from-seed bez databázy). Číta sa len pri builde.
 import fs from 'node:fs';
 import path from 'node:path';
 import type { FeatureCollection, LineFeature, PointFeature } from './map/types';
