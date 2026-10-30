@@ -1,0 +1,4 @@
+3060972	Bratislava	Bratislava	Bratislava,Pozsony,Pressburg	48.14816	17.10674	P	PPLC	SK		02				423737	140	142	Europe/Bratislava	2023-01-01
+724443	Košice	Kosice	Kassa,Kaschau	48.71395	21.25808	P	PPLA	SK		03				229040	208	209	Europe/Bratislava	2023-01-01
+3058268	Rysy	Rysy	Rysy	49.17944	20.08833	T	PK	SK		07					2503	2486	Europe/Bratislava	2023-01-01
+3060405	Banská Štiavnica	Banska Stiavnica	Schemnitz	48.44858	18.91003	P	PPLA2	SK		05				10000	600	593	Europe/Bratislava	2023-01-01

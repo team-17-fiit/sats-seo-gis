@@ -7,8 +7,8 @@ Licencie: [docs/planning/data-licence-register.md](../docs/planning/data-licence
 | Kľúč | Súbor v `data/raw/` | URL | Veľkosť (cca) |
 |---|---|---|---|
 | `osm` | `slovakia-latest.osm.pbf` | https://download.geofabrik.de/europe/slovakia-latest.osm.pbf | ~350 MB |
-| `ne_admin0` | `ne_10m_admin_0_countries.zip` | https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip | 5 MB |
-| `ne_admin1` | `ne_10m_admin_1_states_provinces.zip` | https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_1_states_provinces.zip | 15 MB |
+| `ne_admin0` | `ne_10m_admin_0_countries.geojson` | https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_0_countries.geojson | 24 MB |
+| `ne_admin1` | `ne_10m_admin_1_states_provinces.geojson` | https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_admin_1_states_provinces.geojson | 40 MB |
 | `geonames` | `SK.zip` | https://download.geonames.org/export/dump/SK.zip | 1 MB |
 | `rurallure_ds1` | `rurallure_ds1.csv` | Zenodo – doplniť DOI záznamu DS1 | – |
 | `rurallure_ds6` | `rurallure_ds6/*.gpx`, `*.geojson` | Zenodo – doplniť DOI záznamu DS6 | – |
