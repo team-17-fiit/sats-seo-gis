@@ -1,0 +1,107 @@
+{
+  "_meta": {
+    "description": "7 tematických trás prototypu a ich zastávky (dokumentácia kap. 4.6). Zdroj: team_curated, licencia CC-BY-4.0.",
+    "coordinates": "Približné súradnice (WGS84, presnosť ~100–500 m) na kostru a testy. Nahradí ich párovanie s OSM (pipelines.promote, šprint 2-2Z).",
+    "source": "team_curated",
+    "licence": "CC-BY-4.0",
+    "updated": "2026-10-30"
+  },
+  "pois": [
+    {"slug": "bratislava-start", "name_sk": "Bratislava – štart trás", "name_en": "Bratislava – trailhead", "category": "trailhead", "lon": 17.1077, "lat": 48.1439},
+    {"slug": "devin", "name_sk": "Devín a sútok Dunaja s Moravou", "name_en": "Devín castle and Danube confluence", "category": "castle", "lon": 16.9783, "lat": 48.1737},
+    {"slug": "piestany-kupele", "name_sk": "Piešťany – Kúpeľný ostrov", "name_en": "Piešťany spa island", "category": "spa", "lon": 17.8370, "lat": 48.5900},
+    {"slug": "bojnicky-zamok", "name_sk": "Bojnický zámok a ZOO", "name_en": "Bojnice castle and zoo", "category": "castle", "lon": 18.5775, "lat": 48.7803},
+    {"slug": "mala-fatra-vratna", "name_sk": "Malá Fatra – Vrátna dolina", "name_en": "Malá Fatra – Vrátna valley", "category": "nature", "lon": 19.0530, "lat": 49.2040},
+    {"slug": "vlkolinec", "name_sk": "Vlkolínec", "name_en": "Vlkolínec village", "category": "village", "unesco": true, "lon": 19.2783, "lat": 49.0394},
+    {"slug": "strbske-pleso", "name_sk": "Vysoké Tatry – Štrbské Pleso", "name_en": "High Tatras – Štrbské Pleso", "category": "lake", "lon": 20.0603, "lat": 49.1197},
+    {"slug": "slovensky-raj", "name_sk": "Slovenský raj – tiesňavy", "name_en": "Slovak Paradise gorges", "category": "gorge", "lon": 20.3200, "lat": 48.9580},
+    {"slug": "levoca-spissky-hrad", "name_sk": "Levoča a Spišský hrad", "name_en": "Levoča and Spiš castle", "category": "castle", "unesco": true, "lon": 20.7681, "lat": 48.9997},
+    {"slug": "bardejov", "name_sk": "Bardejov", "name_en": "Bardejov town", "category": "town", "unesco": true, "lon": 21.2760, "lat": 49.2930},
+    {"slug": "slovensky-kras-jaskyne", "name_sk": "Jaskyne Slovenského krasu – Domica", "name_en": "Slovak Karst caves – Domica", "category": "cave", "unesco": true, "lon": 20.4710, "lat": 48.4780},
+    {"slug": "poloniny-park-tmavej-oblohy", "name_sk": "Poloniny – park tmavej oblohy", "name_en": "Poloniny dark-sky park", "category": "nature", "lon": 22.2730, "lat": 48.9350},
+    {"slug": "svaty-jur", "name_sk": "Svätý Jur – vinárske mestečko", "name_en": "Svätý Jur wine town", "category": "town", "lon": 17.2150, "lat": 48.2520},
+    {"slug": "pezinok", "name_sk": "Pezinok – pivničné uličky", "name_en": "Pezinok cellar lanes", "category": "winery", "lon": 17.2690, "lat": 48.2880},
+    {"slug": "modra", "name_sk": "Modra", "name_en": "Modra", "category": "town", "lon": 17.3080, "lat": 48.3340},
+    {"slug": "cerveny-kamen", "name_sk": "Hrad Červený Kameň", "name_en": "Červený Kameň castle", "category": "castle", "lon": 17.3340, "lat": 48.3920},
+    {"slug": "smolenicky-zamok", "name_sk": "Smolenický zámok", "name_en": "Smolenice castle", "category": "castle", "lon": 17.4290, "lat": 48.5110},
+    {"slug": "trnava", "name_sk": "Trnava – kráľovské mesto", "name_en": "Trnava royal town", "category": "town", "lon": 17.5870, "lat": 48.3770},
+    {"slug": "hlohovec-zamok", "name_sk": "Hlohovecký zámok", "name_en": "Hlohovec castle", "category": "castle", "lon": 17.8030, "lat": 48.4300},
+    {"slug": "nitriansky-hrad", "name_sk": "Nitriansky hrad a katedrála", "name_en": "Nitra castle and cathedral", "category": "castle", "lon": 18.0730, "lat": 48.3180},
+    {"slug": "banska-stiavnica", "name_sk": "Banská Štiavnica", "name_en": "Banská Štiavnica", "category": "town", "unesco": true, "lon": 18.9100, "lat": 48.4590},
+    {"slug": "beckov", "name_sk": "Hrad Beckov", "name_en": "Beckov castle", "category": "castle", "lon": 17.8970, "lat": 48.7900},
+    {"slug": "trenciansky-hrad", "name_sk": "Trenčiansky hrad", "name_en": "Trenčín castle", "category": "castle", "lon": 18.0440, "lat": 48.8940},
+    {"slug": "marianka", "name_sk": "Marianka – pútnické miesto", "name_en": "Marianka pilgrimage site", "category": "church", "lon": 17.0630, "lat": 48.2490},
+    {"slug": "kopcany-sv-margita", "name_sk": "Kopčany – kostol sv. Margity", "name_en": "Kopčany – St. Margaret church", "category": "church", "lon": 17.1360, "lat": 48.7880},
+    {"slug": "skalka-klastor", "name_sk": "Skalka – pustovňa a kláštor", "name_en": "Skalka hermitage and monastery", "category": "monastery", "lon": 18.0128, "lat": 48.8742},
+    {"slug": "sturovo", "name_sk": "Štúrovo – výhľad na baziliku", "name_en": "Štúrovo – basilica view", "category": "viewpoint", "lon": 18.7180, "lat": 47.7980},
+    {"slug": "zehra-kostol", "name_sk": "Žehra – kostol Svätého Ducha", "name_en": "Žehra – Holy Spirit church", "category": "church", "unesco": true, "lon": 20.7930, "lat": 48.9780},
+    {"slug": "drazovce-sv-michal", "name_sk": "Dražovce – kostol sv. Michala", "name_en": "Dražovce – St. Michael church", "category": "church", "lon": 18.0490, "lat": 48.3540},
+    {"slug": "zvolensky-zamok", "name_sk": "Zvolenský zámok", "name_en": "Zvolen castle", "category": "castle", "lon": 19.1260, "lat": 48.5750},
+    {"slug": "oravsky-hrad", "name_sk": "Oravský hrad", "name_en": "Orava castle", "category": "castle", "lon": 19.3590, "lat": 49.2620},
+    {"slug": "vihorlat-medvedi-chodnik", "name_sk": "Vihorlat – medvedí chodník", "name_en": "Vihorlat bear trail", "category": "nature", "lon": 22.0900, "lat": 48.8800},
+    {"slug": "gabcikovo-vodne-dielo", "name_sk": "Vodné dielo Gabčíkovo", "name_en": "Gabčíkovo dam", "category": "dam", "lon": 17.5400, "lat": 47.8800},
+    {"slug": "komarno-pristav", "name_sk": "Komárno – riečny prístav", "name_en": "Komárno river port", "category": "port", "lon": 18.1300, "lat": 47.7580},
+    {"slug": "sng-bratislava", "name_sk": "Slovenská národná galéria", "name_en": "Slovak National Gallery", "category": "museum", "lon": 17.1060, "lat": 48.1410},
+    {"slug": "snm-martin", "name_sk": "Slovenské národné múzeum, Martin", "name_en": "Slovak National Museum, Martin", "category": "museum", "lon": 18.9310, "lat": 49.0650},
+    {"slug": "muzeum-snp", "name_sk": "Múzeum SNP, Banská Bystrica", "name_en": "SNP Museum, Banská Bystrica", "category": "museum", "lon": 19.1530, "lat": 48.7340},
+    {"slug": "vychodoslovenske-muzeum", "name_sk": "Východoslovenské múzeum, Košice", "name_en": "East Slovak Museum, Košice", "category": "museum", "lon": 21.2590, "lat": 48.7250}
+  ],
+  "paths": [
+    {
+      "slug": "hlavna-os", "name_sk": "Hlavná os Slovenska", "name_en": "Main corridor spine",
+      "theme": "active", "pilot": "A", "difficulty": "mixed", "length_km": 770, "colour": "#c62828",
+      "mark": "KČT pásové značenie",
+      "summary_sk": "Severojužná chrbtica po karpatskom rozvodí – od Devína cez Tatry až po jaskyne Slovenského krasu a pralesy Polonín.",
+      "summary_en": "North–south backbone along the Carpathian watershed – from Devín through the Tatras to the Slovak Karst caves and Poloniny forests.",
+      "stops": ["devin", "piestany-kupele", "bojnicky-zamok", "mala-fatra-vratna", "vlkolinec", "strbske-pleso", "slovensky-raj", "levoca-spissky-hrad", "bardejov", "slovensky-kras-jaskyne", "poloniny-park-tmavej-oblohy"]
+    },
+    {
+      "slug": "malokarpatska-vinna-cesta", "name_sk": "Malokarpatská vínna cesta", "name_en": "Small-Carpathian wine trail",
+      "theme": "wine", "pilot": "A", "difficulty": "easy", "length_km": 60, "colour": "#7b1fa2",
+      "mark": "Malokarpatská vínna cesta",
+      "summary_sk": "Jednodňové úseky medzi vinárskymi mestečkami na úpätí Malých Karpát, od Bratislavy po Piešťany.",
+      "summary_en": "Gentle day stages between wine towns at the foot of the Small Carpathians, from Bratislava to Piešťany.",
+      "stops": ["bratislava-start", "svaty-jur", "pezinok", "modra", "cerveny-kamen", "smolenicky-zamok", "trnava", "piestany-kupele"]
+    },
+    {
+      "slug": "povazska-hradna-cesta", "name_sk": "Považská hradná cesta", "name_en": "Váh castle corridor",
+      "theme": "heritage", "pilot": "A", "difficulty": "easy", "length_km": 140, "colour": "#ef6c00",
+      "mark": "pásové značenie",
+      "summary_sk": "Hrady vzdialené deň jazdy od seba pozdĺž Váhu – rovinatá dolina s občasným výstupom na hradný kopec.",
+      "summary_en": "Castles a day's ride apart along the Váh – flat valley floor with occasional castle-hill climbs.",
+      "stops": ["piestany-kupele", "hlohovec-zamok", "nitriansky-hrad", "banska-stiavnica", "beckov", "trenciansky-hrad", "mala-fatra-vratna"]
+    },
+    {
+      "slug": "cesta-marie", "name_sk": "Cesta Márie", "name_en": "Pilgrimage – Way of Mary",
+      "theme": "pilgrimage", "pilot": "B", "difficulty": "moderate", "length_km": 450, "colour": "#1565c0",
+      "mark": "Via Mariae – značka M",
+      "summary_sk": "Sieť mariánskych pútnických miest od západu na východ – štrnásť zastávok so storočiami histórie.",
+      "summary_en": "A west-to-east network of Marian shrines – fourteen stops with centuries of history.",
+      "stops": ["bratislava-start", "marianka", "kopcany-sv-margita", "skalka-klastor", "trenciansky-hrad", "sturovo", "banska-stiavnica", "zehra-kostol", "levoca-spissky-hrad", "drazovce-sv-michal", "nitriansky-hrad", "zvolensky-zamok", "vlkolinec", "oravsky-hrad"]
+    },
+    {
+      "slug": "medvedi-chodnik", "name_sk": "Medvedí chodník – divočina", "name_en": "Bear / wilderness trail",
+      "theme": "wilderness", "pilot": "C", "difficulty": "hard", "length_km": 80, "colour": "#2e7d32",
+      "mark": "značka labky",
+      "summary_sk": "Okruh po vulkanickom hrebeni Vihorlatu a pralesoch Polonín – ticho, zver a tmavá obloha.",
+      "summary_en": "A loop on the Vihorlat volcanic ridge and Poloniny primeval forests – silence, wildlife and dark skies.",
+      "stops": ["poloniny-park-tmavej-oblohy", "vihorlat-medvedi-chodnik"]
+    },
+    {
+      "slug": "cyklotrasa-ev6-ev13-vah", "name_sk": "Cyklotrasa EV6 · EV13 · Váh", "name_en": "Bicycle – EV6 · EV13 · Váh",
+      "theme": "cycling", "pilot": "C", "difficulty": "easy", "length_km": null, "colour": "#0277bd",
+      "mark": "modré značenie EuroVelo",
+      "summary_sk": "Tri riečne koridory – Dunaj (EV6), Morava (EV13) a Váh – rovné a súvislé, prevažne spevnené.",
+      "summary_en": "Three river corridors – Danube (EV6), Morava (EV13) and Váh – flat, continuous and mostly paved.",
+      "stops": ["bratislava-start", "gabcikovo-vodne-dielo", "komarno-pristav", "sturovo", "kopcany-sv-margita", "piestany-kupele", "beckov", "trenciansky-hrad", "mala-fatra-vratna"]
+    },
+    {
+      "slug": "okruh-muzei-a-galerii", "name_sk": "Okruh múzeí a galérií", "name_en": "Museums and galleries loop",
+      "theme": "museums", "pilot": "B", "difficulty": "easy", "length_km": 520, "colour": "#6d4c41",
+      "mark": "múzejné piny",
+      "summary_sk": "Kultúrny okruh na daždivé dni – deväť múzeí a galérií od Bratislavy po Košice.",
+      "summary_en": "The culture loop for rainy days – nine museums and galleries from Bratislava to Košice.",
+      "stops": ["sng-bratislava", "bojnicky-zamok", "snm-martin", "oravsky-hrad", "vlkolinec", "muzeum-snp", "banska-stiavnica", "levoca-spissky-hrad", "vychodoslovenske-muzeum"]
+    }
+  ]
+}

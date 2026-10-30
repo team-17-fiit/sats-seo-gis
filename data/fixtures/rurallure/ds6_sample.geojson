@@ -1,0 +1,11 @@
+{
+  "type": "FeatureCollection",
+  "_comment": "Syntetická vzorka DS6 (GeoJSON) na testy importu.",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"id": "SK-DS6-002", "name": "Via Mariae – Marianka – Šaštín"},
+      "geometry": {"type": "LineString", "coordinates": [[17.0630, 48.2490], [17.1000, 48.4500], [17.1460, 48.6390]]}
+    }
+  ]
+}

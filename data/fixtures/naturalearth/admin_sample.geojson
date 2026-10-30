@@ -1,0 +1,16 @@
+{
+  "type": "FeatureCollection",
+  "_comment": "Syntetická zjednodušená obálka SR na testy (nie skutočná hranica). Skutočné dáta: ne_10m_admin_0_countries.geojson.",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {"ISO_A2": "SK", "NAME": "Slovakia", "iso_3166_2": "SK"},
+      "geometry": {"type": "Polygon", "coordinates": [[[16.83, 47.73], [22.57, 47.73], [22.57, 49.62], [16.83, 49.62], [16.83, 47.73]]]}
+    },
+    {
+      "type": "Feature",
+      "properties": {"ISO_A2": "AT", "NAME": "Austria", "iso_3166_2": "AT"},
+      "geometry": {"type": "Polygon", "coordinates": [[[9.5, 46.4], [17.1, 46.4], [17.1, 49.0], [9.5, 49.0], [9.5, 46.4]]]}
+    }
+  ]
+}
