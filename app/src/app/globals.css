@@ -22,3 +22,19 @@ main{max-width:960px;margin:0 auto;padding:0 1rem 2rem}
 .peak-detail dd{margin:0}
 /* Tmavý režim: svetlozelené tlačidlo s bielym textom má kontrast ~2,4:1 (WCAG chce 4,5:1). */
 @media (prefers-color-scheme:dark){#load-map{color:#0b1a12}}
+/* --- šprint 1: navigácia, trasy, statická mapa --- */
+.nav{margin-top:.6rem;display:flex;gap:1rem;font-weight:600}
+.paths-teaser ul,.path-list{list-style:none;padding:0}
+.paths-teaser li{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:3px;flex:none}
+.path-card{border-left:6px solid var(--forest);background:color-mix(in srgb,var(--bg) 85%,#fff);padding:.6rem 1rem;margin:0 0 1rem}
+.path-card h2{margin:.2rem 0;font-size:1.25rem}
+.path-meta{margin:0;opacity:.8;font-size:.95rem}
+.facts{display:grid;grid-template-columns:max-content 1fr;gap:.25rem 1rem;margin:1rem 0}
+.facts dt{font-weight:600}
+.facts dd{margin:0}
+.stops li{margin:.2rem 0}
+.badge{margin-left:.5rem;padding:0 .4rem;font-size:.75rem;font-weight:700;border:1px solid currentColor;border-radius:3px}
+.note,.muted{opacity:.75;font-size:.9rem}
+.static-map{position:absolute;inset:0;width:100%;height:100%}
+@media (prefers-color-scheme:dark){.path-card{background:color-mix(in srgb,var(--bg) 85%,#000)}}
