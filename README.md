@@ -32,7 +32,7 @@ npm ci                                           # len prvýkrát
 NEXT_PUBLIC_API_URL=http://localhost:8000 npm run dev
 ```
 
-Zastavenie: `Ctrl+C` v termináli.
+Stop: `Ctrl+C` v termináli.
 
 ## Testy
 
