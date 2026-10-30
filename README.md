@@ -1,6 +1,6 @@
 # SATS-SEO-GIS
 
-Mapa aktívneho turizmu na Slovensku – tematické trasy, vrcholy a miesta. Team Project FIIT STU.
+Mapa aktívneho turizmu na Slovensku. Team Project FIIT STU.
 
 - **Web:** React + Next.js (`app/`)
 - **API:** Python + FastAPI (`backend/`)
@@ -55,7 +55,7 @@ cd app && npm run lint && npm run test:unit   # web
 
 ## Kde čo je
 
-Na každodennú prácu ti stačia **tri miesta**:
+Hlavné súbory:
 
 - `app/src/app/` – stránky webu
 - `backend/app/` – API
@@ -71,6 +71,6 @@ Celý repozitár:
 | `data/` | databázová schéma, 7 trás (`data/seed/paths.json`) |
 | `docs/` | architektúra, ADR, metodiky, zápisnice |
 
-Viac: [architektúra](docs/architecture/ARCHITECTURE.md) · [ako prispievať](CONTRIBUTING.md) · [Definition of Done](docs/methodology/definition-of-done.md)
+Viac: [architektúra](docs/architecture/ARCHITECTURE.md) · [Pravidlá zmien](CONTRIBUTING.md) · [Definition of Done](docs/methodology/definition-of-done.md)
 
 Plné prostredie s databázou (Docker + PostGIS, import skutočných dát) je opísané v [architektúre](docs/architecture/ARCHITECTURE.md).
