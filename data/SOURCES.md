@@ -1,0 +1,22 @@
+# Dátové zdroje – odkazy na stiahnutie
+
+Surové súbory sa sťahujú do `data/raw/` (mimo git) príkazom `make fetch`.
+`pipelines.fetch` po stiahnutí zapíše SHA256 do `data/raw/CHECKSUMS.txt`; overené súčty sem prepíšte pri dataset freeze.
+Licencie: [docs/planning/data-licence-register.md](../docs/planning/data-licence-register.md).
+
+| Kľúč | Súbor v `data/raw/` | URL | Veľkosť (cca) |
+|---|---|---|---|
+| `osm` | `slovakia-latest.osm.pbf` | https://download.geofabrik.de/europe/slovakia-latest.osm.pbf | ~350 MB |
+| `ne_admin0` | `ne_10m_admin_0_countries.zip` | https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_0_countries.zip | 5 MB |
+| `ne_admin1` | `ne_10m_admin_1_states_provinces.zip` | https://naciscdn.org/naturalearth/10m/cultural/ne_10m_admin_1_states_provinces.zip | 15 MB |
+| `geonames` | `SK.zip` | https://download.geonames.org/export/dump/SK.zip | 1 MB |
+| `rurallure_ds1` | `rurallure_ds1.csv` | Zenodo – doplniť DOI záznamu DS1 | – |
+| `rurallure_ds6` | `rurallure_ds6/*.gpx`, `*.geojson` | Zenodo – doplniť DOI záznamu DS6 | – |
+
+Kým nie sú doplnené DOI rurAllure, importy bežia nad vzorkami v `data/fixtures/`.
+
+## Overené SHA256 (dataset freeze)
+
+| Súbor | SHA256 | Dátum |
+|---|---|---|
+| – | – | – |
