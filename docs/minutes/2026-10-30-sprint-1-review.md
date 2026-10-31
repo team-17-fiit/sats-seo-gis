@@ -31,7 +31,7 @@
 | T1-10 | PWA kostra + routing | US-1a | hotové (manifest; service worker v 4-4Z) | `feat(app)…` |
 | T1-11 | ADR záznamy | WP3 | hotové (0001–0005) | `docs(architecture)…` |
 | T1-12 | projektový web v1 | S1-4 | mimo repozitára | – |
-| T1-13 | PM nástroj + Definition of Done | WP1 | DoD hotové; board v GitHub Projects založiť | `docs(methodology)…` |
+| T1-13 | PM nástroj + Definition of Done | WP1 | DoD hotové; projekt v Plane založiť (T1-13 v 2-2Z) | `docs(methodology)…` |
 | T1-14 | draft metodík | WP1 | hotové | `docs(methodology)…` |
 | T1-15 | sprint review + retro + exporty | WP1 | tento zápis; export úloh doplniť | – |
 
@@ -61,7 +61,7 @@
 | Akcia | Zodpovedný | Termín |
 |---|---|---|
 | Každú story rozdeliť na subtasky ≤ 1 deň pred plánovaním | Scrum Master (G) | plánovanie 2-2Z |
-| Založiť GitHub Projects board podľa `docs/methodology/tasks.md` | G | 2026-11-02 |
+| Založiť projekt v Plane a importovať úlohy (`docs/planning/plane/`) | G | 2026-11-02 |
 | Zapnúť ochranu `main` (required checks) | D | 2026-11-02 |
 | Doplniť DOI DS1/DS6 a overiť ich licenciu | C | 2026-11-05 |
 | Stiahnuť a naimportovať plné OSM dáta (`python -m pipelines.fetch`, `load_osm`, `promote`), zapísať K10 | C | 2026-11-06 |

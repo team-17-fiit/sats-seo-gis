@@ -1,0 +1,82 @@
+Identifier,Name,Description,State Name,Priority,Labels,Cycle Name,Start Date,Due Date,Estimate,Parent
+S1-3,S1-3 OSM extrakt 7 trás v PostGIS,"Schéma, ETL a 7 trás v databáze.
+Riešiteľ: C",Done,medium,story|dáta,1-1Z,2026-10-12,2026-10-25,5,
+US-11,US-11 Každý POI riadok má zdroj a licenciu,"Licenčný register + licenčná brána v ETL a CI.
+Riešiteľ: C",Done,medium,story|dáta,1-1Z,2026-10-12,2026-10-25,5,
+US-18,US-18 CI spúšťa lint a unit testy na každom PR,"ESLint, Vitest, ruff, pytest v GitHub Actions.
+Riešiteľ: D",Done,medium,story|ci,1-1Z,2026-10-12,2026-10-25,5,
+US-1a,US-1a Prvá SSG stránka trasy,"Stránky /trasy/ a /trasy/[slug]/ v Next.js.
+Riešiteľ: A",Done,medium,story|web,1-1Z,2026-10-12,2026-10-25,5,
+S1-4,S1-4 Projektový web online,"Tímová stránka projektu (mimo tohto repozitára). Presunuté z 1-1Z.
+Riešiteľ: E",Todo,high,story|docs,2-2Z,2026-10-26,2026-11-08,1,
+T1-01,T1-01 Repozitár + branch stratégia,Riešiteľ: B · odhad: 5 h,Done,medium,ci,1-1Z,2026-10-12,2026-10-25,,US-18
+T1-02,T1-02 CI kostra: lint + unit testy,Riešiteľ: D · odhad: 8 h,Done,medium,ci,1-1Z,2026-10-12,2026-10-25,,US-18
+T1-03,T1-03 Licenčný register,Riešiteľ: C · odhad: 4 h,Done,medium,dáta|docs,1-1Z,2026-10-12,2026-10-25,,US-11
+T1-05,T1-05 OSM PBF ingest (osm2pgsql flex),Riešiteľ: C · odhad: 8 h,Done,medium,dáta,1-1Z,2026-10-12,2026-10-25,,S1-3
+T1-06,T1-06 Natural Earth + GeoNames,Riešiteľ: C · odhad: 4 h,Done,medium,dáta,1-1Z,2026-10-12,2026-10-25,,S1-3
+T1-07,T1-07 PostGIS schéma,Riešiteľ: C · odhad: 6 h,Done,medium,dáta,1-1Z,2026-10-12,2026-10-25,,S1-3
+T1-08,T1-08 rurAllure DS1 import (na vzorke),Riešiteľ: C · odhad: 6 h,Done,medium,dáta,1-1Z,2026-10-12,2026-10-25,,S1-3
+T1-09,T1-09 rurAllure DS6 import (na vzorke),Riešiteľ: B · odhad: 4 h,Done,medium,dáta,1-1Z,2026-10-12,2026-10-25,,S1-3
+T1-10,T1-10 PWA kostra + routing,Riešiteľ: A · odhad: 8 h,Done,medium,web,1-1Z,2026-10-12,2026-10-25,,US-1a
+T1-11,T1-11 ADR záznamy 0001–0005,Riešiteľ: B · odhad: 3 h,Done,medium,docs,1-1Z,2026-10-12,2026-10-25,,
+T1-14,T1-14 Draft metodík + Definition of Done,Riešiteľ: F · odhad: 4 h,Done,medium,docs,1-1Z,2026-10-12,2026-10-25,,
+T1-04,T1-04 Motivačný dokument + plagát,"Povinný výstup 1. týždňa.
+Riešiteľ: F · odhad: 4 h",Todo,high,docs,2-2Z,2026-10-26,2026-11-04,,
+T1-12,T1-12 Projektový web v1,"Stránka tímu: členovia, zápisnice, dokumenty.
+Riešiteľ: E · odhad: 4 h",Todo,high,docs,2-2Z,2026-10-26,2026-11-04,,S1-4
+T1-13,"T1-13 Založiť Plane projekt, cykly a stavy","Podľa docs/planning/plane/README.md; importovať plane-import.csv.
+Riešiteľ: G · odhad: 2 h",Todo,high,pm,2-2Z,2026-10-26,2026-11-04,,
+T1-15,T1-15 Doplniť zápis zo šprintu 1 a export úloh,"Mená prítomných, export úloh z Plane, docs/minutes/2026-10-30-sprint-1-review.md.
+Riešiteľ: G · odhad: 2 h",Todo,medium,pm|docs,2-2Z,2026-10-26,2026-11-04,,
+T1-16,T1-16 Zapnúť ochranu vetvy main,"GitHub → Settings → Branches: PR + 1 schválenie + povinné kontroly CI.
+Riešiteľ: D · odhad: 1 h",Todo,medium,ci,2-2Z,2026-10-26,2026-11-04,,
+T1-17,T1-17 Overiť DOI a licenciu rurAllure DS1/DS6,"Doplniť do data/SOURCES.md a licenčného registra.
+Riešiteľ: C · odhad: 2 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-04,,S1-3
+T1-18,T1-18 Import celého OSM SR a zápis K10,"python -m pipelines.fetch, load_osm, promote, validate; počet POI zapísať do zápisu.
+Riešiteľ: C · odhad: 4 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-04,,S1-3
+T1-19,T1-19 Lighthouse baseline K1–K4 z CI,"Hodnoty z jobu quality-gate zapísať do zápisu zo šprintu 1.
+Riešiteľ: D · odhad: 1 h",Todo,low,ci,2-2Z,2026-10-26,2026-11-04,,US-18
+T1-20,T1-20 Pridať súbor LICENSE (MIT),Riešiteľ: B · odhad: 1 h,Todo,low,docs,2-2Z,2026-10-26,2026-11-04,,
+S2-3,S2-3 Obohatenie miest z Wikidata,"Ako turista chcem pri mieste vidieť opis, obrázok a odkazy, aby som vedel, či ho navštíviť.
+Riešiteľ: C",Todo,medium,story|dáta,2-2Z,2026-10-26,2026-11-08,5,
+S2-4,S2-4 Playwright smoke test na mobile,"Ako tím chceme, aby CI overilo hlavné stránky na mobile, aby sme nerozbili web.
+Riešiteľ: D",Todo,medium,story|ci,2-2Z,2026-10-26,2026-11-08,3,
+S2-5,S2-5 Dizajnové tokeny a téma,"Ako používateľ chcem jednotný vzhľad (farby, písmo) svetlý aj tmavý.
+Riešiteľ: E",Todo,medium,story|web,2-2Z,2026-10-26,2026-11-08,5,
+S2-6,S2-6 hreflang a sitemap SK/EN,"Ako zahraničný turista chcem anglickú verziu stránok, aby som im rozumel.
+Riešiteľ: A",Todo,medium,story|web|seo,2-2Z,2026-10-26,2026-11-08,3,
+US-1b,US-1b SSG stránky pre T1 miesta,"Ako turista chcem mať každé hlavné miesto na vlastnej stránke, aby som ho našiel cez Google.
+Riešiteľ: A",Todo,high,story|web|seo,2-2Z,2026-10-26,2026-11-08,5,
+US-2,US-2 Mapa trás s presnou geometriou,"Ako turista chcem na mape vidieť skutočný priebeh trasy, nie priamky medzi zastávkami.
+Riešiteľ: B",Todo,high,story|web|dáta,2-2Z,2026-10-26,2026-11-08,5,
+T2-01,T2-01 Štýl mapy a farby trás,"app/src/lib/map/maplibreAdapter.ts
+Riešiteľ: B · odhad: 6 h",Todo,medium,web,2-2Z,2026-10-26,2026-11-08,,US-2
+T2-02,T2-02 Zhlukovanie bodov (clustering),"Pri malom priblížení zlúčiť blízke body.
+Riešiteľ: B · odhad: 6 h",Todo,medium,web,2-2Z,2026-10-26,2026-11-08,,US-2
+T2-03,T2-03 Geometria trás z OSM relácií,"Naplniť route_path a path_segment z canonical.route namiesto priamok.
+Riešiteľ: C · odhad: 6 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-08,,US-2
+T2-05,T2-05 Rozšíriť model POI o Wikidata polia,"opis SK/EN, obrázok, web, otváracie hodiny
+Riešiteľ: C · odhad: 4 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-08,,S2-3
+T2-07,T2-07 Wikidata SPARQL fetcher,"backend/pipelines/load_wikidata.py + fixture + test
+Riešiteľ: C · odhad: 6 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-08,,S2-3
+T2-08,T2-08 Zapisovať Wikidata do licenčného registra,"CC0, source 'wikidata'
+Riešiteľ: C · odhad: 2 h",Todo,medium,dáta|docs,2-2Z,2026-10-26,2026-11-08,,S2-3
+T2-09,T2-09 API: detail miesta s Wikidata poliami,"GET /api/v1/pois/{slug}
+Riešiteľ: B · odhad: 3 h",Todo,medium,api,2-2Z,2026-10-26,2026-11-08,,S2-3
+T2-10,T2-10 Šablóna stránky miesta /miesta/[slug]/,"JSON-LD TouristAttraction, canonical, odkaz na trasy
+Riešiteľ: A · odhad: 6 h",Todo,medium,web|seo,2-2Z,2026-10-26,2026-11-08,,US-1b
+T2-11,T2-11 Export T1 miest do app/public/data/pois.json,"pipelines.export_static
+Riešiteľ: C · odhad: 3 h",Todo,medium,dáta,2-2Z,2026-10-26,2026-11-08,,US-1b
+T2-12,T2-12 Playwright smoke na mobilnom profile,"project mobile v ci.yml
+Riešiteľ: D · odhad: 4 h",Todo,medium,ci,2-2Z,2026-10-26,2026-11-08,,S2-4
+T2-13,T2-13 Kontrola geodát v CI,"rozšíriť data/db/checks.sql
+Riešiteľ: D · odhad: 3 h",Todo,medium,ci|dáta,2-2Z,2026-10-26,2026-11-08,,S2-4
+T2-14,T2-14 Dizajnové tokeny (CSS premenné) + tmavý režim,"app/src/app/globals.css
+Riešiteľ: E · odhad: 6 h",Todo,medium,web,2-2Z,2026-10-26,2026-11-08,,S2-5
+T2-15,"T2-15 Komponenty: karta trasy, odznak, tlačidlo",Riešiteľ: E · odhad: 4 h,Todo,medium,web,2-2Z,2026-10-26,2026-11-08,,S2-5
+T2-16,T2-16 EN texty trás a miest,"name_en, summary_en v data/seed/paths.json
+Riešiteľ: F · odhad: 5 h",Todo,medium,web|docs,2-2Z,2026-10-26,2026-11-08,,S2-6
+T2-17,T2-17 hreflang + EN routy + sitemap,"/en/trails/…, alternates v metadata
+Riešiteľ: A · odhad: 4 h",Todo,medium,web|seo,2-2Z,2026-10-26,2026-11-08,,S2-6
+T2-18,T2-18 Sprint review + retro + export úloh,"zápis do docs/minutes/
+Riešiteľ: G · odhad: 2 h",Todo,medium,pm,2-2Z,2026-10-26,2026-11-08,,
