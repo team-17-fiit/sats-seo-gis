@@ -1,6 +1,7 @@
 -- =============================================================================
 -- 005 – mart_path_pages posiela aj geometriu úsekov trasy (T2-06)
--- segments = pole čiar [[lon, lat], ...] v poradí seq; web ich kreslí namiesto priamok
+-- segments = pole čiar [[lon, lat], ...] v poradí seq; web ich kreslí namiesto priamok.
+-- ST_Simplify ~10 m: pre mapu stačí a stránka trasy ostane malá (presná geometria ostáva v DB).
 -- =============================================================================
 
 CREATE OR REPLACE VIEW marts.mart_path_pages AS
@@ -15,7 +16,7 @@ SELECT
         ORDER BY pp.seq) FILTER (WHERE p.id IS NOT NULL),
       '[]'::json) AS stops,
     l.code AS licence,
-    (SELECT COALESCE(json_agg((ST_AsGeoJSON(s.geom, 5)::json) -> 'coordinates' ORDER BY s.seq), '[]'::json)
+    (SELECT COALESCE(json_agg((ST_AsGeoJSON(ST_Simplify(s.geom, 0.0001), 5)::json) -> 'coordinates' ORDER BY s.seq), '[]'::json)
        FROM canonical.path_segment s WHERE s.path_id = pa.id) AS segments
 FROM canonical.path pa
 JOIN canonical.licence l ON l.id = pa.licence_id

@@ -64,5 +64,5 @@
 | Založiť GitHub Projects board podľa `docs/methodology/tasks.md` | G | 2026-11-02 |
 | Zapnúť ochranu `main` (required checks) | D | 2026-11-02 |
 | Doplniť DOI DS1/DS6 a overiť ich licenciu | C | 2026-11-05 |
-| ~~Stiahnuť a naimportovať plné OSM dáta, zapísať K10~~ hotové 2026-11-01 (T1-18). Geometriu z OSM má zatiaľ 9 z 53 úsekov našich trás, ostatné sú priamky – zastávky sú od seba desiatky km a žiadna jedna OSM trasa nejde popri oboch | C | 2026-11-06 |
+| ~~Stiahnuť a naimportovať plné OSM dáta, zapísať K10~~ hotové 2026-11-01 (T1-18). Všetkých 53 úsekov našich trás vedie po sieti ciest a chodníkov z OSM (najkratšia cesta medzi zastávkami) | C | 2026-11-06 |
 | Zapísať K1–K4 baseline z CI | D | 2026-11-03 |

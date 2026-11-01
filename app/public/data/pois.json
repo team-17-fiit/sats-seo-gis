@@ -59,6 +59,7 @@
   "attribution": null,
   "paths": [
    "povazska-hradna-cesta",
+   "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
   ]
  },
@@ -123,6 +124,7 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
+   "hlavna-os",
    "malokarpatska-vinna-cesta"
   ]
  },
@@ -163,7 +165,9 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
-   "cesta-marie"
+   "povazska-hradna-cesta",
+   "cesta-marie",
+   "cyklotrasa-ev6-ev13-vah"
   ]
  },
  {
@@ -204,6 +208,7 @@
   "attribution": null,
   "paths": [
    "povazska-hradna-cesta",
+   "cyklotrasa-ev6-ev13-vah",
    "okruh-muzei-a-galerii"
   ]
  },
@@ -372,7 +377,8 @@
   "attribution": null,
   "paths": [
    "povazska-hradna-cesta",
-   "cesta-marie"
+   "cesta-marie",
+   "cyklotrasa-ev6-ev13-vah"
   ]
  },
  {
@@ -413,6 +419,7 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
+   "hlavna-os",
    "malokarpatska-vinna-cesta"
   ]
  },
@@ -477,7 +484,9 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
-   "cesta-marie"
+   "povazska-hradna-cesta",
+   "cesta-marie",
+   "cyklotrasa-ev6-ev13-vah"
   ]
  },
  {
@@ -580,6 +589,7 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
+   "hlavna-os",
    "okruh-muzei-a-galerii"
   ]
  },
@@ -641,6 +651,7 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
+   "hlavna-os",
    "malokarpatska-vinna-cesta"
   ]
  },
@@ -703,7 +714,6 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
-   "hlavna-os",
    "medvedi-chodnik"
   ]
  },
@@ -746,6 +756,7 @@
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
+   "hlavna-os",
    "okruh-muzei-a-galerii"
   ]
  },

@@ -1,5 +1,5 @@
 -- =============================================================================
--- osm2pgsql flex štýl – OSM PBF -> staging.osm_poi, staging.osm_route, staging.osm_route_member  (T1-05, T2-06)
+-- osm2pgsql flex štýl – OSM PBF -> staging.osm_poi, staging.osm_route, staging.osm_route_member, staging.osm_way  (T1-05, T2-06)
 -- -----------------------------------------------------------------------------
 -- Spustenie (cez pipelines.load_osm):
 --   osm2pgsql -O flex -S data/osm/flex.lua -d $DATABASE_URL data/raw/slovakia-latest.osm.pbf
@@ -51,6 +51,24 @@ tables.osm_route_member = osm2pgsql.define_table({
         { column = 'seq',       type = 'int4', not_null = true },
     },
 })
+
+-- Sieť ciest a chodníkov: po nej sa hľadá cesta medzi zastávkami našich trás.
+tables.osm_way = osm2pgsql.define_table({
+    name = 'osm_way',
+    schema = 'staging',
+    ids = { type = 'way', id_column = 'osm_id' },
+    columns = {
+        { column = 'highway', type = 'text', not_null = true },
+        { column = 'geom',    type = 'linestring', projection = 4326, not_null = true },
+    },
+})
+
+-- Cesty, po ktorých sa nedá ísť pešo ani na bicykli, alebo ešte neexistujú.
+local NOT_WALKABLE = {
+    motorway = true, motorway_link = true, trunk = true, trunk_link = true,
+    construction = true, proposed = true, raceway = true, bus_guideway = true,
+    platform = true, elevator = true, corridor = true, abandoned = true,
+}
 
 -- Mapovanie OSM tagov na kategóriu projektu. nil = nezaujíma nás.
 local CATEGORY = {
@@ -114,6 +132,11 @@ function osm2pgsql.process_node(object)
 end
 
 function osm2pgsql.process_way(object)
+    local hw = object.tags.highway
+    if hw and not NOT_WALKABLE[hw] and object.tags.access ~= 'private' and object.tags.access ~= 'no'
+        and object.tags.area ~= 'yes' then
+        tables.osm_way:insert({ highway = hw, geom = object:as_linestring() })
+    end
     if not classify(object.tags) then return end
     -- plošné objekty (hrad, zoo) -> bod v strede
     local geom

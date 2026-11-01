@@ -5,6 +5,7 @@ from pipelines.export_static import from_seed, pois_from_seed
 from pipelines.load_geonames import parse as parse_geonames
 from pipelines.load_natural_earth import slovak_features
 from pipelines.load_rurallure import parse_ds1, parse_ds6
+from pipelines.network import shortest_path
 from pipelines.quality import WEIGHTS, quality_score, tier_for
 from pipelines.seed_paths import load_seed, validate_seed
 from pipelines.validate import parse_checks
@@ -96,3 +97,26 @@ def test_poi_export_covers_every_stop_as_t1():
             assert path["slug"] in pois[stop["slug"]]["paths"]
     assert all(p["tier"] == 1 for p in pois.values())
     assert all(p["licence"] and p["source"] for p in pois.values())  # licenčná brána (US-11)
+
+
+def _graph(*ways):
+    graph = {}
+    for cost, coords in ways:
+        for u, v in zip(coords, coords[1:], strict=False):
+            graph.setdefault(u, []).append((v, cost))
+            graph.setdefault(v, []).append((u, cost))
+    return graph
+
+
+def test_shortest_path_goes_along_network_and_prefers_cheaper_way():
+    a, b = (17.0, 48.0), (17.02, 48.0)
+    graph = _graph(
+        (5.0, [a, (17.01, 48.0), b]),  # priamo, ale drahá (hlavná cesta)
+        (1.0, [a, (17.01, 48.005), b]),  # obchádzka po chodníku
+    )
+    assert shortest_path(graph, a, b) == [a, (17.01, 48.005), b]
+
+
+def test_shortest_path_none_when_stops_are_far_from_network():
+    graph = _graph((1.0, [(17.0, 48.0), (17.01, 48.0)]))
+    assert shortest_path(graph, (18.0, 49.0), (18.1, 49.0)) is None

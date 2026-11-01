@@ -16,11 +16,12 @@ from __future__ import annotations
 import json
 
 from .common import connect, in_slovakia_bbox, slugify, source_ids
+from .network import route_between
 from .quality import PUBLISH_THRESHOLD, quality_score, tier_for
 
 DEDUP_RADIUS_M = 150
 DETOUR_RADIUS_M = 2000
-STOP_SNAP_M = 500  # zastávka musí byť do 500 m od OSM trasy, aby sa použila jej geometria
+ROUTE_BUFFER_DEG = 0.0003  # ~30 m: úsek našej trasy do tejto vzdialenosti od OSM trasy ide po nej
 
 
 def reject(cur, source: str, ext_id: str | None, reason: str, payload: dict) -> None:
@@ -257,51 +258,54 @@ def build_route_segments(cur) -> int:
 
 
 def build_path_geometry(cur) -> int:
-    """Úseky našich trás (medzi dvoma zastávkami) nahradí časťou OSM trasy, ktorá prechádza
-    pri oboch zastávkach (do STOP_SNAP_M). Kde taká nie je, ostane priamka. Naplní aj route_path."""
+    """Úseky našich trás (medzi dvoma zastávkami) povedie po sieti ciest a chodníkov z OSM
+    (najkratšia cesta, pipelines.network). Kde sa cesta nenájde, ostane priamka. Naplní aj
+    route_path: aký podiel našej trasy ide po ktorej OSM trase."""
+    cur.execute("SELECT to_regclass('staging.osm_way') IS NOT NULL")
+    if not cur.fetchone()[0]:
+        return 0  # starý import bez siete ciest -> spusti znova load_osm
     osm_src, osm_lic = source_ids(cur, "osm")
     cur.execute(
         """
-        CREATE TEMP TABLE matched ON COMMIT DROP AS
-        SELECT ps.id AS segment_id, ps.path_id, best.route_id, best.geom
+        SELECT ps.id, ST_X(pa.geom), ST_Y(pa.geom), ST_X(pb.geom), ST_Y(pb.geom)
         FROM canonical.path_segment ps
         JOIN canonical.poi_path a ON a.path_id = ps.path_id AND a.seq = ps.seq AND a.role = 'stop'
         JOIN canonical.poi_path b ON b.path_id = ps.path_id AND b.seq = ps.seq + 1 AND b.role = 'stop'
         JOIN canonical.poi pa ON pa.id = a.poi_id
         JOIN canonical.poi pb ON pb.id = b.poi_id
-        CROSS JOIN LATERAL (
-            SELECT rs.route_id,
-                   CASE WHEN f.fa < f.fb THEN ST_LineSubstring(rs.geom, f.fa, f.fb)
-                        ELSE ST_Reverse(ST_LineSubstring(rs.geom, f.fb, f.fa)) END AS geom
-            FROM canonical.route_segment rs
-            CROSS JOIN LATERAL (SELECT ST_LineLocatePoint(rs.geom, pa.geom) AS fa,
-                                       ST_LineLocatePoint(rs.geom, pb.geom) AS fb) f
-            WHERE ST_DWithin(rs.geom::geography, pa.geom::geography, %(snap)s)
-              AND ST_DWithin(rs.geom::geography, pb.geom::geography, %(snap)s)
-              AND f.fa <> f.fb
-            ORDER BY abs(f.fb - f.fa) * ST_Length(rs.geom::geography)
-            LIMIT 1
-        ) best
-        """,
-        {"snap": STOP_SNAP_M},
-    )
-    cur.execute(
+        ORDER BY ps.path_id, ps.seq
         """
-        UPDATE canonical.path_segment ps
-        SET geom = m.geom, surface = 'osm', source_id = %s, licence_id = %s
-        FROM matched m WHERE ps.id = m.segment_id
-        """,
-        (osm_src, osm_lic),
     )
-    n = cur.rowcount
+    n = 0
+    for segment_id, ax, ay, bx, by in cur.fetchall():
+        line = route_between(cur, (ax, ay), (bx, by))
+        if not line:
+            continue
+        cur.execute(
+            """UPDATE canonical.path_segment
+               SET geom = ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326), surface = 'osm', source_id = %s, licence_id = %s
+               WHERE id = %s""",
+            (json.dumps({"type": "LineString", "coordinates": line}), osm_src, osm_lic, segment_id),
+        )
+        n += 1
     cur.execute("DELETE FROM canonical.route_path")
     cur.execute(
         """
+        WITH pts AS (  -- body na našich úsekoch každých ~200 m
+            SELECT row_number() OVER () AS id, s.path_id, ST_LineInterpolatePoint(s.geom, i::float8 / k.n) AS geom
+            FROM canonical.path_segment s,
+                 LATERAL (SELECT greatest(1, ceil(ST_Length(s.geom::geography) / 200))::int AS n) k,
+                 LATERAL generate_series(0, k.n) i
+        ), total AS (SELECT path_id, count(*) AS n FROM pts GROUP BY path_id)
         INSERT INTO canonical.route_path (route_id, path_id, share_pct)
-        SELECT m.route_id, m.path_id,
-               round(100.0 * count(*) / (SELECT count(*) FROM canonical.path_segment s WHERE s.path_id = m.path_id), 2)
-        FROM matched m GROUP BY m.route_id, m.path_id
-        """
+        SELECT rs.route_id, p.path_id, round(100.0 * count(DISTINCT p.id) / t.n, 2)
+        FROM pts p
+        JOIN canonical.route_segment rs ON ST_DWithin(rs.geom, p.geom, %(buf)s)
+        JOIN total t ON t.path_id = p.path_id
+        GROUP BY rs.route_id, p.path_id, t.n
+        HAVING 100.0 * count(DISTINCT p.id) / t.n >= 1
+        """,
+        {"buf": ROUTE_BUFFER_DEG},
     )
     return n
 
@@ -341,7 +345,7 @@ def main() -> None:
         if has_osm_route:
             print(f"Trasy (OSM + DS6): {promote_routes(cur)}")
             print(f"Podtrasy: {link_sub_routes(cur)}, úseky trás: {build_route_segments(cur)}")
-            print(f"Úseky našich trás podľa OSM geometrie: {build_path_geometry(cur)}")
+            print(f"Úseky našich trás po OSM cestách a chodníkoch: {build_path_geometry(cur)}")
         print(f"Odbočky do {DETOUR_RADIUS_M / 1000:.0f} km: {link_detours(cur)}")
         conn.commit()
 
