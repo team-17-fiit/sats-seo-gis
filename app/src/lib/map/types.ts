@@ -19,7 +19,7 @@ export type FeatureCollection<F> = { type: 'FeatureCollection'; features: F[] };
 
 export type LayerSpec =
   | { id: string; kind: 'points'; color: string; data: FeatureCollection<PointFeature> | string }
-  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> };
+  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> | string };
 
 export type MapOptions = {
   center: LngLat;

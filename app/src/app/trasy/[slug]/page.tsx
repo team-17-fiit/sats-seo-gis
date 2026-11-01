@@ -6,7 +6,7 @@ import JsonLd from '@/components/JsonLd';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
-import { DIFFICULTY_SK, getPath, getPaths, pathLineGeoJSON, stopsToGeoJSON, viewFor } from '@/lib/paths';
+import { DIFFICULTY_SK, getPath, getPaths, pathLineData, stopsToGeoJSON, viewFor } from '@/lib/paths';
 import { SITE_URL } from '@/lib/site';
 
 export const dynamicParams = false;
@@ -35,6 +35,7 @@ export default async function PathPage({ params }: Props) {
   const p = getPath(slug);
   if (!p) notFound();
   const view = viewFor(p);
+  const line = pathLineData(p);
 
   return (
     <>
@@ -80,11 +81,15 @@ export default async function PathPage({ params }: Props) {
             center={view.center}
             zoom={view.zoom}
             layers={[
-              { id: 'path-line', kind: 'line', color: p.colour, data: pathLineGeoJSON(p) },
+              { id: 'path-line', kind: 'line', color: p.colour, data: line },
               { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(p) },
             ]}
           />
-          <p className="note">Čiara spája zastávky priamo – presná geometria z OSM príde v ďalšom šprinte.</p>
+          <p className="note">
+            {typeof line === 'string'
+              ? 'Trasa vedie po cestách a chodníkoch z mapy © OpenStreetMap contributors (ODbL).'
+              : 'Čiara zatiaľ spája zastávky priamo – presná geometria z OSM sa pripravuje.'}
+          </p>
         </section>
 
         <section>

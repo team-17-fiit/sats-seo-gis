@@ -67,7 +67,16 @@ export function stopsToGeoJSON(p: TrailPath): FeatureCollection<PointFeature> {
   };
 }
 
-/** Spojnica zastávok – placeholder geometria, kým nie sú OSM relácie (šprint 2-2Z). */
+/**
+ * Čiara trasy pre mapu: URL súboru so skutočnou geometriou z OSM (`python -m pipelines.fetch_geometry`),
+ * alebo spojnica zastávok, ak súbor ešte neexistuje. Súbor sa stiahne až s mapou, HTML ostáva malé.
+ */
+export function pathLineData(p: TrailPath): FeatureCollection<LineFeature> | string {
+  const file = path.join(process.cwd(), 'public', 'data', 'geom', `${p.slug}.json`);
+  return fs.existsSync(file) ? `/data/geom/${p.slug}.json` : pathLineGeoJSON(p);
+}
+
+/** Spojnica zastávok – náhradná čiara, kým nie je súbor s geometriou z OSM. */
 export function pathLineGeoJSON(p: TrailPath): FeatureCollection<LineFeature> {
   return {
     type: 'FeatureCollection',

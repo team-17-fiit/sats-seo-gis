@@ -1,6 +1,8 @@
 // Statický náhľad bez WebGL a bez externých dlaždíc: body a línie ako inline SVG.
 // Použije sa na zariadeniach bez WebGL alebo pri "šetrení dát". Rozmery dáva kontajner -> CLS = 0.
-import type { FeatureCollection, LayerSpec, LngLat, MapAdapter, MapOptions, PointFeature, Unsubscribe } from './types';
+import type {
+  FeatureCollection, LayerSpec, LineFeature, LngLat, MapAdapter, MapOptions, PointFeature, Unsubscribe,
+} from './types';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const WIDTH = 1000;
@@ -38,7 +40,15 @@ export class StaticImageAdapter implements MapAdapter {
   }
 
   addLayer(spec: LayerSpec): void {
-    if (!this.svg || typeof spec.data === 'string') return; // URL dáta static adapter nesťahuje
+    if (this.svg && spec.kind === 'line' && typeof spec.data === 'string') {
+      // čiara trasy z URL (/data/geom/<slug>.json) – malý súbor, stiahni a nakresli
+      fetch(spec.data)
+        .then((r) => r.json() as Promise<FeatureCollection<LineFeature>>)
+        .then((data) => this.addLayer({ ...spec, data }))
+        .catch((err) => console.warn('Čiaru trasy sa nepodarilo načítať:', err));
+      return;
+    }
+    if (!this.svg || typeof spec.data === 'string') return; // URL bodov static adapter nesťahuje
     if (spec.kind === 'line') {
       for (const f of spec.data.features) {
         const pts = f.geometry.coordinates.map((c) => project(c, this.bounds).join(',')).join(' ');
