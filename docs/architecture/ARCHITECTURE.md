@@ -38,8 +38,9 @@ API pridáva len doplnky, napr. „miesta v okolí“.
 | `poi` | miesta – hrady, vrcholy, kostoly… (poloha, kategória) |
 | `poi_path` | ktoré miesto je na ktorej trase a v akom poradí |
 | `source`, `licence` | odkiaľ dáta sú a pod akou licenciou – **každé miesto ich musí mať** |
+| `route`, `route_segment` | trasa z OSM (napr. EuroVelo) > podtrasa (`parent_id`) > úseky s geometriou |
 
-Ostatné tabuľky (hranice krajov, GeoNames, OSM trasy) sú pomocné. Celá schéma: `data/db/migrations/001_init_schema.sql`.
+Ostatné tabuľky (hranice krajov, GeoNames) sú pomocné. Celá schéma: `data/db/migrations/`.
 
 ## Ako sa dáta dostanú do databázy
 
