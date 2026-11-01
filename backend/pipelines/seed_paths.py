@@ -2,15 +2,16 @@
 
     python -m pipelines.seed_paths
 
-Vytvorí aj placeholder `path_segment` (priamky medzi zastávkami, surface='placeholder'),
-aby mapa mala čo kresliť. V šprinte 2-2Z ich nahradí geometria OSM relácií (route_path).
+Vytvorí aj `path_segment` – jeden úsek na dvojicu po sebe idúcich zastávok. Čiara úseku je z
+app/public/data/geom/<slug>.json (OSM cez BRouter, `python -m pipelines.fetch_geometry`); ak súbor
+alebo úsek chýba, ostane priamka (surface='placeholder').
 """
 
 from __future__ import annotations
 
 import json
 
-from .common import SEED_PATHS, connect, source_ids
+from .common import APP_DATA_DIR, SEED_PATHS, connect, source_ids
 from .quality import quality_score
 
 CURATED_TIER = 1
@@ -126,7 +127,7 @@ def main() -> None:
                 )
 
             # placeholder geometria: priamky medzi po sebe idúcimi zastávkami
-            cur.execute("DELETE FROM canonical.path_segment WHERE path_id = %s AND surface = 'placeholder'", (path_id,))
+            cur.execute("DELETE FROM canonical.path_segment WHERE path_id = %s", (path_id,))
             cur.execute(
                 """
                 INSERT INTO canonical.path_segment (path_id, seq, surface, geom, source_id, licence_id)
@@ -141,6 +142,25 @@ def main() -> None:
                 """,
                 (src_id, lic_id, path_id),
             )
+
+            # skutočná čiara z OSM, ak ju máme (úsek sa použije len pre tú istú dvojicu zastávok)
+            geom_file = APP_DATA_DIR / "geom" / f"{path['slug']}.json"
+            if geom_file.exists():
+                osm_src, osm_lic = source_ids(cur, "osm")
+                stops = path["stops"]
+                for f in json.loads(geom_file.read_text(encoding="utf-8"))["features"]:
+                    seq, props = f["properties"]["seq"], f["properties"]
+                    if stops[seq - 1 : seq + 1] != [props["from"], props["to"]]:
+                        continue  # zastávky sa zmenili -> spusti znova fetch_geometry
+                    cur.execute(
+                        """
+                        UPDATE canonical.path_segment
+                        SET geom = ST_SetSRID(ST_GeomFromGeoJSON(%s), 4326), surface = NULL,
+                            source_id = %s, licence_id = %s
+                        WHERE path_id = %s AND seq = %s
+                        """,
+                        (json.dumps(f["geometry"]), osm_src, osm_lic, path_id, seq),
+                    )
         conn.commit()
     print(f"Seed: {len(seed['paths'])} trás, {len(seed['pois'])} POI")
 
