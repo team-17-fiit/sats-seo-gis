@@ -45,8 +45,9 @@ Ostatné tabuľky (hranice krajov, GeoNames, OSM trasy) sú pomocné. Celá sch�
 
 1. **Načítanie** – skripty v `backend/pipelines/` (`load_osm`, `load_geonames`, `load_rurallure`, `seed_paths`) uložia surové dáta.
 2. **Kontrola** – `promote` zahodí duplicity a zlé riadky (bez mena, mimo Slovenska, bez licencie) do karantény.
-3. **Overenie** – `validate` skontroluje, že je všetko v poriadku.
-4. **Export** – `export_static` zapíše trasy do `app/public/data/paths.json`, odkiaľ ich berie web.
+3. **Trasovanie** – `route_legs` vypočíta čiaru každej etapy (úsek trasy medzi dvoma zastávkami) cez GraphHopper nad OSM. Bez GraphHoppera ostane priamka. Model trasa → etapa → úsek: [ADR-0006](../adr/0006-path-geometry-routing.md).
+4. **Overenie** – `validate` skontroluje, že je všetko v poriadku.
+5. **Export** – `export_static` zapíše trasy do `app/public/data/paths.json` a geometriu do `app/public/data/geom/<slug>.json`, odkiaľ ich berie web.
 
 ## Spustenie s databázou (Git Bash, voliteľné)
 
@@ -61,6 +62,7 @@ python -m pipelines.migrate             # vytvorí tabuľky
 python -m pipelines.seed_paths          # 7 trás a ich zastávky
 python -m pipelines.load_rurallure --fixture
 python -m pipelines.promote
+python -m pipelines.route_legs          # čiary etáp (s `docker compose up -d graphhopper` po OSM, inak priamky)
 python -m pipelines.validate            # všetky riadky musia mať ✓
 
 REPOSITORY=postgis python -m uvicorn app.main:app --reload --port 8000

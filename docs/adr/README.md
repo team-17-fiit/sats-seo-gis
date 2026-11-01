@@ -9,5 +9,6 @@ Zrkadlí tabuľku Y.2 dokumentácie – pri zmene aktualizovať obe.
 | [0003](0003-map-engine.md) | Mapa: MapLibre GL za MapAdapter, PMTiles | prijaté | Leaflet raster, komerčné API |
 | [0004](0004-backend-python-fastapi-postgis.md) | Backend: Python + FastAPI + PostGIS 16 | prijaté | Node, Rust (axum), Go, PHP |
 | [0005](0005-etl-orchestration.md) | ETL: Makefile teraz, Airflow neskôr | prijaté | Airflow od 1. šprintu |
+| [0006](0006-path-geometry-routing.md) | Geometria trás: etapy cez GraphHopper nad OSM | navrhnuté | skladanie z OSM relácií, OSRM |
 
 Šablóna nového ADR: Stav, Dátum, Kontext, Zvažované možnosti, Rozhodnutie, Dôsledky (+/−).
