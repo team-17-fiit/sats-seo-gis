@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             '@type': 'WebSite',
             name: SITE_NAME,
             url: SITE_URL,
-            inLanguage: 'sk',
+            inLanguage: ['sk', 'en'],
             description: 'Mapa aktívneho turizmu na Slovensku',
           }}
         />

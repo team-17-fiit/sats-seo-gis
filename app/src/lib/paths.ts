@@ -2,6 +2,7 @@
 // (z PostGIS, alebo s --from-seed bez databázy). Číta sa len pri builde.
 import fs from 'node:fs';
 import path from 'node:path';
+import { pick, type Locale } from './i18n';
 import type { FeatureCollection, LineFeature, PointFeature } from './map/types';
 
 export type Stop = {
@@ -39,6 +40,32 @@ export const DIFFICULTY_SK: Record<TrailPath['difficulty'], string> = {
   hard: 'náročná',
   mixed: 'zmiešaná',
 };
+
+export const DIFFICULTY_EN: Record<TrailPath['difficulty'], string> = {
+  easy: 'easy',
+  moderate: 'moderate',
+  hard: 'hard',
+  mixed: 'mixed',
+};
+
+export function difficultyLabel(d: TrailPath['difficulty'], locale: Locale = 'sk'): string {
+  return (locale === 'en' ? DIFFICULTY_EN : DIFFICULTY_SK)[d];
+}
+
+/** Názov a zhrnutie trasy v jazyku stránky (náhrada za slovenčinu, ak preklad chýba). */
+export function trailName(p: TrailPath, locale: Locale = 'sk'): string {
+  return pick(locale, p.name_sk, p.name_en);
+}
+
+export function trailSummary(p: TrailPath, locale: Locale = 'sk'): string | null {
+  return locale === 'en' ? (p.summary_en ?? p.summary_sk) : p.summary_sk;
+}
+
+/** Kópia trasy s názvami zastávok v jazyku stránky (pre mapu a JSON-LD). */
+export function localizeStops(p: TrailPath, locale: Locale = 'sk'): TrailPath {
+  if (locale === 'sk') return p;
+  return { ...p, stops: p.stops.map((s) => ({ ...s, name_sk: pick(locale, s.name_sk, s.name_en) })) };
+}
 
 let cache: TrailPath[] | null = null;
 
