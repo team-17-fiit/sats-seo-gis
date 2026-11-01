@@ -45,7 +45,8 @@ Ostatné tabuľky (hranice krajov, GeoNames) sú pomocné. Celá schéma: `data/
 ## Ako sa dáta dostanú do databázy
 
 1. **Načítanie** – skripty v `backend/pipelines/` (`load_osm`, `load_geonames`, `load_rurallure`, `seed_paths`) uložia surové dáta.
-2. **Kontrola** – `promote` zahodí duplicity a zlé riadky (bez mena, mimo Slovenska, bez licencie) do karantény.
+2. **Kontrola** – `promote` zahodí duplicity a zlé riadky (bez mena, mimo Slovenska, bez licencie) do karantény
+   a úseky našich trás medzi zastávkami povedie po sieti ciest a chodníkov z OSM (najkratšia cesta, `pipelines/network.py`).
 3. **Overenie** – `validate` skontroluje, že je všetko v poriadku.
 4. **Export** – `export_static` zapíše trasy do `app/public/data/paths.json`, odkiaľ ich berie web.
 

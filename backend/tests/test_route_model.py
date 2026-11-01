@@ -49,8 +49,8 @@ def test_every_route_with_geometry_has_valid_segments(cur):
     assert cur.fetchone()[0] == 0
 
 
-def test_path_segment_follows_osm_route_between_stops(cur):
-    # Svätý Jur (seq 2) -> Pezinok (seq 3) na Malokarpatskej vínnej ceste leží pri cyklotrase 6003
+def test_path_segment_follows_osm_network_between_stops(cur):
+    # Svätý Jur (seq 2) -> Pezinok (seq 3): vo fixtures ich spája cesta 8001 (highway=track)
     cur.execute(
         """SELECT ps.surface, ST_NPoints(ps.geom) FROM canonical.path_segment ps
            JOIN canonical.path p ON p.id = ps.path_id
@@ -61,7 +61,7 @@ def test_path_segment_follows_osm_route_between_stops(cur):
     assert points > 2  # nie priamka
 
 
-def test_segments_without_osm_route_stay_straight(cur):
+def test_segments_without_osm_network_stay_straight(cur):
     cur.execute(
         """SELECT count(*) FROM canonical.path_segment
            WHERE surface = 'placeholder' AND ST_NPoints(geom) <> 2"""
@@ -70,6 +70,7 @@ def test_segments_without_osm_route_stay_straight(cur):
 
 
 def test_route_path_records_share_of_path(cur):
+    # cesta 8001 je zároveň v cyklotrase 6003 -> časť Malokarpatskej vínnej cesty ide po nej
     cur.execute(
         """SELECT rp.share_pct FROM canonical.route_path rp
            JOIN canonical.route r ON r.id = rp.route_id
