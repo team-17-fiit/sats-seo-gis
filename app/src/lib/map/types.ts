@@ -11,7 +11,7 @@ export type PointFeature = {
 
 export type LineFeature = {
   type: 'Feature';
-  properties: { id: string; name: string };
+  properties: { id: string; name: string; routed?: boolean };
   geometry: { type: 'LineString'; coordinates: LngLat[] };
 };
 
@@ -19,7 +19,8 @@ export type FeatureCollection<F> = { type: 'FeatureCollection'; features: F[] };
 
 export type LayerSpec =
   | { id: string; kind: 'points'; color: string; data: FeatureCollection<PointFeature> | string }
-  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> };
+  // data = GeoJSON priamo, alebo URL súboru (napr. /data/geom/<slug>.json), ktorý sa stiahne až s mapou
+  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> | string };
 
 export type MapOptions = {
   center: LngLat;

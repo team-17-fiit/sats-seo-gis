@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { nearUrl } from './api';
-import { getPaths, parsePaths, pathLineGeoJSON, stopsToGeoJSON, viewFor, type TrailPath } from './paths';
+import fs from 'node:fs';
+import path from 'node:path';
+import { getPaths, parsePaths, pathGeometryUrl, stopsToGeoJSON, viewFor, type TrailPath } from './paths';
 import { slugify } from './peaks';
 
 const sample: TrailPath = {
@@ -32,7 +34,18 @@ describe('paths data', () => {
   it('builds GeoJSON in lon,lat order', () => {
     const [p] = parsePaths([sample]);
     expect(stopsToGeoJSON(p).features[0].geometry.coordinates).toEqual([17.1, 48.1]);
-    expect(pathLineGeoJSON(p).features[0].geometry.coordinates).toHaveLength(2);
+  });
+
+  it('every path has an exported geometry file with one line per leg', () => {
+    // vyžaduje app/public/data/geom/*.json (python -m pipelines.export_static --from-seed)
+    for (const p of getPaths()) {
+      expect(pathGeometryUrl(p)).toBe(`/data/geom/${p.slug}.json`);
+      const file = path.join(process.cwd(), 'public', pathGeometryUrl(p));
+      const geom = JSON.parse(fs.readFileSync(file, 'utf8'));
+      expect(geom.type).toBe('FeatureCollection');
+      expect(geom.features).toHaveLength(p.stops.length - 1);
+      expect(geom.features.every((f: { geometry: { type: string } }) => f.geometry.type === 'LineString')).toBe(true);
+    }
   });
 
   it('centres the view between the stops', () => {

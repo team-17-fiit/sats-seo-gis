@@ -2,7 +2,7 @@
 // (z PostGIS, alebo s --from-seed bez databázy). Číta sa len pri builde.
 import fs from 'node:fs';
 import path from 'node:path';
-import type { FeatureCollection, LineFeature, PointFeature } from './map/types';
+import type { FeatureCollection, PointFeature } from './map/types';
 
 export type Stop = {
   slug: string;
@@ -29,6 +29,8 @@ export type TrailPath = {
   summary_en: string | null;
   stops: Stop[];
   licence: string;
+  /** true = všetky etapy majú geometriu z OSM (GraphHopper), false = priamky medzi zastávkami */
+  geometry_routed?: boolean;
 };
 
 export const DIFFICULTY_SK: Record<TrailPath['difficulty'], string> = {
@@ -67,18 +69,12 @@ export function stopsToGeoJSON(p: TrailPath): FeatureCollection<PointFeature> {
   };
 }
 
-/** Spojnica zastávok – placeholder geometria, kým nie sú OSM relácie (šprint 2-2Z). */
-export function pathLineGeoJSON(p: TrailPath): FeatureCollection<LineFeature> {
-  return {
-    type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: { id: p.slug, name: p.name_sk },
-        geometry: { type: 'LineString', coordinates: p.stops.map((s) => [s.lon, s.lat]) },
-      },
-    ],
-  };
+/**
+ * URL geometrie trasy: GeoJSON s jednou čiarou na etapu, ktorý zapisuje `python -m pipelines.export_static`.
+ * Mapa si ho stiahne až po kliknutí, takže geometria nezväčšuje HTML stránky.
+ */
+export function pathGeometryUrl(p: Pick<TrailPath, 'slug'>): string {
+  return `/data/geom/${p.slug}.json`;
 }
 
 /** Stred a zoom, aby boli vidno všetky zastávky (hrubý odhad bez knižnice). */
