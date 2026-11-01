@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { getPaths } from './paths';
-import { categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiToGeoJSON, schemaTypes, type Poi } from './pois';
+import {
+  categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiName, poiToGeoJSON, schemaTypes,
+  type Poi,
+} from './pois';
 
 const sample: Poi = {
   slug: 'devin', name_sk: 'Devín', name_en: 'Devín castle', category: 'castle', tier: 1, unesco: false,
@@ -56,5 +59,25 @@ describe('pois helpers', () => {
     expect(ld.geo).toMatchObject({ latitude: 48.17, longitude: 16.98 });
     expect(ld.sameAs).toBeUndefined();
     expect(poiJsonLd({ ...sample, wikidata_id: 'Q1' }, 'https://x.sk').sameAs).toBe('https://www.wikidata.org/wiki/Q1');
+  });
+});
+
+describe('pois in English', () => {
+  it('uses English names, categories and fallback description', () => {
+    expect(poiName(sample, 'en')).toBe('Devín castle');
+    expect(poiName({ ...sample, name_en: null }, 'en')).toBe('Devín');
+    expect(categoryLabel('dam', 'en')).toBe('reservoir');
+    expect(poiDescription(sample, ['Main corridor spine'], 'en')).toBe(
+      'Devín castle – castle in Slovakia. A stop on the Main corridor spine trail.',
+    );
+  });
+
+  it('builds English JSON-LD with /en/ URLs and the Slovak name as alternateName', () => {
+    const ld = poiJsonLd(sample, 'https://x.sk', [{ slug: 'hlavna-os', name_sk: 'Main corridor spine' }], 'en');
+    expect(ld.url).toBe('https://x.sk/en/places/devin/');
+    expect(ld.inLanguage).toBe('en');
+    expect(ld.name).toBe('Devín castle');
+    expect(ld.alternateName).toBe('Devín');
+    expect(ld.subjectOf).toEqual([{ '@type': 'TouristTrip', name: 'Main corridor spine', url: 'https://x.sk/en/trails/hlavna-os/' }]);
   });
 });

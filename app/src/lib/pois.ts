@@ -3,6 +3,7 @@
 // Číta sa len pri builde. Polia opisu, výšky a Wikidata sú zatiaľ prázdne – doplní ich T2-05 / T2-07.
 import fs from 'node:fs';
 import path from 'node:path';
+import { pagePath, pick, T, type Locale } from './i18n';
 import type { FeatureCollection, PointFeature } from './map/types';
 
 export type Poi = {
@@ -45,8 +46,37 @@ export const CATEGORY_SK: Record<string, string> = {
   peak: 'vrchol',
 };
 
+export const CATEGORY_EN: Record<string, string> = {
+  castle: 'castle',
+  town: 'town',
+  village: 'village',
+  church: 'church',
+  monastery: 'monastery',
+  museum: 'museum',
+  nature: 'nature site',
+  lake: 'lake',
+  gorge: 'gorge',
+  cave: 'cave',
+  spa: 'spa',
+  winery: 'winery',
+  viewpoint: 'viewpoint',
+  dam: 'reservoir',
+  port: 'port',
+  trailhead: 'trailhead',
+  peak: 'peak',
+};
+
 export function categorySk(category: string): string {
   return CATEGORY_SK[category] ?? category;
+}
+
+export function categoryLabel(category: string, locale: Locale = 'sk'): string {
+  return (locale === 'en' ? CATEGORY_EN : CATEGORY_SK)[category] ?? category;
+}
+
+/** Názov miesta v jazyku stránky (náhrada za slovenčinu, ak preklad chýba). */
+export function poiName(p: Poi, locale: Locale = 'sk'): string {
+  return pick(locale, p.name_sk, p.name_en);
 }
 
 /** Konkrétnejší schema.org typ podľa kategórie; TouristAttraction je vždy prvý (dokumentácia, výpis 5.3). */
@@ -90,21 +120,19 @@ export function getPoi(slug: string): Poi | undefined {
 }
 
 /** Meta description: kurátorský opis, ak existuje, inak veta poskladaná z faktov. */
-export function poiDescription(p: Poi, pathNames: string[] = []): string {
-  if (p.description_sk) return p.description_sk;
-  const parts = [`${p.name_sk} – ${categorySk(p.category)} na Slovensku`];
-  if (p.unesco) parts[0] += ', pamiatka UNESCO';
-  if (pathNames.length) parts.push(`Zastávka na trase ${pathNames.join(', ')}`);
-  return parts.join('. ') + '.';
+export function poiDescription(p: Poi, pathNames: string[] = [], locale: Locale = 'sk'): string {
+  const curated = locale === 'en' ? p.description_en : p.description_sk;
+  if (curated) return curated;
+  return T[locale].placeFallback(poiName(p, locale), categoryLabel(p.category, locale), p.unesco, pathNames);
 }
 
-export function poiToGeoJSON(p: Poi): FeatureCollection<PointFeature> {
+export function poiToGeoJSON(p: Poi, locale: Locale = 'sk'): FeatureCollection<PointFeature> {
   return {
     type: 'FeatureCollection',
     features: [
       {
         type: 'Feature',
-        properties: { id: p.slug, name: p.name_sk },
+        properties: { id: p.slug, name: poiName(p, locale) },
         geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
       },
     ],
@@ -112,27 +140,33 @@ export function poiToGeoJSON(p: Poi): FeatureCollection<PointFeature> {
 }
 
 /** JSON-LD stránky miesta (schema.org). Čistá funkcia, aby sa dala testovať bez buildu. */
-export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_sk: string }[] = []) {
+/** `paths` nesú názov trasy už v jazyku stránky (name_sk = zobrazený názov). */
+export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_sk: string }[] = [], locale: Locale = 'sk') {
   const data: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': schemaTypes(p.category),
-    name: p.name_sk,
-    description: poiDescription(p, paths.map((x) => x.name_sk)),
-    url: `${siteUrl}/miesta/${p.slug}/`,
-    inLanguage: 'sk-SK',
+    name: poiName(p, locale),
+    description: poiDescription(p, paths.map((x) => x.name_sk), locale),
+    url: siteUrl + pagePath(locale, 'place', p.slug),
+    inLanguage: locale === 'en' ? 'en' : 'sk-SK',
     geo: {
       '@type': 'GeoCoordinates',
       latitude: p.lat,
       longitude: p.lon,
       ...(p.elevation_m != null ? { elevation: p.elevation_m } : {}),
     },
-    containedInPlace: { '@type': 'Country', name: 'Slovensko' },
+    containedInPlace: { '@type': 'Country', name: T[locale].country },
     isAccessibleForFree: true,
   };
-  if (p.name_en) data.alternateName = p.name_en;
+  const other = locale === 'en' ? p.name_sk : p.name_en;
+  if (other && other !== data.name) data.alternateName = other;
   if (p.wikidata_id) data.sameAs = `https://www.wikidata.org/wiki/${p.wikidata_id}`;
   if (paths.length) {
-    data.subjectOf = paths.map((x) => ({ '@type': 'TouristTrip', name: x.name_sk, url: `${siteUrl}/trasy/${x.slug}/` }));
+    data.subjectOf = paths.map((x) => ({
+      '@type': 'TouristTrip',
+      name: x.name_sk,
+      url: siteUrl + pagePath(locale, 'trail', x.slug),
+    }));
   }
   return data;
 }

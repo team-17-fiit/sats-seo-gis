@@ -12,9 +12,19 @@ type Props = {
   center?: LngLat;
   zoom?: number;
   label?: string;
+  /** Texty tlačidla v jazyku stránky (T2-14). Posielajú sa ako props, aby slovník nebol v JS bundli. */
+  texts?: MapTexts;
 };
 
-export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, label = 'Mapa' }: Props) {
+export type MapTexts = { load: string; loading: string; error: string };
+
+const SK_TEXTS: MapTexts = {
+  load: 'Zobraziť interaktívnu mapu',
+  loading: 'Načítavam mapu…',
+  error: 'Mapu sa nepodarilo načítať – skúsiť znova',
+};
+
+export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, label = 'Mapa', texts = SK_TEXTS }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapAdapter | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -51,9 +61,9 @@ export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, l
 
   const showButton = status !== 'ready';
   const text =
-    status === 'loading' ? 'Načítavam mapu…'
-    : status === 'error' ? 'Mapu sa nepodarilo načítať – skúsiť znova'
-    : 'Zobraziť interaktívnu mapu';
+    status === 'loading' ? texts.loading
+    : status === 'error' ? texts.error
+    : texts.load;
 
   return (
     <div

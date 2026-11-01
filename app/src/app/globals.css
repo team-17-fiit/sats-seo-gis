@@ -40,3 +40,5 @@ main{max-width:960px;margin:0 auto;padding:0 1rem 2rem}
 @media (prefers-color-scheme:dark){.path-card{background:color-mix(in srgb,var(--bg) 85%,#000)}}
 .path-links{list-style:none;padding:0}
 .path-links li{display:flex;align-items:center;gap:.5rem;margin:.25rem 0}
+.top{position:relative}
+.lang-switch{position:absolute;top:1.2rem;right:1rem;margin:0;font-weight:600}
