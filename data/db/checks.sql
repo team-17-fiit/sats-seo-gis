@@ -24,3 +24,8 @@ LEFT JOIN canonical.licence l ON l.id = s.licence_id WHERE l.id IS NULL;
 
 -- check: proprietary_in_public_mart
 SELECT count(*) FROM marts.mart_poi_pages WHERE licence = 'PROPRIETARY';
+
+-- check: route_without_segments
+SELECT count(*) FROM canonical.route r
+WHERE r.geom IS NOT NULL
+  AND NOT EXISTS (SELECT 1 FROM canonical.route_segment s WHERE s.route_id = r.id);

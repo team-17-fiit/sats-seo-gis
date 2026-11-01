@@ -198,8 +198,9 @@ def promote_routes(cur) -> int:
         """
         INSERT INTO canonical.route (osm_relation_id, name, route_type, network, ref, colour, geom,
                                      source_id, licence_id)
-        SELECT osm_id, name, route, network, ref, colour, ST_Multi(geom), %s, %s
-        FROM staging.osm_route WHERE geom IS NOT NULL AND NOT ST_IsEmpty(geom)
+        SELECT osm_id, name, route, network, ref, colour,
+               CASE WHEN geom IS NULL OR ST_IsEmpty(geom) THEN NULL ELSE ST_Multi(geom) END, %s, %s
+        FROM staging.osm_route
         ON CONFLICT (osm_relation_id) DO UPDATE SET
           name = EXCLUDED.name, route_type = EXCLUDED.route_type, network = EXCLUDED.network,
           ref = EXCLUDED.ref, colour = EXCLUDED.colour, geom = EXCLUDED.geom
@@ -218,6 +219,39 @@ def promote_routes(cur) -> int:
         (ds6_src, ds6_lic),
     )
     return n + cur.rowcount
+
+
+def link_sub_routes(cur) -> int:
+    """route > sub-route: podľa členstva relácií v OSM nastaví parent_id (T2-06)."""
+    cur.execute("SELECT to_regclass('staging.osm_route_member') IS NOT NULL")
+    if not cur.fetchone()[0]:
+        return 0
+    cur.execute("UPDATE canonical.route SET parent_id = NULL WHERE parent_id IS NOT NULL")
+    cur.execute(
+        """
+        UPDATE canonical.route child SET parent_id = parent.id
+        FROM staging.osm_route_member m
+        JOIN canonical.route parent ON parent.osm_relation_id = m.osm_id
+        WHERE child.osm_relation_id = m.member_id AND child.id <> parent.id
+        """
+    )
+    return cur.rowcount
+
+
+def build_route_segments(cur) -> int:
+    """sub-route > segment: geometriu trasy rozdelí na súvislé čiary v poradí (T2-06)."""
+    cur.execute("TRUNCATE canonical.route_segment")
+    cur.execute(
+        """
+        INSERT INTO canonical.route_segment (route_id, seq, geom)
+        SELECT r.id, row_number() OVER (PARTITION BY r.id ORDER BY d.path), d.geom
+        FROM canonical.route r,
+             LATERAL ST_Dump(ST_LineMerge(r.geom)) d
+        WHERE r.geom IS NOT NULL
+          AND GeometryType(d.geom) = 'LINESTRING' AND ST_NPoints(d.geom) >= 2 AND ST_IsValid(d.geom)
+        """
+    )
+    return cur.rowcount
 
 
 def link_detours(cur) -> int:
@@ -254,6 +288,7 @@ def main() -> None:
         print(f"rurAllure DS1: {ok} kandidátov, {bad} do karantény")
         if has_osm_route:
             print(f"Trasy (OSM + DS6): {promote_routes(cur)}")
+            print(f"Podtrasy: {link_sub_routes(cur)}, úseky trás: {build_route_segments(cur)}")
         print(f"Odbočky do {DETOUR_RADIUS_M / 1000:.0f} km: {link_detours(cur)}")
         conn.commit()
 
