@@ -7,7 +7,7 @@ PY ?= python3
 BACKEND := backend
 export DATABASE_URL ?= postgresql://satsgis:satsgis@localhost:5432/satsgis
 
-.PHONY: help install db db-down migrate fetch data data-fixtures export api dev \
+.PHONY: help install db db-down routing migrate fetch data data-fixtures route export api dev \
         export-seed backend-lint backend-test app-lint app-test test lint
 
 help: ## zoznam cieľov
@@ -20,6 +20,9 @@ install: ## nainštaluje závislosti frontendu aj backendu
 # --- databáza -----------------------------------------------------------------
 db: ## spustí PostGIS v Dockeri (localhost:5432)
 	docker compose up -d db
+
+routing: ## spustí GraphHopper v Dockeri (localhost:8989, potrebuje `make fetch`)
+	docker compose up -d graphhopper
 
 db-down: ## zastaví kontajnery
 	docker compose down
@@ -38,6 +41,7 @@ data: migrate ## celá pipeline nad skutočnými dátami (po `make fetch`)
 	cd $(BACKEND) && $(PY) -m pipelines.load_rurallure --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
+	cd $(BACKEND) && $(PY) -m pipelines.route_legs
 	cd $(BACKEND) && $(PY) -m pipelines.validate
 	cd $(BACKEND) && $(PY) -m pipelines.export_static
 
@@ -48,7 +52,11 @@ data-fixtures: migrate ## celá pipeline nad malými vzorkami (sekundy, aj v CI)
 	cd $(BACKEND) && $(PY) -m pipelines.load_rurallure --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
+	cd $(BACKEND) && $(PY) -m pipelines.route_legs
 	cd $(BACKEND) && $(PY) -m pipelines.validate
+
+route: ## prepočíta geometriu etáp cez GraphHopper (ALL=1 = všetky)
+	cd $(BACKEND) && $(PY) -m pipelines.route_legs $(if $(ALL),--all)
 
 export: ## zapíše app/public/data/paths.json z DB
 	cd $(BACKEND) && $(PY) -m pipelines.export_static

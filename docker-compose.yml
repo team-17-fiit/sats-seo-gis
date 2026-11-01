@@ -2,6 +2,7 @@
 # Lokálne prostredie: PostGIS + API
 #   docker compose up -d db          # len databáza (localhost:5432)
 #   docker compose up -d             # databáza + API (localhost:8000)
+#   docker compose up -d graphhopper # trasovanie po OSM (localhost:8989), pozri data/routing/
 # Migrácie sa pri prvom štarte DB aplikujú automaticky (initdb.d);
 # neskôr ich aplikuje `make migrate` (idempotentné).
 # =============================================================================
@@ -36,6 +37,18 @@ services:
       CORS_ORIGINS: http://localhost:3000,http://localhost:4173
     ports:
       - "8000:8000"
+
+  graphhopper:
+    image: israelhikingmap/graphhopper:latest   # config.yml je pre GraphHopper 10.x; po overení zafixuj tag
+    container_name: satsgis-graphhopper
+    command: --input /data/slovakia-latest.osm.pbf --config /config/config.yml --host 0.0.0.0
+    environment:
+      JAVA_OPTS: -Xmx2g
+    volumes:
+      - ./data/raw:/data              # PBF z `make fetch`, graf sa uloží do data/raw/graph-cache
+      - ./data/routing:/config:ro     # config.yml + vlastné custom modely
+    ports:
+      - "8989:8989"
 
 volumes:
   pgdata:

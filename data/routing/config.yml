@@ -1,0 +1,32 @@
+# =============================================================================
+# GraphHopper – trasovanie etáp po OSM (pipelines.route_legs). Napísané pre GraphHopper 10.x.
+# Spúšťa sa cez `docker compose up -d graphhopper`; prvý štart importuje
+# data/raw/slovakia-latest.osm.pbf do data/raw/graph-cache (niekoľko minút).
+# Po zmene tohto súboru zmaž data/raw/graph-cache, aby sa graf postavil znova.
+# Ak sa nová verzia sťažuje na neznámy kľúč, porovnaj s config-example.yml danej verzie.
+# =============================================================================
+graphhopper:
+  datareader.file: /data/slovakia-latest.osm.pbf
+  graph.location: /data/graph-cache
+
+  # Hodnoty, ktoré potrebujú profily nižšie. foot_network/bike_network hovoria,
+  # či cesta patrí do značenej OSM trasy – route_legs podľa nich delí etapu na úseky.
+  graph.encoded_values: >-
+    foot_access, foot_priority, foot_average_speed, foot_network, hike_rating,
+    bike_access, bike_priority, bike_average_speed, bike_network, mtb_rating,
+    car_access, car_average_speed, road_access, max_speed,
+    road_class, road_environment, roundabout, surface, track_type
+
+  profiles:
+    - name: hike                                # active, wine, heritage, pilgrimage, wilderness
+      custom_model_files: [hike.json, marked_trails.json]
+    - name: bike                                # cycling
+      custom_model_files: [bike.json]
+    - name: car                                 # museums (presuny medzi mestami)
+      custom_model_files: [car.json]
+
+  # bez CH/LM: pár desiatok etáp sa vypočíta aj bez predpočtov a import je rýchlejší
+  profiles_ch: []
+  profiles_lm: []
+
+  custom_models.directory: /config
