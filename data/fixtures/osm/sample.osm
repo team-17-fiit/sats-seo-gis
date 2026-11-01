@@ -35,6 +35,7 @@
   <node id="4001" version="1" lat="49.1500" lon="20.0500"/>
   <node id="4002" version="1" lat="49.1600" lon="20.0700"/>
   <node id="4003" version="1" lat="49.1795" lon="20.0883"/>
+  <node id="4004" version="1" lat="49.1950" lon="20.1100"/>
   <!-- uzavretá cesta: zámok ako plocha -> bod v strede -->
   <way id="3001" version="1">
     <nd ref="2001"/><nd ref="2002"/><nd ref="2003"/><nd ref="2004"/><nd ref="2001"/>
@@ -49,6 +50,10 @@
     <nd ref="4002"/><nd ref="4003"/>
     <tag k="highway" v="path"/>
   </way>
+  <way id="5003" version="1">
+    <nd ref="4003"/><nd ref="4004"/>
+    <tag k="highway" v="path"/>
+  </way>
   <!-- turistická trasa ako relácia -->
   <relation id="6001" version="1">
     <member type="way" ref="5001" role=""/>
@@ -58,5 +63,22 @@
     <tag k="network" v="lwn"/>
     <tag k="name" v="Štrbské Pleso – Rysy"/>
     <tag k="osmc:symbol" v="red:white:red_bar"/>
+  </relation>
+  <!-- druhá podtrasa -->
+  <relation id="6002" version="1">
+    <member type="way" ref="5003" role=""/>
+    <tag k="type" v="route"/>
+    <tag k="route" v="hiking"/>
+    <tag k="network" v="lwn"/>
+    <tag k="name" v="Rysy – hranica"/>
+  </relation>
+  <!-- nadradená trasa: obsahuje dve podtrasy (relácie), sama nemá cesty -->
+  <relation id="6100" version="1">
+    <member type="relation" ref="6001" role=""/>
+    <member type="relation" ref="6002" role=""/>
+    <tag k="type" v="superroute"/>
+    <tag k="route" v="hiking"/>
+    <tag k="network" v="rwn"/>
+    <tag k="name" v="Testovacia nadtrasa Tatry"/>
   </relation>
 </osm>

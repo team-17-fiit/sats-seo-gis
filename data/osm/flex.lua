@@ -1,5 +1,5 @@
 -- =============================================================================
--- osm2pgsql flex štýl – OSM PBF -> staging.osm_poi, staging.osm_route  (T1-05)
+-- osm2pgsql flex štýl – OSM PBF -> staging.osm_poi, staging.osm_route, staging.osm_route_member  (T1-05, T2-06)
 -- -----------------------------------------------------------------------------
 -- Spustenie (cez pipelines.load_osm):
 --   osm2pgsql -O flex -S data/osm/flex.lua -d $DATABASE_URL data/raw/slovakia-latest.osm.pbf
@@ -38,6 +38,17 @@ tables.osm_route = osm2pgsql.define_table({
         { column = 'colour',  type = 'text' },
         { column = 'tags',    type = 'jsonb' },
         { column = 'geom',    type = 'multilinestring', projection = 4326 },
+    },
+})
+
+-- Podtrasy: relácia trasy, ktorá je členom inej relácie trasy (napr. etapa EuroVelo 6).
+tables.osm_route_member = osm2pgsql.define_table({
+    name = 'osm_route_member',
+    schema = 'staging',
+    ids = { type = 'relation', id_column = 'osm_id' },
+    columns = {
+        { column = 'member_id', type = 'int8', not_null = true },
+        { column = 'seq',       type = 'int4', not_null = true },
     },
 })
 
@@ -116,8 +127,16 @@ end
 
 function osm2pgsql.process_relation(object)
     local tags = object.tags
-    if tags.type == 'route' and (ROUTE_TYPES[tags.route] or tags.route == 'pilgrimage'
-        or tags.pilgrimage == 'yes') then
+    if (tags.type == 'route' or tags.type == 'superroute')
+        and (ROUTE_TYPES[tags.route] or tags.route == 'pilgrimage' or tags.pilgrimage == 'yes') then
+        -- členovia typu relácia = podtrasy (poradie podľa poradia v relácii)
+        local seq = 0
+        for _, member in ipairs(object.members) do
+            if member.type == 'r' then
+                seq = seq + 1
+                tables.osm_route_member:insert({ member_id = member.ref, seq = seq })
+            end
+        end
         tables.osm_route:insert({
             name = tags.name,
             route = tags.route,
