@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "licence": "CC-BY-4.0", "features": [{"type": "Feature", "properties": {"id": "medvedi-chodnik-1", "name": "Etapa 1", "seq": 1, "from": "poloniny-park-tmavej-oblohy", "to": "vihorlat-medvedi-chodnik", "length_km": null, "routed": false}, "geometry": {"type": "LineString", "coordinates": [[22.273, 48.935], [22.09, 48.88]]}}]}

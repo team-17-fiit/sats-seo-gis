@@ -23,3 +23,14 @@ def test_merges_neighbouring_intervals_with_same_value():
 def test_skips_zero_length_intervals():
     parts = split_by_network(LINE, [[0, 0, "LOCAL"], [0, 4, "MISSING"]])
     assert parts == [("MISSING", LINE)]
+
+
+def test_seed_export_has_one_straight_leg_per_stop_pair():
+    from pipelines.export_static import from_seed
+
+    paths, geoms = from_seed()
+    for p in paths:
+        legs = geoms[p["slug"]]
+        assert len(legs) == len(p["stops"]) - 1
+        assert p["geometry_routed"] is False
+        assert all(f["geometry"]["type"] == "LineString" for f in legs)

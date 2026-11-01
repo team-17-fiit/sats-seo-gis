@@ -123,7 +123,8 @@
     "lon": 22.273
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "malokarpatska-vinna-cesta",
@@ -219,7 +220,8 @@
     "lon": 17.837
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "povazska-hradna-cesta",
@@ -305,7 +307,8 @@
     "lon": 19.053
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "cesta-marie",
@@ -461,7 +464,8 @@
     "lon": 19.359
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "medvedi-chodnik",
@@ -497,7 +501,8 @@
     "lon": 22.09
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "cyklotrasa-ev6-ev13-vah",
@@ -603,7 +608,8 @@
     "lon": 19.053
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  },
  {
   "slug": "okruh-muzei-a-galerii",
@@ -709,6 +715,7 @@
     "lon": 21.259
    }
   ],
-  "licence": "CC-BY-4.0"
+  "licence": "CC-BY-4.0",
+  "geometry_routed": false
  }
 ]
