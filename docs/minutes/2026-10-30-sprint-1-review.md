@@ -9,7 +9,7 @@
 
 | ID | Story | Body | Riešiteľ | Stav | Dôkaz v repozitári |
 |---|---|---|---|---|---|
-| S1-3 | OSM extrakt 7 trás v PostGIS | 5 | C | hotové (na fixtures), čaká na beh nad plným PBF | `data/db/migrations/`, `backend/pipelines/`, `data/seed/paths.json` |
+| S1-3 | OSM extrakt 7 trás v PostGIS | 5 | C | hotové (plný extrakt SR naimportovaný 2026-11-01, T1-18) | `data/db/migrations/`, `backend/pipelines/`, `data/seed/paths.json` |
 | S1-4 | projektový web online | 1 | E | mimo tohto repozitára | – |
 | US-11 | každý POI riadok má zdroj a licenciu | 5 | C | hotové | `docs/planning/data-licence-register.md`, `NOT NULL source_id/licence_id`, `data/db/checks.sql`, CI job `data-contract` |
 | US-18 | CI spúšťa lint a unit testy na každom PR | 5 | D | hotové | `.github/workflows/ci.yml` (`app-lint-unit`, `backend-lint-unit`) |
@@ -39,7 +39,7 @@
 
 | KPI | Baseline 1-1Z | Ako zmerané | Cieľ |
 |---|---|---|---|
-| K10 dátové pokrytie | 39 schválených POI (38 kurátorských zastávok + 1 OSM z fixtures), 7 trás | `make data-fixtures` → `pipelines.validate` | ≥ 500 POI |
+| K10 dátové pokrytie | **30 123 schválených POI**, 7 trás, 5 773 OSM trás (263 podtrás); karanténa 31 359 (takmer všetky OSM objekty bez názvu). Na fixtures bolo 39 POI. | plný `slovakia-latest.osm.pbf` (Geofabrik, 347 MB) → `load_osm`, `promote`, `pipelines.validate` (2026-11-01) | ≥ 500 POI ✓ |
 | K7 funkčná kvalita | 19 pytest + 14 Vitest unit testov, 0 zlyhaní; E2E 3 + 5 scenárov (Playwright) | lokálne; E2E v CI | 100 % E2E |
 | K19 štruktúrované dáta | JSON-LD na všetkých typoch stránok (WebSite, ItemList, TouristTrip, Mountain) | kontrola HTML výstupu `out/` | 100 % Rich Results |
 | JS first load | 103 kB zdieľané, 108 kB úvodná stránka; MapLibre mimo úvodného balíka | `next build` | sledovať (TBT) |
@@ -64,5 +64,5 @@
 | Založiť GitHub Projects board podľa `docs/methodology/tasks.md` | G | 2026-11-02 |
 | Zapnúť ochranu `main` (required checks) | D | 2026-11-02 |
 | Doplniť DOI DS1/DS6 a overiť ich licenciu | C | 2026-11-05 |
-| Stiahnuť a naimportovať plné OSM dáta (`python -m pipelines.fetch`, `load_osm`, `promote`), zapísať K10 | C | 2026-11-06 |
+| ~~Stiahnuť a naimportovať plné OSM dáta, zapísať K10~~ hotové 2026-11-01 (T1-18). Geometriu z OSM má zatiaľ 9 z 53 úsekov našich trás, ostatné sú priamky – zastávky sú od seba desiatky km a žiadna jedna OSM trasa nejde popri oboch | C | 2026-11-06 |
 | Zapísať K1–K4 baseline z CI | D | 2026-11-03 |

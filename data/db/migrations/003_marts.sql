@@ -3,6 +3,8 @@
 -- =============================================================================
 
 -- Stránky trás: trasa + zoradené zastávky (vstup pre export_static.py a API)
+-- DROP: 005 pridáva stĺpec segments a CREATE OR REPLACE nevie stĺpce ubrať pri opakovanom behu
+DROP VIEW IF EXISTS marts.mart_path_pages;
 CREATE OR REPLACE VIEW marts.mart_path_pages AS
 SELECT
     pa.slug, pa.name_sk, pa.name_en, pa.theme, pa.pilot_code, pa.difficulty,
