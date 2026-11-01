@@ -17,6 +17,7 @@ export default function ThemeToggle() {
     try {
       localStorage.setItem('theme', next);
     } catch {
+      // localStorage môže byť zablokovaný; téma platí aspoň do zatvorenia stránky
     }
     setTheme(next);
   }
