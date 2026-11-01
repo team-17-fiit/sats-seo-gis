@@ -92,7 +92,7 @@ export default async function PathPage({ params }: Props) {
           <ol className="stops" id="stop-list">
             {p.stops.map((s) => (
               <li key={s.slug}>
-                {s.name_sk}
+                <Link href={`/miesta/${s.slug}/`}>{s.name_sk}</Link>
                 {s.unesco && <span className="badge" title="Svetové dedičstvo UNESCO">UNESCO</span>}
               </li>
             ))}
