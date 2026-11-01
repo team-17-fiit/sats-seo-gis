@@ -1,6 +1,7 @@
 """Unit testy ETL bez databázy: parsery, quality score, kontrakt seedu."""
 
 from pipelines.common import FIXTURES_DIR, in_slovakia_bbox, slugify
+from pipelines.export_static import from_seed, pois_from_seed
 from pipelines.load_geonames import parse as parse_geonames
 from pipelines.load_natural_earth import slovak_features
 from pipelines.load_rurallure import parse_ds1, parse_ds6
@@ -85,3 +86,13 @@ def test_checks_sql_is_parsed():
     names = [n for n, _ in checks]
     assert "poi_without_source_or_licence" in names
     assert all(q.lower().startswith("select") for _, q in checks)
+
+
+def test_poi_export_covers_every_stop_as_t1():
+    pois = {p["slug"]: p for p in pois_from_seed()}
+    for path in from_seed():
+        for stop in path["stops"]:
+            assert stop["slug"] in pois
+            assert path["slug"] in pois[stop["slug"]]["paths"]
+    assert all(p["tier"] == 1 for p in pois.values())
+    assert all(p["licence"] and p["source"] for p in pois.values())  # licenčná brána (US-11)
