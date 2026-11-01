@@ -137,7 +137,7 @@ def main() -> None:
                 JOIN canonical.poi a ON a.id = pp.poi_id
                 JOIN canonical.poi b ON b.id = nx.poi_id
                 WHERE pp.path_id = %s AND pp.role = 'stop' AND NOT ST_Equals(a.geom, b.geom)
-                ON CONFLICT (path_id, seq) DO NOTHING
+                ON CONFLICT DO NOTHING
                 """,
                 (src_id, lic_id, path_id),
             )
