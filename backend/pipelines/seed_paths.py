@@ -3,7 +3,7 @@
     python -m pipelines.seed_paths
 
 Vytvorí aj placeholder `path_segment` (priamky medzi zastávkami, surface='placeholder'),
-aby mapa mala čo kresliť. V šprinte 2-2Z ich nahradí geometria OSM relácií (route_path).
+aby mapa mala čo kresliť. pipelines.promote ich nahradí geometriou OSM trás, kde existuje (T2-06).
 """
 
 from __future__ import annotations
@@ -125,8 +125,9 @@ def main() -> None:
                     (poi_ids[stop], path_id, seq),
                 )
 
-            # placeholder geometria: priamky medzi po sebe idúcimi zastávkami
-            cur.execute("DELETE FROM canonical.path_segment WHERE path_id = %s AND surface = 'placeholder'", (path_id,))
+            # placeholder geometria: priamky medzi po sebe idúcimi zastávkami;
+            # pipelines.promote ich potom nahradí úsekmi z OSM trás, kde existujú (T2-06)
+            cur.execute("DELETE FROM canonical.path_segment WHERE path_id = %s", (path_id,))
             cur.execute(
                 """
                 INSERT INTO canonical.path_segment (path_id, seq, surface, geom, source_id, licence_id)

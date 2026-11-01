@@ -36,6 +36,10 @@
   <node id="4002" version="1" lat="49.1600" lon="20.0700"/>
   <node id="4003" version="1" lat="49.1795" lon="20.0883"/>
   <node id="4004" version="1" lat="49.1950" lon="20.1100"/>
+  <node id="7001" version="1" lat="48.2522" lon="17.2148"/>
+  <node id="7002" version="1" lat="48.2580" lon="17.2420"/>
+  <node id="7003" version="1" lat="48.2760" lon="17.2580"/>
+  <node id="7004" version="1" lat="48.2882" lon="17.2692"/>
   <!-- uzavretá cesta: zámok ako plocha -> bod v strede -->
   <way id="3001" version="1">
     <nd ref="2001"/><nd ref="2002"/><nd ref="2003"/><nd ref="2004"/><nd ref="2001"/>
@@ -54,6 +58,11 @@
     <nd ref="4003"/><nd ref="4004"/>
     <tag k="highway" v="path"/>
   </way>
+  <!-- cesta medzi zastávkami Svätý Jur a Pezinok (Malokarpatská vínna cesta) -->
+  <way id="8001" version="1">
+    <nd ref="7001"/><nd ref="7002"/><nd ref="7003"/><nd ref="7004"/>
+    <tag k="highway" v="track"/>
+  </way>
   <!-- turistická trasa ako relácia -->
   <relation id="6001" version="1">
     <member type="way" ref="5001" role=""/>
@@ -71,6 +80,14 @@
     <tag k="route" v="hiking"/>
     <tag k="network" v="lwn"/>
     <tag k="name" v="Rysy – hranica"/>
+  </relation>
+  <!-- cyklotrasa, ktorá prechádza pri dvoch zastávkach našej trasy -->
+  <relation id="6003" version="1">
+    <member type="way" ref="8001" role=""/>
+    <tag k="type" v="route"/>
+    <tag k="route" v="bicycle"/>
+    <tag k="network" v="lcn"/>
+    <tag k="name" v="Vinohradnícka cyklotrasa (vzorka)"/>
   </relation>
   <!-- nadradená trasa: obsahuje dve podtrasy (relácie), sama nemá cesty -->
   <relation id="6100" version="1">

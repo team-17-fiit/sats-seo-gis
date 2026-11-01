@@ -7,6 +7,7 @@
 - rurAllure DS1 -> canonical.poi so statusom 'candidate' (licencia čaká na overenie).
 - OSM trasy a rurAllure DS6 -> canonical.route.
 - Čo neprejde, ide do quarantine.rejected_row s dôvodom.
+- OSM trasy -> podtrasy a úseky; úseky našich trás medzi zastávkami dostanú geometriu OSM trasy.
 - Nakoniec prepočíta odbočky poi_path(role='detour') do 2 km od trás.
 """
 
@@ -19,6 +20,7 @@ from .quality import PUBLISH_THRESHOLD, quality_score, tier_for
 
 DEDUP_RADIUS_M = 150
 DETOUR_RADIUS_M = 2000
+STOP_SNAP_M = 500  # zastávka musí byť do 500 m od OSM trasy, aby sa použila jej geometria
 
 
 def reject(cur, source: str, ext_id: str | None, reason: str, payload: dict) -> None:
@@ -254,6 +256,56 @@ def build_route_segments(cur) -> int:
     return cur.rowcount
 
 
+def build_path_geometry(cur) -> int:
+    """Úseky našich trás (medzi dvoma zastávkami) nahradí časťou OSM trasy, ktorá prechádza
+    pri oboch zastávkach (do STOP_SNAP_M). Kde taká nie je, ostane priamka. Naplní aj route_path."""
+    osm_src, osm_lic = source_ids(cur, "osm")
+    cur.execute(
+        """
+        CREATE TEMP TABLE matched ON COMMIT DROP AS
+        SELECT ps.id AS segment_id, ps.path_id, best.route_id, best.geom
+        FROM canonical.path_segment ps
+        JOIN canonical.poi_path a ON a.path_id = ps.path_id AND a.seq = ps.seq AND a.role = 'stop'
+        JOIN canonical.poi_path b ON b.path_id = ps.path_id AND b.seq = ps.seq + 1 AND b.role = 'stop'
+        JOIN canonical.poi pa ON pa.id = a.poi_id
+        JOIN canonical.poi pb ON pb.id = b.poi_id
+        CROSS JOIN LATERAL (
+            SELECT rs.route_id,
+                   CASE WHEN f.fa < f.fb THEN ST_LineSubstring(rs.geom, f.fa, f.fb)
+                        ELSE ST_Reverse(ST_LineSubstring(rs.geom, f.fb, f.fa)) END AS geom
+            FROM canonical.route_segment rs
+            CROSS JOIN LATERAL (SELECT ST_LineLocatePoint(rs.geom, pa.geom) AS fa,
+                                       ST_LineLocatePoint(rs.geom, pb.geom) AS fb) f
+            WHERE ST_DWithin(rs.geom::geography, pa.geom::geography, %(snap)s)
+              AND ST_DWithin(rs.geom::geography, pb.geom::geography, %(snap)s)
+              AND f.fa <> f.fb
+            ORDER BY abs(f.fb - f.fa) * ST_Length(rs.geom::geography)
+            LIMIT 1
+        ) best
+        """,
+        {"snap": STOP_SNAP_M},
+    )
+    cur.execute(
+        """
+        UPDATE canonical.path_segment ps
+        SET geom = m.geom, surface = 'osm', source_id = %s, licence_id = %s
+        FROM matched m WHERE ps.id = m.segment_id
+        """,
+        (osm_src, osm_lic),
+    )
+    n = cur.rowcount
+    cur.execute("DELETE FROM canonical.route_path")
+    cur.execute(
+        """
+        INSERT INTO canonical.route_path (route_id, path_id, share_pct)
+        SELECT m.route_id, m.path_id,
+               round(100.0 * count(*) / (SELECT count(*) FROM canonical.path_segment s WHERE s.path_id = m.path_id), 2)
+        FROM matched m GROUP BY m.route_id, m.path_id
+        """
+    )
+    return n
+
+
 def link_detours(cur) -> int:
     """POI do 2 km od segmentov trasy, ktoré nie sú jej zastávkou -> role 'detour'."""
     cur.execute("DELETE FROM canonical.poi_path WHERE role = 'detour'")
@@ -289,6 +341,7 @@ def main() -> None:
         if has_osm_route:
             print(f"Trasy (OSM + DS6): {promote_routes(cur)}")
             print(f"Podtrasy: {link_sub_routes(cur)}, úseky trás: {build_route_segments(cur)}")
+            print(f"Úseky našich trás podľa OSM geometrie: {build_path_geometry(cur)}")
         print(f"Odbočky do {DETOUR_RADIUS_M / 1000:.0f} km: {link_detours(cur)}")
         conn.commit()
 
