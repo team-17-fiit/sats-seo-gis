@@ -29,6 +29,8 @@ export type TrailPath = {
   summary_en: string | null;
   stops: Stop[];
   licence: string;
+  /** Geometria úsekov medzi zastávkami z DB (OSM trasa alebo priamka). Bez DB chýba. */
+  segments?: [number, number][][];
 };
 
 export const DIFFICULTY_SK: Record<TrailPath['difficulty'], string> = {
@@ -67,17 +69,16 @@ export function stopsToGeoJSON(p: TrailPath): FeatureCollection<PointFeature> {
   };
 }
 
-/** Spojnica zastávok – placeholder geometria, kým nie sú OSM relácie (šprint 2-2Z). */
+/** Čiara trasy: úseky z DB (podľa OSM), inak spojnica zastávok. */
 export function pathLineGeoJSON(p: TrailPath): FeatureCollection<LineFeature> {
+  const lines = p.segments?.length ? p.segments : [p.stops.map((s): [number, number] => [s.lon, s.lat])];
   return {
     type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        properties: { id: p.slug, name: p.name_sk },
-        geometry: { type: 'LineString', coordinates: p.stops.map((s) => [s.lon, s.lat]) },
-      },
-    ],
+    features: lines.map((coordinates, i) => ({
+      type: 'Feature',
+      properties: { id: `${p.slug}-${i + 1}`, name: p.name_sk },
+      geometry: { type: 'LineString', coordinates },
+    })),
   };
 }
 

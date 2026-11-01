@@ -100,7 +100,7 @@ def from_db() -> list[dict]:
     with connect() as conn, conn.cursor() as cur:
         cur.execute(
             """SELECT slug, name_sk, name_en, theme, pilot_code, difficulty, length_km, colour, mark,
-                      summary_sk, summary_en, stops, licence
+                      summary_sk, summary_en, stops, licence, segments
                FROM marts.mart_path_pages ORDER BY slug"""
         )
         cols = [d.name for d in cur.description]

@@ -35,6 +35,13 @@ describe('paths data', () => {
     expect(pathLineGeoJSON(p).features[0].geometry.coordinates).toHaveLength(2);
   });
 
+  it('draws segments from the database instead of the straight stop line', () => {
+    const [p] = parsePaths([{ ...sample, segments: [[[17.1, 48.1], [17.2, 48.15], [17.3, 48.3]]] }]);
+    const line = pathLineGeoJSON(p);
+    expect(line.features).toHaveLength(1);
+    expect(line.features[0].geometry.coordinates).toHaveLength(3);
+  });
+
   it('centres the view between the stops', () => {
     const v = viewFor(parsePaths([sample])[0]);
     expect(v.center[0]).toBeCloseTo(17.2);

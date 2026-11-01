@@ -84,7 +84,7 @@ export default async function PathPage({ params }: Props) {
               { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(p) },
             ]}
           />
-          <p className="note">Čiara spája zastávky priamo – presná geometria z OSM príde v ďalšom šprinte.</p>
+          <p className="note">Čiara ide po trasách z OpenStreetMap; kde chýbajú, spája zastávky priamo.</p>
         </section>
 
         <section>
