@@ -49,7 +49,7 @@
   "paths": [
     {
       "slug": "hlavna-os", "name_sk": "Hlavná os Slovenska", "name_en": "Main corridor spine",
-      "theme": "active", "pilot": "A", "difficulty": "mixed", "length_km": 770, "colour": "#c62828",
+      "theme": "active", "profile": "hike", "pilot": "A", "difficulty": "mixed", "length_km": 770, "colour": "#c62828",
       "mark": "KČT pásové značenie",
       "summary_sk": "Severojužná chrbtica po karpatskom rozvodí – od Devína cez Tatry až po jaskyne Slovenského krasu a pralesy Polonín.",
       "summary_en": "North–south backbone along the Carpathian watershed – from Devín through the Tatras to the Slovak Karst caves and Poloniny forests.",
@@ -57,7 +57,7 @@
     },
     {
       "slug": "malokarpatska-vinna-cesta", "name_sk": "Malokarpatská vínna cesta", "name_en": "Small-Carpathian wine trail",
-      "theme": "wine", "pilot": "A", "difficulty": "easy", "length_km": 60, "colour": "#7b1fa2",
+      "theme": "wine", "profile": "hike", "pilot": "A", "difficulty": "easy", "length_km": 60, "colour": "#7b1fa2",
       "mark": "Malokarpatská vínna cesta",
       "summary_sk": "Jednodňové úseky medzi vinárskymi mestečkami na úpätí Malých Karpát, od Bratislavy po Piešťany.",
       "summary_en": "Gentle day stages between wine towns at the foot of the Small Carpathians, from Bratislava to Piešťany.",
@@ -65,7 +65,7 @@
     },
     {
       "slug": "povazska-hradna-cesta", "name_sk": "Považská hradná cesta", "name_en": "Váh castle corridor",
-      "theme": "heritage", "pilot": "A", "difficulty": "easy", "length_km": 140, "colour": "#ef6c00",
+      "theme": "heritage", "profile": "hike", "pilot": "A", "difficulty": "easy", "length_km": 140, "colour": "#ef6c00",
       "mark": "pásové značenie",
       "summary_sk": "Hrady vzdialené deň jazdy od seba pozdĺž Váhu – rovinatá dolina s občasným výstupom na hradný kopec.",
       "summary_en": "Castles a day's ride apart along the Váh – flat valley floor with occasional castle-hill climbs.",
@@ -73,7 +73,7 @@
     },
     {
       "slug": "cesta-marie", "name_sk": "Cesta Márie", "name_en": "Pilgrimage – Way of Mary",
-      "theme": "pilgrimage", "pilot": "B", "difficulty": "moderate", "length_km": 450, "colour": "#1565c0",
+      "theme": "pilgrimage", "profile": "hike", "pilot": "B", "difficulty": "moderate", "length_km": 450, "colour": "#1565c0",
       "mark": "Via Mariae – značka M",
       "summary_sk": "Sieť mariánskych pútnických miest od západu na východ – štrnásť zastávok so storočiami histórie.",
       "summary_en": "A west-to-east network of Marian shrines – fourteen stops with centuries of history.",
@@ -81,7 +81,7 @@
     },
     {
       "slug": "medvedi-chodnik", "name_sk": "Medvedí chodník – divočina", "name_en": "Bear / wilderness trail",
-      "theme": "wilderness", "pilot": "C", "difficulty": "hard", "length_km": 80, "colour": "#2e7d32",
+      "theme": "wilderness", "profile": "hike", "pilot": "C", "difficulty": "hard", "length_km": 80, "colour": "#2e7d32",
       "mark": "značka labky",
       "summary_sk": "Okruh po vulkanickom hrebeni Vihorlatu a pralesoch Polonín – ticho, zver a tmavá obloha.",
       "summary_en": "A loop on the Vihorlat volcanic ridge and Poloniny primeval forests – silence, wildlife and dark skies.",
@@ -89,7 +89,7 @@
     },
     {
       "slug": "cyklotrasa-ev6-ev13-vah", "name_sk": "Cyklotrasa EV6 · EV13 · Váh", "name_en": "Bicycle – EV6 · EV13 · Váh",
-      "theme": "cycling", "pilot": "C", "difficulty": "easy", "length_km": null, "colour": "#0277bd",
+      "theme": "cycling", "profile": "bike", "pilot": "C", "difficulty": "easy", "length_km": null, "colour": "#0277bd",
       "mark": "modré značenie EuroVelo",
       "summary_sk": "Tri riečne koridory – Dunaj (EV6), Morava (EV13) a Váh – rovné a súvislé, prevažne spevnené.",
       "summary_en": "Three river corridors – Danube (EV6), Morava (EV13) and Váh – flat, continuous and mostly paved.",
@@ -97,7 +97,7 @@
     },
     {
       "slug": "okruh-muzei-a-galerii", "name_sk": "Okruh múzeí a galérií", "name_en": "Museums and galleries loop",
-      "theme": "museums", "pilot": "B", "difficulty": "easy", "length_km": 520, "colour": "#6d4c41",
+      "theme": "museums", "profile": "car", "pilot": "B", "difficulty": "easy", "length_km": 520, "colour": "#6d4c41",
       "mark": "múzejné piny",
       "summary_sk": "Kultúrny okruh na daždivé dni – deväť múzeí a galérií od Bratislavy po Košice.",
       "summary_en": "The culture loop for rainy days – nine museums and galleries from Bratislava to Košice.",

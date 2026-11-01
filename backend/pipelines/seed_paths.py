@@ -2,8 +2,8 @@
 
     python -m pipelines.seed_paths
 
-Vytvorí aj placeholder `path_segment` (priamky medzi zastávkami, surface='placeholder'),
-aby mapa mala čo kresliť. V šprinte 2-2Z ich nahradí geometria OSM relácií (route_path).
+Vytvorí aj etapy `path_leg` (podtrasy) medzi po sebe idúcimi zastávkami. Ich geometriu
+(úseky `path_segment`) potom vypočíta `python -m pipelines.route_legs`.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ from .common import SEED_PATHS, connect, source_ids
 from .quality import quality_score
 
 CURATED_TIER = 1
+PROFILES = {"hike", "bike", "car"}  # profily GraphHoppera (data/routing/config.yml)
 
 
 def load_seed(path=SEED_PATHS) -> dict:
@@ -36,6 +37,8 @@ def validate_seed(seed: dict) -> list[str]:
     for path in seed["paths"]:
         if path["pilot"] not in {"A", "B", "C"}:
             errors.append(f"trasa {path['slug']}: neznámy pilot")
+        if path.get("profile", "hike") not in PROFILES:
+            errors.append(f"trasa {path['slug']}: neznámy profil {path.get('profile')}")
         for stop in path["stops"]:
             if stop not in pois:
                 errors.append(f"trasa {path['slug']}: zastávka {stop} nie je v pois")
@@ -125,22 +128,27 @@ def main() -> None:
                     (poi_ids[stop], path_id, seq),
                 )
 
-            # placeholder geometria: priamky medzi po sebe idúcimi zastávkami
-            cur.execute("DELETE FROM canonical.path_segment WHERE path_id = %s AND surface = 'placeholder'", (path_id,))
-            cur.execute(
-                """
-                INSERT INTO canonical.path_segment (path_id, seq, surface, geom, source_id, licence_id)
-                SELECT pp.path_id, pp.seq, 'placeholder',
-                       ST_MakeLine(a.geom, b.geom), %s, %s
-                FROM canonical.poi_path pp
-                JOIN canonical.poi_path nx ON nx.path_id = pp.path_id AND nx.seq = pp.seq + 1 AND nx.role = 'stop'
-                JOIN canonical.poi a ON a.id = pp.poi_id
-                JOIN canonical.poi b ON b.id = nx.poi_id
-                WHERE pp.path_id = %s AND pp.role = 'stop' AND NOT ST_Equals(a.geom, b.geom)
-                ON CONFLICT DO NOTHING
-                """,
-                (src_id, lic_id, path_id),
-            )
+            # etapy (podtrasy) medzi po sebe idúcimi zastávkami; zmenená etapa dostane routed_at = NULL
+            stops = path["stops"]
+            for seq, (a, b) in enumerate(zip(stops, stops[1:], strict=False), start=1):
+                via = path.get("via", {}).get(f"{a}>{b}")  # napr. "devin>piestany-kupele": [[lon, lat]]
+                via_json = json.dumps(via) if via else None
+                cur.execute(
+                    """
+                    INSERT INTO canonical.path_leg (path_id, seq, from_poi_id, to_poi_id, profile, via)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    ON CONFLICT (path_id, seq) DO UPDATE SET
+                      from_poi_id = EXCLUDED.from_poi_id, to_poi_id = EXCLUDED.to_poi_id,
+                      profile = EXCLUDED.profile, via = EXCLUDED.via,
+                      routed_at = CASE
+                        WHEN (path_leg.from_poi_id, path_leg.to_poi_id, path_leg.profile, path_leg.via)
+                             IS DISTINCT FROM
+                             (EXCLUDED.from_poi_id, EXCLUDED.to_poi_id, EXCLUDED.profile, EXCLUDED.via)
+                        THEN NULL ELSE path_leg.routed_at END
+                    """,
+                    (path_id, seq, poi_ids[a], poi_ids[b], path.get("profile", "hike"), via_json),
+                )
+            cur.execute("DELETE FROM canonical.path_leg WHERE path_id = %s AND seq >= %s", (path_id, len(stops)))
         conn.commit()
     print(f"Seed: {len(seed['paths'])} trás, {len(seed['pois'])} POI")
 

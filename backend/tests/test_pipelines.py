@@ -46,6 +46,13 @@ def test_seed_validation_detects_missing_stop():
     assert any("neexistuje" in e for e in validate_seed(seed))
 
 
+def test_seed_paths_have_known_routing_profile():
+    seed = load_seed()
+    assert {p["profile"] for p in seed["paths"]} <= {"hike", "bike", "car"}
+    seed["paths"][0]["profile"] = "lietadlo"
+    assert any("profil" in e for e in validate_seed(seed))
+
+
 def test_ds1_parser_keeps_bad_rows_for_quarantine():
     rows = parse_ds1(FIXTURES_DIR / "rurallure" / "ds1_sample.csv")
     assert len(rows) == 5
