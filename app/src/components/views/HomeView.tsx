@@ -47,7 +47,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
       </header>
       <main>
         <section id="map-section" aria-label={t.peaksMap}>
-          <MapLoader texts={mapTexts(locale)} label={t.peaksMap} layers={[{ id: 'peaks', kind: 'points', color: '#c62828', data: peakLayer }]} />
+          <MapLoader texts={mapTexts(locale)} label={t.peaksMap} layers={[{ id: 'peaks', kind: 'points', color: '#c62828', data: peakLayer, cluster: true }]} />
         </section>
         <section className="paths-teaser">
           <h2>{t.trailsHeading}</h2>

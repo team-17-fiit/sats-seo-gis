@@ -89,7 +89,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
             zoom={view.zoom}
             layers={[
               { id: 'path-line', kind: 'line', color: p.colour, data: pathLineGeoJSON(p) },
-              { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(localizeStops(p, locale)) },
+              { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(localizeStops(p, locale)), cluster: true },
             ]}
           />
           <p className="note">{t.trailGeometryNote}</p>

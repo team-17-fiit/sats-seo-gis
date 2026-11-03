@@ -1,5 +1,6 @@
 // Statický náhľad bez WebGL a bez externých dlaždíc: body a línie ako inline SVG.
 // Použije sa na zariadeniach bez WebGL alebo pri "šetrení dát". Rozmery dáva kontajner -> CLS = 0.
+import { clusterPoints, resolveClusterOptions, type Cluster, type ScreenPoint } from './cluster';
 import type { FeatureCollection, LayerSpec, LngLat, MapAdapter, MapOptions, PointFeature, Unsubscribe } from './types';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -51,22 +52,45 @@ export class StaticImageAdapter implements MapAdapter {
       }
       return;
     }
-    for (const f of (spec.data as FeatureCollection<PointFeature>).features) {
+    const points: ScreenPoint[] = (spec.data as FeatureCollection<PointFeature>).features.map((f) => {
       const [x, y] = project(f.geometry.coordinates, this.bounds);
-      const dot = document.createElementNS(SVG_NS, 'circle');
-      dot.setAttribute('cx', String(x));
-      dot.setAttribute('cy', String(y));
-      dot.setAttribute('r', '9');
-      dot.setAttribute('fill', spec.color);
-      dot.setAttribute('stroke', '#fff');
-      dot.setAttribute('stroke-width', '2');
-      dot.setAttribute('data-id', f.properties.id);
-      const title = document.createElementNS(SVG_NS, 'title');
-      title.textContent = f.properties.label ?? f.properties.name;
-      dot.appendChild(title);
-      dot.addEventListener('click', () => this.handlers.forEach((cb) => cb(f.properties.id)));
-      this.svg.appendChild(dot);
+      return { id: f.properties.id, x, y, label: f.properties.label ?? f.properties.name };
+    });
+    // Polomer v jednotkách viewBoxu (1000 × 600) ≈ pixely pri bežnej šírke mapy.
+    const cluster = resolveClusterOptions(spec.cluster);
+    const groups = cluster ? clusterPoints(points, cluster.radius) : points.map((p) => ({ ...p, count: 1, members: [p] }));
+
+    for (const g of groups) {
+      if (g.count === 1) this.drawPoint(this.svg, g.members[0], spec.color);
+      else this.drawCluster(this.svg, g, spec.color);
     }
+  }
+
+  private drawPoint(svg: SVGSVGElement, p: ScreenPoint, color: string): void {
+    const dot = circle(p.x, p.y, 9, color);
+    dot.setAttribute('data-id', p.id);
+    dot.appendChild(title(p.label));
+    dot.addEventListener('click', () => this.handlers.forEach((cb) => cb(p.id)));
+    svg.appendChild(dot);
+  }
+
+  /** Zhluk: väčší kruh s počtom bodov; názvy sú v <title>. Statický náhľad nemá zoom, preto zhluk nie je klikateľný. */
+  private drawCluster(svg: SVGSVGElement, c: Cluster, color: string): void {
+    const g = document.createElementNS(SVG_NS, 'g');
+    g.setAttribute('data-cluster-count', String(c.count));
+    g.appendChild(title(c.members.map((m) => m.label).join(', ')));
+    g.appendChild(circle(c.x, c.y, c.count < 10 ? 16 : 20, color));
+    const text = document.createElementNS(SVG_NS, 'text');
+    text.setAttribute('x', String(c.x));
+    text.setAttribute('y', String(c.y));
+    text.setAttribute('text-anchor', 'middle');
+    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('fill', '#fff');
+    text.setAttribute('font-size', '15');
+    text.setAttribute('font-weight', 'bold');
+    text.textContent = String(c.count);
+    g.appendChild(text);
+    svg.appendChild(g);
   }
 
   onPoiClick(cb: (id: string) => void): Unsubscribe {
@@ -79,4 +103,21 @@ export class StaticImageAdapter implements MapAdapter {
     this.svg = null;
     this.handlers.clear();
   }
+}
+
+function circle(x: number, y: number, r: number, color: string): SVGCircleElement {
+  const c = document.createElementNS(SVG_NS, 'circle');
+  c.setAttribute('cx', String(x));
+  c.setAttribute('cy', String(y));
+  c.setAttribute('r', String(r));
+  c.setAttribute('fill', color);
+  c.setAttribute('stroke', '#fff');
+  c.setAttribute('stroke-width', '2');
+  return c;
+}
+
+function title(text: string): SVGTitleElement {
+  const t = document.createElementNS(SVG_NS, 'title');
+  t.textContent = text;
+  return t;
 }
