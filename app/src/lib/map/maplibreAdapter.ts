@@ -10,6 +10,9 @@ export class MapLibreAdapter implements MapAdapter {
   readonly kind = 'maplibre' as const;
   private map: maplibregl.Map | null = null;
   private pending: LayerSpec[] = [];
+  // Vlastný príznak namiesto map.loaded(): to vráti false hneď po addSource (načítavajú sa dáta),
+  // takže druhá vrstva by skončila v `pending` navždy – 'load' sa už znova nespustí.
+  private styleReady = false;
   private pointLayers: string[] = [];
   private clickHandlers = new Set<(id: string) => void>();
 
@@ -26,6 +29,7 @@ export class MapLibreAdapter implements MapAdapter {
         map.addControl(new maplibregl.NavigationControl());
         this.map = map;
         map.on('load', () => {
+          this.styleReady = true;
           this.pending.forEach((spec) => this.applyLayer(spec));
           this.pending = [];
           resolve();
@@ -44,7 +48,7 @@ export class MapLibreAdapter implements MapAdapter {
   }
 
   addLayer(spec: LayerSpec): void {
-    if (this.map?.loaded()) this.applyLayer(spec);
+    if (this.map && this.styleReady) this.applyLayer(spec);
     else this.pending.push(spec);
   }
 
@@ -56,6 +60,7 @@ export class MapLibreAdapter implements MapAdapter {
   destroy(): void {
     this.map?.remove();
     this.map = null;
+    this.styleReady = false;
     this.clickHandlers.clear();
   }
 
