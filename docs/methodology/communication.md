@@ -9,7 +9,7 @@
 2. Odpoveď do 24 h v pracovné dni; urgentné veci telefonicky.
 3. Externá pošta len z tímovej adresy, v kópii vedúci projektu.
 4. Zápisnica po každom stretnutí do `docs/minutes/YYYY-MM-DD-<typ>.md` v ten istý deň (KPI K13).
-5. Export všetkých úloh (GitHub Projects) v deň stretnutia.
+5. Export úloh z Plane v deň stretnutia.
 
 ## Dôkaz použitia
 

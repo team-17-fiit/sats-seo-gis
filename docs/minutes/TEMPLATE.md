@@ -18,4 +18,4 @@
 | Úloha | Zodpovedný | Termín |
 |---|---|---|
 
-Export úloh z GitHub Projects priložený: ☐
+Export úloh z Plane priložený: ☐
