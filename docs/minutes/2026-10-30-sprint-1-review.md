@@ -3,7 +3,7 @@
 - **Šprint:** 1-1Z (12. 10. – 25. 10. 2026)
 - **Cieľ:** repozitár, CI kostra, licenčný register a prvý dátový extrakt
 - **Dátum zápisu:** 2026-10-30 (chýbajúce položky doplnené dodatočne na začiatku 2-2Z, vetva `chore/sprint-1-skeleton`)
-- **Prítomní:** _doplniť_ · **Zapisovateľ:** _doplniť_
+- **Prítomní:** Jan Porubsky, Leon Rado, Matus Plsko, Matus Vrabel, Nikolas Kristin, Richard Pukac, Vlastislav Pokorny · **Zapisovateľ:** Matus Plsko
 
 ## 1. User stories
 
@@ -33,7 +33,7 @@
 | T1-12 | projektový web v1 | S1-4 | mimo repozitára | – |
 | T1-13 | PM nástroj + Definition of Done | WP1 | DoD hotové; projekt v Plane založený, zostáva pozvať členov tímu (T1-13 v 2-2Z) | `docs(methodology)…` |
 | T1-14 | draft metodík | WP1 | hotové | `docs(methodology)…` |
-| T1-15 | sprint review + retro + exporty | WP1 | tento zápis; export úloh doplniť | – |
+| T1-15 | sprint review + retro + exporty | WP1 | tento zápis; [export cyklu 1-1Z z Plane](exports/2026-11-04-plane-cycle-1-1Z.csv) z 2026-11-04 (15 položiek, bez stĺpca `Subscribers` s e-mailmi; S1-4, T1-04, T1-12, T1-13 a T1-15 boli presunuté do 2-2Z, preto v ňom nie sú) | – |
 
 ## 3. KPI – baseline (merané, nie odhadované)
 

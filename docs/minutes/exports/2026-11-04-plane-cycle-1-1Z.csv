@@ -1,0 +1,31 @@
+Project Name,Project Identifier,Parent,Identifier,Name,State Name,Priority,Assignees,Description,Created By Name,Start Date,Due Date,Completed At,Created At,Updated At,Archived At,Estimate,Labels,Cycle Name,Cycle Start Date,Cycle End Date,Module Name,Links,Relations,Comments,Issue Type,Total Time Logged,Worklogs,Customers,Initiatives
+SATS-SEO-GIS,SATSS,SATSS-11,SATSS-35,T1-10 PWA skeleton + routing (Astro),Done,medium,,"Kostra webovej aplikácie (PWA manifest) a stránky. V dokumente Astro, realizované v Next.js (ADR-0001).
+Riešiteľ: A · odhad: 8 h · patrí k: US-1a",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:08.979431Z,2026-10-31T09:55:08.997796Z,2026-10-31T12:20:32.463594Z,,,web,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-8,SATSS-34,T1-09 DS6 GPX/GeoJSON import,Done,medium,,"Import trás z datasetu rurAllure DS6 (GPX a GeoJSON). Hotové na vzorke.
+Riešiteľ: B · odhad: 4 h · patrí k: S1-3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:08.459838Z,2026-10-31T09:55:08.483441Z,2026-10-31T12:20:39.656886Z,,,dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-8,SATSS-33,T1-08 rurAllure DS1 POI import,Done,medium,,"Import miest z datasetu rurAllure DS1. Hotové na vzorke, chýba overenie DOI/licencie = T1-17.
+Riešiteľ: C · odhad: 6 h · patrí k: S1-3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:07.987922Z,2026-10-31T09:55:08.008920Z,2026-10-31T12:07:18.766779Z,,,dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-8,SATSS-32,T1-07 PostGIS canonical schema,Done,medium,,"Hlavná databázová schéma: trasy, miesta, zdroje, licencie (data/db/migrations/).
+Riešiteľ: C · odhad: 6 h · patrí k: S1-3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:07.500206Z,2026-10-31T09:55:07.523888Z,2026-10-31T12:20:43.494050Z,,,dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-8,SATSS-31,T1-06 Natural Earth + GeoNames load,Done,medium,,"Import hraníc a krajov (Natural Earth) a sídiel (GeoNames) do databázy.
+Riešiteľ: C · odhad: 4 h · patrí k: S1-3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:06.999978Z,2026-10-31T09:55:07.020201Z,2026-10-31T12:09:04.085305Z,,,dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-8,SATSS-30,T1-05 OSM PBF ingest (osm2pgsql flex),Done,medium,,"Import OSM extraktu Slovenska do databázy cez osm2pgsql (štýl data/osm/flex.lua). Hotové na vzorke, celé dáta = T1-18.
+Riešiteľ: C · odhad: 8 h · patrí k: S1-3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:06.539581Z,2026-10-31T09:55:06.559770Z,2026-10-31T12:09:00.348461Z,,,dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-9,SATSS-29,T1-03 licence register init,Done,medium,,"Licenčný register dátových zdrojov (docs/planning/data-licence-register.md) – OSM ODbL, GeoNames CC BY, …
+Riešiteľ: C · odhad: 4 h · patrí k: US-11",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:06.082670Z,2026-10-31T09:55:06.100997Z,2026-10-31T12:08:54.774129Z,,,dáta|docs,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-10,SATSS-28,T1-02 CI skeleton: lint + unit tests,Done,medium,,"Základ CI v GitHub Actions: ESLint, TypeScript, Vitest (web) a ruff, pytest (backend).
+Riešiteľ: D · odhad: 8 h · patrí k: US-18",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:05.521471Z,2026-10-31T09:55:05.538384Z,2026-10-31T12:08:51.542198Z,,,ci,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-10,SATSS-27,T1-01 repository init + branch strategy,Done,medium,,"Založenie GitHub repozitára a pravidiel pre vetvy (feature/, fix/, docs/), PR šablóna, CONTRIBUTING.md.
+Riešiteľ: B · odhad: 5 h · patrí k: US-18",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:55:04.998882Z,2026-10-31T09:55:05.018922Z,2026-10-31T12:08:46.370435Z,,,ci,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-14,T1-14 methodology docs draft,Done,medium,,"Návrh metodík tímu (komunikácia, úlohy, testovanie, code review) v docs/methodology/.
+Riešiteľ: F · odhad: 4 h · patrí k: WP1",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:58.505815Z,2026-10-31T09:54:58.526423Z,2026-10-31T12:21:35.102949Z,,,docs,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-13,T1-11 ADR-0001 framework record,Done,medium,,"Záznam rozhodnutia o frontend frameworku (docs/adr/). Doplnené aj ADR-0002 až 0005.
+Riešiteľ: B · odhad: 3 h · patrí k: WP3",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:58.047667Z,2026-10-31T09:54:58.070927Z,2026-10-31T12:21:37.636686Z,,,docs,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-11,US-1a first SSG page of a path,Done,medium,,"Prvá staticky generovaná (SSG) stránka trasy, ktorú vidí aj vyhľadávač. V dokumente presunuté do 2-2Z ako „SSG pages for all paths“ – u nás hotové pre všetkých 7 trás (/trasy/<slug>/).
+Riešiteľ: A · 5 body",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:57.148151Z,2026-10-31T09:54:57.157313Z,2026-10-31T10:13:23.780787Z,,5,story|web,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-10,US-18 CI runs lint and unit tests on every PR,Done,medium,,"Pri každom Pull Requeste sa automaticky spustí kontrola kódu (lint) a unit testy v GitHub Actions.
+Riešiteľ: D · 5 body",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:56.729223Z,2026-10-31T09:54:56.752381Z,2026-10-31T10:13:22.975687Z,,5,story|ci,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-9,US-11 every POI row has source and licence,Done,medium,,"Každý záznam miesta (POI) v databáze má uvedený zdroj a licenciu; bez nich sa do databázy nedostane (licenčná brána).
+Riešiteľ: C · 5 body",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:56.199095Z,2026-10-31T09:54:56.212490Z,2026-10-31T10:13:22.271279Z,,5,story|dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-8,S1-3 OSM extract of 7 paths in PostGIS,Done,medium,,"Dáta 7 tematických trás z OpenStreetMap uložené v databáze PostgreSQL + PostGIS (schéma, import, 7 trás so zastávkami).
+Riešiteľ: C · 5 body",Matúš Vrábel,2026-10-12,2026-10-25,2026-10-31T09:54:49.046549Z,2026-10-31T09:54:49.060272Z,2026-10-31T10:13:20.736905Z,,5,story|dáta,1-1Z,2026-10-12,2026-10-25,,,,,,0h 0m,,,
