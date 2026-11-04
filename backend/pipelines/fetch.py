@@ -25,7 +25,12 @@ SOURCES: dict[str, tuple[str, str]] = {
         "ne_10m_admin_1_states_provinces.geojson",
     ),
     "geonames": ("https://download.geonames.org/export/dump/SK.zip", "SK.zip"),
-    # rurAllure DS1/DS6: doplniť URL zo Zenodo (data/SOURCES.md), dovtedy fixtures
+    # rurAllure DS1/DS6: Zenodo 10.5281/zenodo.7611876 (v2.0, CC BY 4.0) – pozri data/SOURCES.md (T1-17)
+    "rurallure_ds1": (
+        "https://zenodo.org/api/records/7611876/files/DS1%20POI%20info%20sheets%2003-02-2023.xlsx/content",
+        "rurallure_ds1.xlsx",
+    ),
+    "rurallure_ds6": ("https://zenodo.org/api/records/7611876/files/DS6.zip/content", "rurallure_ds6.zip"),
 }
 
 
