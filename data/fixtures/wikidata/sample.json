@@ -1,0 +1,23 @@
+{
+ "head": {"vars": ["item", "descSk", "descEn", "image", "website", "unesco"]},
+ "results": {"bindings": [
+  {
+   "item": {"type": "uri", "value": "http://www.wikidata.org/entity/Q1033473"},
+   "descSk": {"xml:lang": "sk", "type": "literal", "value": "štít vo Vysokých Tatrách"},
+   "descEn": {"xml:lang": "en", "type": "literal", "value": "mountain in the High Tatras"},
+   "image": {"type": "uri", "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rysy%20fixture.jpg"},
+   "unesco": {"datatype": "http://www.w3.org/2001/XMLSchema#boolean", "type": "literal", "value": "false"}
+  },
+  {
+   "item": {"type": "uri", "value": "http://www.wikidata.org/entity/Q1033473"},
+   "image": {"type": "uri", "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rysy%20second.jpg"},
+   "unesco": {"datatype": "http://www.w3.org/2001/XMLSchema#boolean", "type": "literal", "value": "false"}
+  },
+  {
+   "item": {"type": "uri", "value": "http://www.wikidata.org/entity/Q392365"},
+   "descSk": {"xml:lang": "sk", "type": "literal", "value": "obec na Slovensku"},
+   "website": {"type": "uri", "value": "https://www.vlkolinec.sk/"},
+   "unesco": {"datatype": "http://www.w3.org/2001/XMLSchema#boolean", "type": "literal", "value": "true"}
+  }
+ ]}
+}
