@@ -85,12 +85,13 @@ export function getPath(slug: string): TrailPath | undefined {
   return getPaths().find((p) => p.slug === slug);
 }
 
+/** Zastávky trasy ako body mapy; UNESCO zastávky majú ⋆ v popise (kap. 4.6). */
 export function stopsToGeoJSON(p: TrailPath): FeatureCollection<PointFeature> {
   return {
     type: 'FeatureCollection',
     features: p.stops.map((s) => ({
       type: 'Feature',
-      properties: { id: s.slug, name: s.name_sk, label: `${s.seq}. ${s.name_sk}` },
+      properties: { id: s.slug, name: s.name_sk, label: `${s.seq}. ${s.unesco ? '⋆ ' : ''}${s.name_sk}`, unesco: s.unesco },
       geometry: { type: 'Point', coordinates: [s.lon, s.lat] },
     })),
   };

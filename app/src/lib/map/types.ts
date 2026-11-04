@@ -5,7 +5,8 @@ export type LngLat = [lon: number, lat: number];
 
 export type PointFeature = {
   type: 'Feature';
-  properties: { id: string; name: string; label?: string };
+  /** `unesco` = zastávka ⋆ zo Zoznamu svetového dedičstva (kap. 4.6) – kreslí sa zvýraznená. */
+  properties: { id: string; name: string; label?: string; unesco?: boolean };
   geometry: { type: 'Point'; coordinates: LngLat };
 };
 
@@ -14,6 +15,9 @@ export type LineFeature = {
   properties: { id: string; name: string };
   geometry: { type: 'LineString'; coordinates: LngLat[] };
 };
+
+/** Okraj UNESCO zastávky – rovnaký v MapLibre aj v statickom náhľade (= --color-focus). */
+export const UNESCO_COLOR = '#ffb300';
 
 export type FeatureCollection<F> = { type: 'FeatureCollection'; features: F[] };
 

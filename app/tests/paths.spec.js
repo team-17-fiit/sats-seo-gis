@@ -15,6 +15,24 @@ test('detail trasy má zoradené zastávky a mapu na kliknutie', async ({ page }
   await expect(page.locator('#map[data-ready="true"]')).toBeAttached({ timeout: 15000 });
 });
 
+// T2-01: legenda mapy – farba trasy a značka UNESCO zastávok (kap. 4.6, obr. Z-H.8).
+test('mapa trasy má legendu s trasou a UNESCO zastávkami', async ({ page }) => {
+  await page.goto('/trasy/cesta-marie/');
+  const legend = page.locator('#map-legend');
+  await expect(legend).toContainText('Cesta Márie');
+  await expect(legend).toContainText('UNESCO');
+});
+
+test('statický náhľad zvýrazní UNESCO zastávky', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'connection', { value: { saveData: true }, configurable: true });
+  });
+  await page.goto('/trasy/povazska-hradna-cesta/');
+  await page.getByRole('button', { name: /Zobraziť interaktívnu mapu/ }).click();
+  await expect(page.locator('#map[data-ready="true"][data-adapter="static"]')).toBeAttached({ timeout: 15000 });
+  await expect(page.locator('#map [data-unesco="true"]')).toHaveCount(1); // Banská Štiavnica
+});
+
 test.describe('bez JavaScriptu (pohľad crawlera)', () => {
   test.use({ javaScriptEnabled: false });
 

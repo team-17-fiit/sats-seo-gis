@@ -91,6 +91,10 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
               { id: 'path-line', kind: 'line', color: p.colour, data: pathLineGeoJSON(p) },
               { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(localizeStops(p, locale)), cluster: true },
             ]}
+            legend={[
+              { label: name, color: p.colour },
+              ...(p.stops.some((s) => s.unesco) ? [{ label: `⋆ ${t.unescoTitle}`, color: p.colour, unesco: true }] : []),
+            ]}
           />
           <p className="note">{t.trailGeometryNote}</p>
         </section>

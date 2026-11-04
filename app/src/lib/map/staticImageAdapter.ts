@@ -1,7 +1,10 @@
 // Statický náhľad bez WebGL a bez externých dlaždíc: body a línie ako inline SVG.
 // Použije sa na zariadeniach bez WebGL alebo pri "šetrení dát". Rozmery dáva kontajner -> CLS = 0.
 import { clusterPoints, resolveClusterOptions, type Cluster, type ScreenPoint } from './cluster';
-import type { FeatureCollection, LayerSpec, LngLat, MapAdapter, MapOptions, PointFeature, Unsubscribe } from './types';
+import {
+  UNESCO_COLOR, type FeatureCollection, type LayerSpec, type LngLat, type MapAdapter, type MapOptions, type PointFeature,
+  type Unsubscribe,
+} from './types';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const WIDTH = 1000;
@@ -54,7 +57,7 @@ export class StaticImageAdapter implements MapAdapter {
     }
     const points: ScreenPoint[] = (spec.data as FeatureCollection<PointFeature>).features.map((f) => {
       const [x, y] = project(f.geometry.coordinates, this.bounds);
-      return { id: f.properties.id, x, y, label: f.properties.label ?? f.properties.name };
+      return { id: f.properties.id, x, y, label: f.properties.label ?? f.properties.name, unesco: f.properties.unesco };
     });
     // Polomer v jednotkách viewBoxu (1000 × 600) ≈ pixely pri bežnej šírke mapy.
     const cluster = resolveClusterOptions(spec.cluster);
@@ -67,7 +70,13 @@ export class StaticImageAdapter implements MapAdapter {
   }
 
   private drawPoint(svg: SVGSVGElement, p: ScreenPoint, color: string): void {
-    const dot = circle(p.x, p.y, 9, color);
+    const dot = circle(p.x, p.y, p.unesco ? 11 : 9, color);
+    if (p.unesco) {
+      // UNESCO zastávka (⋆): rovnaký jantárový okraj ako v MapLibre
+      dot.setAttribute('stroke', UNESCO_COLOR);
+      dot.setAttribute('stroke-width', '3');
+      dot.setAttribute('data-unesco', 'true');
+    }
     dot.setAttribute('data-id', p.id);
     dot.appendChild(title(p.label));
     dot.addEventListener('click', () => this.handlers.forEach((cb) => cb(p.id)));

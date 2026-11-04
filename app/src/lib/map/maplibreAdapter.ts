@@ -2,7 +2,9 @@
 import maplibregl, { type GeoJSONSource } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { resolveClusterOptions } from './cluster';
-import type { LayerSpec, LngLat, MapAdapter, MapOptions, Unsubscribe } from './types';
+import { UNESCO_COLOR, type LayerSpec, type LngLat, type MapAdapter, type MapOptions, type Unsubscribe } from './types';
+
+const IS_UNESCO: maplibregl.ExpressionSpecification = ['==', ['get', 'unesco'], true];
 
 // Dočasný podklad (OSM, ODbL) – v šprinte 3-3Z ho nahradia vlastné PMTiles.
 export const DEFAULT_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
@@ -76,13 +78,10 @@ export class MapLibreAdapter implements MapAdapter {
     });
 
     if (spec.kind === 'line') {
-      map.addLayer({
-        id: spec.id,
-        type: 'line',
-        source: spec.id,
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': spec.color, 'line-width': 4, 'line-opacity': 0.85 },
-      });
+      // trasa vo farbe svojho značenia (kap. 4.6) s bielym lemom, aby bola čitateľná na každom podklade
+      const layout = { 'line-cap': 'round', 'line-join': 'round' } as const;
+      map.addLayer({ id: `${spec.id}-casing`, type: 'line', source: spec.id, layout, paint: { 'line-color': '#fff', 'line-width': 7 } });
+      map.addLayer({ id: spec.id, type: 'line', source: spec.id, layout, paint: { 'line-color': spec.color, 'line-width': 4 } });
       return;
     }
 
@@ -94,11 +93,12 @@ export class MapLibreAdapter implements MapAdapter {
       source: spec.id,
       // pri zlučovaní kreslí táto vrstva len samostatné body; zhluky majú vlastné vrstvy
       ...(cluster && { filter: ['!', ['has', 'point_count']] }),
+      // UNESCO zastávka (⋆): väčší kruh s jantárovým okrajom
       paint: {
-        'circle-radius': 7,
+        'circle-radius': ['case', IS_UNESCO, 9, 7],
         'circle-color': spec.color,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#fff',
+        'circle-stroke-width': ['case', IS_UNESCO, 3, 2],
+        'circle-stroke-color': ['case', IS_UNESCO, UNESCO_COLOR, '#fff'],
       },
     });
     this.pointLayers.push(spec.id);

@@ -37,6 +37,10 @@ a{color:var(--color-link)}
 main{max-width:var(--page-width);margin:0 auto;padding:0 var(--space-3) var(--space-5)}
 .map-box{position:relative;height:min(65vh,520px);min-height:320px;border:1px solid var(--color-line);
   background:linear-gradient(135deg,var(--color-map-from),var(--color-map-to));display:grid;place-items:center;overflow:hidden}
+.map-legend{list-style:none;display:flex;flex-wrap:wrap;gap:var(--space-1) var(--space-4);margin:var(--space-2) 0 0;padding:0;font-size:var(--text-sm)}
+.map-legend li{display:flex;align-items:center;gap:var(--space-2)}
+.map-legend-line{width:24px;height:4px;border-radius:2px;box-shadow:0 0 0 1.5px #fff}
+.map-legend-unesco{width:14px;height:14px;border-radius:50%;border:3px solid #ffb300}
 #load-map{font:inherit;font-weight:600;padding:.8rem 1.2rem;border:0;background:var(--color-forest);color:var(--color-on-forest);cursor:pointer}
 #load-map:disabled{cursor:progress}
 #load-map:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}

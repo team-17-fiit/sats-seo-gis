@@ -14,17 +14,21 @@ type Props = {
   label?: string;
   /** Texty tlačidla v jazyku stránky (T2-14). Posielajú sa ako props, aby slovník nebol v JS bundli. */
   texts?: MapTexts;
+  /** Položky legendy: farba trasy + názov; `unesco` = značka UNESCO zastávky (⋆). */
+  legend?: LegendItem[];
 };
 
-export type MapTexts = { load: string; loading: string; error: string };
+export type MapTexts = { load: string; loading: string; error: string; legend: string };
+export type LegendItem = { label: string; color: string; unesco?: boolean };
 
 const SK_TEXTS: MapTexts = {
   load: 'Zobraziť interaktívnu mapu',
   loading: 'Načítavam mapu…',
   error: 'Mapu sa nepodarilo načítať – skúsiť znova',
+  legend: 'Legenda',
 };
 
-export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, label = 'Mapa', texts = SK_TEXTS }: Props) {
+export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, label = 'Mapa', texts = SK_TEXTS, legend = [] }: Props) {
   const boxRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapAdapter | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -66,19 +70,36 @@ export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, l
     : texts.load;
 
   return (
-    <div
-      id="map"
-      ref={boxRef}
-      className="map-box"
-      aria-label={label}
-      data-ready={status === 'ready' ? 'true' : undefined}
-      data-adapter={kind}
-    >
-      {showButton && (
-        <button id="load-map" type="button" onClick={load} disabled={!hydrated || status === 'loading'}>
-          {text}
-        </button>
+    <>
+      <div
+        id="map"
+        ref={boxRef}
+        className="map-box"
+        aria-label={label}
+        data-ready={status === 'ready' ? 'true' : undefined}
+        data-adapter={kind}
+      >
+        {showButton && (
+          <button id="load-map" type="button" onClick={load} disabled={!hydrated || status === 'loading'}>
+            {text}
+          </button>
+        )}
+      </div>
+      {/* Legenda (obr. Z-H.8) je v HTML už pri builde – nič sa neposúva, platí pre MapLibre aj statický náhľad. */}
+      {legend.length > 0 && (
+        <ul className="map-legend" id="map-legend" aria-label={texts.legend}>
+          {legend.map((it) => (
+            <li key={it.label}>
+              <span
+                className={it.unesco ? 'map-legend-unesco' : 'map-legend-line'}
+                style={{ background: it.color }}
+                aria-hidden="true"
+              />
+              {it.label}
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </>
   );
 }

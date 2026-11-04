@@ -15,7 +15,7 @@ export function resolveClusterOptions(cluster: ClusterSpec | undefined): Cluster
   return { ...CLUSTER_DEFAULTS, ...cluster };
 }
 
-export type ScreenPoint = { id: string; x: number; y: number; label: string };
+export type ScreenPoint = { id: string; x: number; y: number; label: string; unesco?: boolean };
 export type Cluster = { x: number; y: number; count: number; members: ScreenPoint[] };
 
 /**
