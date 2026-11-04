@@ -25,6 +25,12 @@ SOURCES: dict[str, tuple[str, str]] = {
         "ne_10m_admin_1_states_provinces.geojson",
     ),
     "geonames": ("https://download.geonames.org/export/dump/SK.zip", "SK.zip"),
+    # ŠOP SR chránené územia – INSPIRE WFS, GeoJSON (T2-08)
+    "sopsr": (
+        "http://inspire.biomonitoring.sk/geoserver/ps/ows?service=WFS&version=2.0.0&request=GetFeature"
+        "&typeNames=ps:ProtectedSite&outputFormat=application/json",
+        "sopsr_protected_sites.geojson",
+    ),
     # rurAllure DS1/DS6: doplniť URL zo Zenodo (data/SOURCES.md), dovtedy fixtures
 }
 

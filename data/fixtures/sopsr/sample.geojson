@@ -1,0 +1,31 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "id": "PROTECTEDSITE_FIXTURE_1",
+   "geometry": {"type": "Polygon", "coordinates": [[[19.9, 49.1], [20.3, 49.1], [20.3, 49.3], [19.9, 49.3], [19.9, 49.1]]]},
+   "properties": {
+    "inspireID": {"namespace": "SK.SOP.PS", "localId": "IDENTIFIERID_fixture-tanap"},
+    "siteName": {"GeographicalName": {"language": "SLK", "spelling": {"text": "Tatransky narodny park", "script": "LATN"}}},
+    "siteProtectionClassification": "natureConservation"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "PROTECTEDSITE_FIXTURE_2",
+   "geometry": {"type": "Polygon", "coordinates": [[[18.61, 49.22], [18.62, 49.22], [18.62, 49.23], [18.61, 49.23], [18.61, 49.22]]]},
+   "properties": {
+    "inspireID": {"namespace": "SK.SOP.PS", "localId": "IDENTIFIERID_fixture-ihla"},
+    "siteName": {"GeographicalName": [{"language": "SLK", "spelling": [{"text": " Hricovska skalna ihla ", "script": "LATN"}]}]},
+    "siteProtectionClassification": "natureConservation"
+   }
+  },
+  {
+   "type": "Feature",
+   "id": "PROTECTEDSITE_FIXTURE_3",
+   "geometry": {"type": "Polygon", "coordinates": [[[21.0, 48.7], [21.1, 48.7], [21.1, 48.8], [21.0, 48.8], [21.0, 48.7]]]},
+   "properties": {"inspireID": {"namespace": "SK.SOP.PS", "localId": "IDENTIFIERID_fixture-noname"}}
+  }
+ ]
+}

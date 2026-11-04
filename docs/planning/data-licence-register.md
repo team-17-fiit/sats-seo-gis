@@ -1,6 +1,6 @@
 # Licenčný register dát (US-11)
 
-*Zodpovedá: člen C (dáta) · založené v šprinte 1-1Z · strojová verzia: `data/db/migrations/002_seed_licences.sql`*
+*Zodpovedá: člen C (dáta) · založené v šprinte 1-1Z · strojová verzia: `data/db/migrations/002_seed_licences.sql`, `008_protected_areas.sql`*
 
 Pravidlo: **každý riadok** v kanonickej DB odkazuje na `source_id` a `licence_id`. Zdroj, ktorý tu nie je,
 sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom kontrakte).
@@ -11,6 +11,7 @@ sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom k
 |---|---|---|---|---|
 | `ODbL-1.0` | Open Database License 1.0 | atribúcia „© OpenStreetMap contributors“, odvodená DB pod ODbL | áno | áno |
 | `CC-BY-4.0` | Creative Commons Attribution 4.0 | atribúcia, uviesť zmeny | nie | áno (atribúcia) |
+| `CC-BY-SA-4.0` | Creative Commons Attribution-ShareAlike 4.0 | atribúcia, uviesť zmeny, odvodené dielo pod rovnakou licenciou | áno | **nie** (iná share-alike licencia ako ODbL) |
 | `CC0-1.0` | Public Domain Dedication | žiadne (atribúcia vítaná) | nie | áno |
 | `PD` | Public domain | žiadne | nie | áno |
 | `PROPRIETARY` | Partnerské dáta (LOI) | podľa zmluvy, nezverejňovať | – | **nie** |
@@ -24,8 +25,10 @@ sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom k
 | `geonames` | GeoNames dump `SK` | CC-BY-4.0 | sídla, georeferencie, vyhľadávanie | `geonames_place` | štvrťročne | ✅ ingest skript |
 | `rurallure_ds1` | rurAllure DS1 – POI pútnických trás | CC-BY-4.0 ⚠ | doplnkové POI (pilot B) | `staging.rurallure_ds1` | pri zmene | ✅ import (fixture) |
 | `rurallure_ds6` | rurAllure DS6 – GPX/GeoJSON trasy | CC-BY-4.0 ⚠ | geometria pútnických trás | `staging.rurallure_ds6` | pri zmene | ✅ import (fixture) |
-| `wikidata` | Wikidata SPARQL | CC0-1.0 | dedičstvo, obrázky, preklady | – | týždenne | ⏳ šprint 2-2Z |
+| `wikidata` | Wikidata SPARQL | CC0-1.0 | opis SK/EN, obrázok, web, UNESCO pre POI s Wikidata ID | `staging.wikidata_item` → `poi` | týždenne | ✅ `load_wikidata` (S2-3) |
 | `natura2000` | EEA Natura 2000 | CC-BY-4.0 | chránené územia | – | ročne | ⏳ backlog |
+| `sopsr` | ŠOP SR – chránené územia (INSPIRE WFS `ps:ProtectedSite`) | CC-BY-SA-4.0 | názov chráneného územia pri POI | `protected_area` | ročne | ✅ `load_sopsr` (T2-08) |
+| `pusr` | Pamiatkový úrad SR – Ústredný zoznam pamiatkového fondu | ? | pamiatkový status miest | – | – | ⏳ licencia nepotvrdená – neimportuje sa |
 | `team_curated` | Kurátorské dáta tímu (`data/seed/paths.json`, `peaks.geojson`) | CC-BY-4.0 | 7 trás, zastávky, vrcholy | `path`, `poi`, `poi_path` | priebežne | ✅ seed |
 | `openfreemap` | OpenFreeMap štýl „liberty“ (dlaždice z OSM) | ODbL-1.0 | podkladová mapa do 3-3Z | – (runtime) | – | ✅ dočasné |
 
@@ -35,6 +38,7 @@ pred prvým zverejnením. Kým nie je overená, riadky z DS1/DS6 ostávajú v `s
 ## Pravidlá oddelenia
 
 1. Tabuľky odvodené z OSM (ODbL) sa držia oddelene od CC BY obsahu; export do PMTiles obsahuje iba ODbL + PD + CC0/CC BY s atribúciou.
+   CC BY-SA (ŠOP SR) má vlastnú tabuľku `protected_area` a do PMTiles nejde.
 2. `PROPRIETARY` dáta partnerov nikdy nejdú do verejných dlaždíc ani SSG stránok.
 3. Atribúcie sa zobrazujú v pätičke mapy a na stránke `/o-projekte/` (šprint 2).
 
@@ -43,3 +47,4 @@ pred prvým zverejnením. Kým nie je overená, riadky z DS1/DS6 ostávajú v `s
 | Dátum | Zmena | Kto |
 |---|---|---|
 | 2026-10-30 | založenie registra, 9 zdrojov, 5 licencií | tím |
+| 2026-11-04 | `wikidata` importovaná (S2-3); `sopsr` a licencia CC-BY-SA-4.0; `pusr` čaká na licenciu (T2-08) | Leon Rado |
