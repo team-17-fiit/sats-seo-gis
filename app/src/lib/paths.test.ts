@@ -35,6 +35,13 @@ describe('paths data', () => {
     expect(pathLineGeoJSON(p).features[0].geometry.coordinates).toHaveLength(2);
   });
 
+  it('marks UNESCO stops for the map (flag + ⋆ in the label)', () => {
+    const [p] = parsePaths([{ ...sample, stops: [{ ...sample.stops[1], unesco: true }, sample.stops[0]] }]);
+    const [a, b] = stopsToGeoJSON(p).features.map((f) => f.properties);
+    expect(a).toMatchObject({ unesco: true, label: '1. ⋆ A' });
+    expect(b).toMatchObject({ unesco: false, label: '2. B' });
+  });
+
   it('draws segments from the database instead of the straight stop line', () => {
     const [p] = parsePaths([{ ...sample, segments: [[[17.1, 48.1], [17.2, 48.15], [17.3, 48.3]]] }]);
     const line = pathLineGeoJSON(p);

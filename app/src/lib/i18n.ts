@@ -95,6 +95,7 @@ const sk = {
   mapLoad: 'Zobraziť interaktívnu mapu',
   mapLoading: 'Načítavam mapu…',
   mapError: 'Mapu sa nepodarilo načítať – skúsiť znova',
+  mapLegend: 'Legenda',
 };
 
 export type Dict = typeof sk;
@@ -153,6 +154,7 @@ const en: Dict = {
   mapLoad: 'Show interactive map',
   mapLoading: 'Loading the map…',
   mapError: 'The map could not be loaded – try again',
+  mapLegend: 'Legend',
 };
 
 export const T: Record<Locale, Dict> = { sk, en };
@@ -165,5 +167,5 @@ export function pick(locale: Locale, skText: string, enText: string | null | und
 /** Texty tlačidla mapy pre MapLoader (posielajú sa ako props). */
 export function mapTexts(locale: Locale) {
   const t = T[locale];
-  return { load: t.mapLoad, loading: t.mapLoading, error: t.mapError };
+  return { load: t.mapLoad, loading: t.mapLoading, error: t.mapError, legend: t.mapLegend };
 }

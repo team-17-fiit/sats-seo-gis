@@ -26,6 +26,12 @@ describe('FakeMapAdapter', () => {
     expect(map.view).toEqual({ center: [17.1, 48.1], zoom: 10 });
   });
 
+  it('passes the cluster option through to the adapter', () => {
+    const map = new FakeMapAdapter();
+    map.addLayer({ id: 'peaks', kind: 'points', color: '#000', data: { type: 'FeatureCollection', features: [] }, cluster: true });
+    expect(map.layers[0]).toMatchObject({ id: 'peaks', cluster: true });
+  });
+
   it('delivers POI clicks until unsubscribed', () => {
     const map = new FakeMapAdapter();
     const seen: string[] = [];
