@@ -1,26 +1,20 @@
 -- =============================================================================
 -- 008 – chránené územia ŠOP SR (T2-08, obr. 4.4 „ŠOP protected areas“)
--- Zdroj: INSPIRE Protected Sites (WFS ps:ProtectedSite, namespace SK.SOP.PS), licencia CC BY-SA 4.0.
--- Share-alike -> vlastná tabuľka, oddelená od ostatného obsahu (pravidlo 1 licenčného registra).
+-- Zdroj: WFS ŠOP SR (chranene_objekty) – veľkoplošné (VCHÚ) a maloplošné (MCHÚ) chránené územia,
+-- licencia CC BY 4.0 (distribúcia v národnom katalógu otvorených dát).
 -- POI dostane názov územia, v ktorom leží, cez mart_poi_pages.protected_area.
 -- =============================================================================
 
-INSERT INTO canonical.licence (code, name, url, share_alike, attribution, public_ok) VALUES
-  ('CC-BY-SA-4.0', 'Creative Commons Attribution-ShareAlike 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/',
-   true, NULL, true)
-ON CONFLICT (code) DO UPDATE SET
-  name = EXCLUDED.name, url = EXCLUDED.url, share_alike = EXCLUDED.share_alike,
-  attribution = EXCLUDED.attribution, public_ok = EXCLUDED.public_ok;
-
 INSERT INTO canonical.source (code, name, url, licence_id)
-SELECT 'sopsr', 'ŠOP SR – chránené územia (INSPIRE Protected Sites)',
-       'http://inspire.biomonitoring.sk/geoserver/ps/ows', l.id
-FROM canonical.licence l WHERE l.code = 'CC-BY-SA-4.0'
+SELECT 'sopsr', 'ŠOP SR – chránené územia (VCHÚ, MCHÚ)',
+       'https://www.sopsr.sk/geoserver/chranene_objekty/ows', l.id
+FROM canonical.licence l WHERE l.code = 'CC-BY-4.0'
 ON CONFLICT (code) DO UPDATE SET name = EXCLUDED.name, url = EXCLUDED.url, licence_id = EXCLUDED.licence_id;
 
 CREATE TABLE IF NOT EXISTS canonical.protected_area (
     id          serial PRIMARY KEY,
-    inspire_id  text NOT NULL UNIQUE,             -- inspireID.localId
+    ext_id      text NOT NULL UNIQUE,             -- <druh>:<ID> z WFS
+    kind        text NOT NULL CHECK (kind IN ('vchu', 'mchu')),
     name        text NOT NULL,
     geom        geometry(MultiPolygon, 4326) NOT NULL CHECK (ST_IsValid(geom)),
     source_id   smallint NOT NULL REFERENCES canonical.source(id),

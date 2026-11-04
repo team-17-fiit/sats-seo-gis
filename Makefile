@@ -37,6 +37,7 @@ data: migrate ## celá pipeline nad skutočnými dátami (po `make fetch`)
 	cd $(BACKEND) && $(PY) -m pipelines.load_osm
 	cd $(BACKEND) && $(PY) -m pipelines.load_rurallure --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.load_sopsr
+	cd $(BACKEND) && $(PY) -m pipelines.load_pusr
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
 	cd $(BACKEND) && $(PY) -m pipelines.load_wikidata
@@ -49,6 +50,7 @@ data-fixtures: migrate ## celá pipeline nad malými vzorkami (sekundy, aj v CI)
 	cd $(BACKEND) && $(PY) -m pipelines.load_osm --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.load_rurallure --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.load_sopsr --fixture
+	cd $(BACKEND) && $(PY) -m pipelines.load_pusr --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
 	cd $(BACKEND) && $(PY) -m pipelines.load_wikidata --fixture

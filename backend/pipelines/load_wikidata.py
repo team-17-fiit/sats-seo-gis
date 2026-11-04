@@ -17,12 +17,11 @@ import urllib.parse
 import urllib.request
 
 from .common import FIXTURES_DIR, RAW_DIR, connect, mark_fetched
-from .fetch import sha256_of
+from .fetch import USER_AGENT, sha256_of
 from .quality import quality_score, tier_for
 
+# služba vyžaduje popisný User-Agent (https://meta.wikimedia.org/wiki/User-Agent_policy) – fetch.USER_AGENT
 ENDPOINT = "https://query.wikidata.org/sparql"
-# služba vyžaduje popisný User-Agent (https://meta.wikimedia.org/wiki/User-Agent_policy)
-USER_AGENT = "SATS-SEO-GIS/0.1 (https://github.com/team-17-fiit/sats-seo-gis)"
 RAW_FILE = "wikidata-sk-heritage.json"
 BATCH = 200
 WORLD_HERITAGE_SITE = "Q9259"

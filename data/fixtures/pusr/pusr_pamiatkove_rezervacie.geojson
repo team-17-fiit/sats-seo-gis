@@ -1,0 +1,10 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {"type": "MultiPolygon", "coordinates": [[[[18.89, 48.44], [18.93, 48.44], [18.93, 48.48], [18.89, 48.48], [18.89, 48.44]]]]},
+   "properties": {"id": 2, "ID_PR": "PR2", "Nazov": "Pamiatková rezervácia Banská Štiavnica", "Typ": "mestská pamiatková rezervácia", "Cislo_UZPF": 2}
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {"type": "MultiPolygon", "coordinates": [[[[19.9, 49.1], [20.3, 49.1], [20.3, 49.3], [19.9, 49.3], [19.9, 49.1]]]]},
+   "properties": {"STATUS": "active", "NATIONALSITECODE": "P/42", "SITETITLE_SK": "NP Tatranský národný park", "CATEGORY": 8,
+                  "categoryName": "VCHU", "identificationName": "NP Tatranský národný park (VCHU)", "ID": 1001}
+  }
+ ]
+}
