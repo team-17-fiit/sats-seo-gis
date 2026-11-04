@@ -29,6 +29,12 @@ def test_quality_score_bounds_and_weights():
     assert quality_score({"name_sk": "Devín", "licence_clear": True}) == 40
 
 
+def test_quality_features_follow_section_5_2_2():
+    # meno SK+EN, Wikidata, obrázok, otváracie hodiny, opis, licencia (T2-05)
+    assert set(WEIGHTS) == {"name_sk", "name_en", "wikidata", "image", "opening_hours", "description", "licence_clear"}
+    assert quality_score({"name_sk": "Devín", "image": "x.jpg", "opening_hours": "Tu-Su 10:00-17:00"}) == 30
+
+
 def test_tier_rules():
     assert tier_for("castle", has_wikidata=False, unesco=True) == 1
     assert tier_for("peak", has_wikidata=True) == 2

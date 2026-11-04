@@ -24,6 +24,8 @@ LEFT JOIN canonical.poi p ON p.id = pp.poi_id
 GROUP BY pa.id, l.code;
 
 -- Stránky POI: len verejne publikovateľné (licencia public_ok, nie zamietnuté)
+-- DROP: 006 pridáva stĺpce image a opening_hours (rovnaký dôvod ako pri mart_path_pages)
+DROP VIEW IF EXISTS marts.mart_poi_pages;
 CREATE OR REPLACE VIEW marts.mart_poi_pages AS
 SELECT
     p.slug, p.name_sk, p.name_en, p.category, p.tier, p.status, p.unesco,

@@ -12,6 +12,7 @@
     <tag k="historic" v="castle"/>
     <tag k="name" v="Devín"/>
     <tag k="name:en" v="Devín Castle"/>
+    <tag k="opening_hours" v="Tu-Su 10:00-17:00"/>
   </node>
   <node id="1003" version="1" lat="48.4780" lon="20.4710">
     <tag k="natural" v="cave_entrance"/>

@@ -61,8 +61,9 @@ def main() -> None:
                     "name_sk": p["name_sk"],
                     "name_en": p.get("name_en"),
                     "wikidata": p.get("wikidata"),
+                    "image": p.get("image"),
+                    "opening_hours": p.get("opening_hours"),
                     "description": p.get("description_sk"),
-                    "website": p.get("website"),
                     "licence_clear": licence_clear,
                 }
             )
