@@ -43,7 +43,7 @@
 | K7 funkčná kvalita | 19 pytest + 14 Vitest unit testov, 0 zlyhaní; E2E 3 + 5 scenárov (Playwright) | lokálne; E2E v CI | 100 % E2E |
 | K19 štruktúrované dáta | JSON-LD na všetkých typoch stránok (WebSite, ItemList, TouristTrip, Mountain) | kontrola HTML výstupu `out/` | 100 % Rich Results |
 | JS first load | 103 kB zdieľané, 108 kB úvodná stránka; MapLibre mimo úvodného balíka | `next build` | sledovať (TBT) |
-| K1–K4 Lighthouse / CWV | _doplniť z prvého behu CI_ | `quality-gate`, `nightly-metrics` | ≥ 80, LCP ≤ 2,5 s, CLS ≤ 0,1 |
+| K1–K4 Lighthouse / CWV | **Performance 100, SEO 100**, Accessibility 100, Best Practices 96; **LCP 0,47 s, CLS 0**, TBT 0 ms, FCP 0,23 s (medián 3 behov, úvodná stránka `/`, desktop). Prvý beh na `main` (2026-10-26) prahy splnil, ale reporty sa neuložili (`.lighthouseci` chýbal v artefakte, opravené v T1-19). Mobilný profil zatiaľ nemeraný. | `quality-gate` – Lighthouse CI 12.1.0, beh 41922348305 (2026-11-04) | ≥ 80, LCP ≤ 2,5 s, CLS ≤ 0,1 ✓ |
 
 ## 4. Retrospektíva
 
