@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 
 test('stránka má správny titulok a meta description', async ({ page }) => {
   await page.goto('/');
-  await expect(page).toHaveTitle(/Aktívny turizmus/);
+  await expect(page).toHaveTitle(/^Slovenské mapy – aktívny turizmus/);
   await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
 });
 
