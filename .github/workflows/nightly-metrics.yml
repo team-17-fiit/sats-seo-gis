@@ -47,4 +47,6 @@ jobs:
             app/.lighthouseci
             app/.lighthouseci-mobile
           if-no-files-found: ignore
+          # .lighthouseci zacina bodkou; upload-artifact@v4 skryte subory bez tohto vynecha.
+          include-hidden-files: true
           retention-days: 30

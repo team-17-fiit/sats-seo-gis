@@ -46,6 +46,8 @@ jobs:
           name: e2e-${{ matrix.project }}
           path: app/playwright-report
           if-no-files-found: ignore
+          # .lighthouseci zacina bodkou; upload-artifact@v4 skryte subory bez tohto vynecha.
+          include-hidden-files: true
           retention-days: 14
 
   lighthouse-mobile:
@@ -71,4 +73,6 @@ jobs:
           name: lighthouse-mobile
           path: app/.lighthouseci-mobile
           if-no-files-found: ignore
+          # .lighthouseci zacina bodkou; upload-artifact@v4 skryte subory bez tohto vynecha.
+          include-hidden-files: true
           retention-days: 14
