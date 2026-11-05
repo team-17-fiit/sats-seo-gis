@@ -10,6 +10,7 @@
 | Unit (frontend) | Vitest | logika knižníc, adaptéry (MapAdapter) | 100 % pass | `app/src/**/*.test.ts` |
 | Unit (backend) | pytest | API, repozitáre, ETL transformácie | 100 % pass | `backend/tests/` |
 | Kontrakt dát | SQL + pytest | schéma, platná geometria, licencie | žiadna neznáma licencia | `data/db/checks.sql` |
+| Geodáta (T2-11) | SQL + Python | nadväznosť úsekov (≤ 50 m), zastávky pri trase (≤ 200 m), poradie zastávok, súradnice v SR / prehodené lat-lon; varovania: duplicity, nadmorská výška, dĺžka trasy | 0 chýb (`check`), varovania (`warn`) len vypíše | `data/db/checks.sql`, `backend/pipelines/geocheck.py` (export pre web, aj v `export_static`) |
 | E2E | Playwright | používateľské scenáre mobil + desktop | 100 % (K7) | `app/tests/` |
 | Výkon | LHCI, k6 | CWV budgety, p95 API | K1–K4 | `app/lighthouserc*.cjs` |
 | Prístupnosť | axe-core | WCAG 2.2 AA | K17 | (šprint 4-4Z) |
