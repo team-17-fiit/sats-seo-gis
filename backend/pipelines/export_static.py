@@ -11,7 +11,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 
+from . import geocheck
 from .common import APP_DATA_DIR, connect
 from .seed_paths import CURATED_TIER, load_seed
 
@@ -142,6 +144,8 @@ def main() -> None:
     paths.sort(key=lambda p: order.get(p["slug"], len(order)))
     for p in pois:
         p["paths"].sort(key=lambda s: order.get(s, len(order)))
+    if geocheck.report(geocheck.check_export(paths, pois)):
+        sys.exit("Export nezapísaný: geokontrola našla chyby (pipelines.geocheck, T2-11)")
     APP_DATA_DIR.mkdir(parents=True, exist_ok=True)
     _write(OUTPUT, paths)
     _write(POI_OUTPUT, pois)

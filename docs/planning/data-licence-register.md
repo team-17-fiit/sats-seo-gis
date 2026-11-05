@@ -22,8 +22,8 @@ sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom k
 | `osm` | OpenStreetMap – Geofabrik extrakt SR | ODbL-1.0 | POI, trasy `route=*`, geometria | `staging.osm_poi`, `staging.osm_route` | týždenne | ✅ ingest skript |
 | `naturalearth` | Natural Earth 1:10m admin 0/1 | PD | hranica SR, kraje (rozsah pre validáciu) | `admin_area` | pri zmene | ✅ ingest skript |
 | `geonames` | GeoNames dump `SK` | CC-BY-4.0 | sídla, georeferencie, vyhľadávanie | `geonames_place` | štvrťročne | ✅ ingest skript |
-| `rurallure_ds1` | rurAllure DS1 – POI pútnických trás | CC-BY-4.0 ⚠ | doplnkové POI (pilot B) | `staging.rurallure_ds1` | pri zmene | ✅ import (fixture) |
-| `rurallure_ds6` | rurAllure DS6 – GPX/GeoJSON trasy | CC-BY-4.0 ⚠ | geometria pútnických trás | `staging.rurallure_ds6` | pri zmene | ✅ import (fixture) |
+| `rurallure_ds1` | rurAllure DS1 – POI pútnických trás | CC-BY-4.0 ✓ | doplnkové POI (pilot B) | `staging.rurallure_ds1` | pri zmene | ✅ import (fixture), licencia overená |
+| `rurallure_ds6` | rurAllure DS6 – GPX/GeoJSON trasy | CC-BY-4.0 ✓ | geometria pútnických trás | `staging.rurallure_ds6` | pri zmene | ✅ import (fixture), licencia overená |
 | `wikidata` | Wikidata SPARQL | CC0-1.0 | opis SK/EN, obrázok, web, UNESCO pre POI s Wikidata ID | `staging.wikidata_item` → `poi` | týždenne | ✅ `load_wikidata` (S2-3) |
 | `natura2000` | EEA Natura 2000 | CC-BY-4.0 | chránené územia | – | ročne | ⏳ backlog |
 | `sopsr` | ŠOP SR – chránené územia VCHÚ a MCHÚ (WFS `chranene_objekty`) | CC-BY-4.0 | názov chráneného územia pri POI | `protected_area` | ročne | ✅ `load_sopsr` (T2-08) |
@@ -31,8 +31,10 @@ sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom k
 | `team_curated` | Kurátorské dáta tímu (`data/seed/paths.json`, `peaks.geojson`) | CC-BY-4.0 | 7 trás, zastávky, vrcholy | `path`, `poi`, `poi_path` | priebežne | ✅ seed |
 | `openfreemap` | OpenFreeMap štýl „liberty“ (dlaždice z OSM) | ODbL-1.0 | podkladová mapa do 3-3Z | – (runtime) | – | ✅ dočasné |
 
-⚠ = licenciu konkrétneho datasetu treba **overiť na jeho Zenodo zázname** a doplniť DOI do `data/SOURCES.md`
-pred prvým zverejnením. Kým nie je overená, riadky z DS1/DS6 ostávajú v `staging` (status `candidate`).
+✓ = licencia overená na Zenodo zázname 2026-11-04 (T1-17): DS1 aj DS6 sú v zázname
+[10.5281/zenodo.7611876](https://doi.org/10.5281/zenodo.7611876) (v2.0) pod **CC BY 4.0**; DOI, autori a text
+atribúcie sú v [`data/SOURCES.md`](../../data/SOURCES.md). Riadky z DS1/DS6 ostávajú v `staging` (status
+`candidate`), kým sa neimportuje plný súbor a nespracuje ich `promote`.
 
 ## Pravidlá oddelenia
 

@@ -3,7 +3,7 @@
 *Príloha B dokumentácie · verzia v1.0 · platí od šprintu 1-1Z*
 
 **Účel:** zhodnúť sa, kedy je práca hotová, na piatich úrovniach.
-**Roly a nástroje:** celý tím; checklist v šablóne PR (`.github/pull_request_template.md`), GitHub Projects.
+**Roly a nástroje:** celý tím; checklist v šablóne PR (`.github/pull_request_template.md`), Plane.
 
 | Úroveň | Hotovo, keď | Kto overí |
 |---|---|---|

@@ -5,7 +5,8 @@ export type LngLat = [lon: number, lat: number];
 
 export type PointFeature = {
   type: 'Feature';
-  properties: { id: string; name: string; label?: string };
+  /** `unesco` = zastávka ⋆ zo Zoznamu svetového dedičstva (kap. 4.6) – kreslí sa zvýraznená. */
+  properties: { id: string; name: string; label?: string; unesco?: boolean };
   geometry: { type: 'Point'; coordinates: LngLat };
 };
 
@@ -15,10 +16,19 @@ export type LineFeature = {
   geometry: { type: 'LineString'; coordinates: LngLat[] };
 };
 
+/** Okraj UNESCO zastávky – rovnaký v MapLibre aj v statickom náhľade (= --color-focus). */
+export const UNESCO_COLOR = '#ffb300';
+
 export type FeatureCollection<F> = { type: 'FeatureCollection'; features: F[] };
 
+/**
+ * Zlučovanie blízkych bodov pri oddialení (T2-02). `true` = predvolené nastavenia (CLUSTER_DEFAULTS
+ * v cluster.ts); `radius` je v pixeloch, `maxZoom` je posledný zoom, na ktorom sa ešte zlučuje.
+ */
+export type ClusterSpec = boolean | { radius?: number; maxZoom?: number };
+
 export type LayerSpec =
-  | { id: string; kind: 'points'; color: string; data: FeatureCollection<PointFeature> | string }
+  | { id: string; kind: 'points'; color: string; data: FeatureCollection<PointFeature> | string; cluster?: ClusterSpec }
   | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> };
 
 export type MapOptions = {

@@ -52,7 +52,12 @@ SOURCES: dict[str, tuple[str, str]] = {
     "pusr_pr": (_pusr_wfs("pamis_pamiatkove_rezervacie"), "pusr_pamiatkove_rezervacie.geojson"),
     "pusr_pz": (_pusr_wfs("pamis_pamiatkove_zony"), "pusr_pamiatkove_zony.geojson"),
     "pusr_skd": (_pusr_wfs("pamis_svetove_kulturne_dedicstvo"), "pusr_svetove_kulturne_dedicstvo.geojson"),
-    # rurAllure DS1/DS6: doplniť URL zo Zenodo (data/SOURCES.md), dovtedy fixtures
+    # rurAllure DS1/DS6: Zenodo 10.5281/zenodo.7611876 (v2.0, CC BY 4.0) – pozri data/SOURCES.md (T1-17)
+    "rurallure_ds1": (
+        "https://zenodo.org/api/records/7611876/files/DS1%20POI%20info%20sheets%2003-02-2023.xlsx/content",
+        "rurallure_ds1.xlsx",
+    ),
+    "rurallure_ds6": ("https://zenodo.org/api/records/7611876/files/DS6.zip/content", "rurallure_ds6.zip"),
 }
 
 

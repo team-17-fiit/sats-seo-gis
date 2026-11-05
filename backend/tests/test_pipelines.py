@@ -90,9 +90,18 @@ def test_checks_sql_is_parsed():
     from pipelines.validate import CHECKS_FILE
 
     checks = parse_checks(CHECKS_FILE.read_text(encoding="utf-8"))
-    names = [n for n, _ in checks]
+    names = [n for n, _, _ in checks]
     assert "poi_without_source_or_licence" in names
-    assert all(q.lower().startswith("select") for _, q in checks)
+    assert "path_segment_gap_over_50m" in names
+    assert len(names) == len(set(names))
+    assert all(q.lower().startswith("select") for _, q, _ in checks)
+    assert all("--" not in q for _, q, _ in checks)
+    assert {lvl for _, _, lvl in checks} == {"check", "warn"}
+
+
+def test_checks_sql_warn_level_is_parsed():
+    sql = "-- check: a\nSELECT 1;\n\n-- section comment\n-- warn: b\nSELECT 2;\n"
+    assert parse_checks(sql) == [("a", "SELECT 1", "check"), ("b", "SELECT 2", "warn")]
 
 
 def test_poi_export_covers_every_stop_as_t1():
