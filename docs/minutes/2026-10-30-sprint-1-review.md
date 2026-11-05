@@ -63,6 +63,6 @@
 | Každú story rozdeliť na subtasky ≤ 1 deň pred plánovaním | Scrum Master (G) | plánovanie 2-2Z |
 | Založiť projekt v Plane podľa `docs/methodology/tasks.md` (namiesto GitHub Projects) | G | 2026-11-02 |
 | Zapnúť ochranu `main` (required checks) | D | 2026-11-02 |
-| Doplniť DOI DS1/DS6 a overiť ich licenciu | C | 2026-11-05 |
+| ~~Doplniť DOI DS1/DS6 a overiť ich licenciu~~ hotové 2026-11-04 (T1-17): Zenodo 10.5281/zenodo.7611876, CC BY 4.0, zapísané v `data/SOURCES.md` | C | 2026-11-05 |
 | ~~Stiahnuť a naimportovať plné OSM dáta, zapísať K10~~ hotové 2026-11-01 (T1-18). Všetkých 53 úsekov našich trás vedie po sieti ciest a chodníkov z OSM (najkratšia cesta medzi zastávkami) | C | 2026-11-06 |
 | Zapísať K1–K4 baseline z CI | D | 2026-11-03 |
