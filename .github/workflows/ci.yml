@@ -131,11 +131,21 @@ jobs:
 
       # Smoke (T2-12): kazdy typ stranky sa nacita bez chyb. Ak padne, plna sada
       # sa uz nespusti - rozbity build sa ukaze za par sekund.
+      # Oba kroky zapisuju "blob" vysledky do vlastneho suboru v blob-report/,
+      # krok "Spojenie Playwright reportov" z nich spravi jeden HTML report.
       - name: Smoke test (Playwright, desktop)
-        run: npm run test:smoke -- --project=desktop
+        run: npm run test:smoke -- --project=desktop --reporter=blob,list
+        env:
+          PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report/smoke.zip
 
       - name: E2E testy (Playwright, desktop)
-        run: npm run test:e2e -- --project=desktop --grep-invert @smoke
+        run: npm run test:e2e -- --project=desktop --grep-invert @smoke --reporter=blob,list
+        env:
+          PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report/e2e.zip
+
+      - name: Spojenie Playwright reportov (smoke + E2E)
+        if: always() && hashFiles('app/blob-report/*.zip') != ''
+        run: npx playwright merge-reports --reporter=html blob-report
 
       - name: Lighthouse CI (desktop, prahy >= 80)
         run: npm run lhci

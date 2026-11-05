@@ -16,7 +16,9 @@ data/processed/*
 *.pmtiles
 .lighthouseci/
 playwright-report/
-test-results/.lighthouseci-mobile/
+blob-report/
+test-results/
+.lighthouseci-mobile/
 app/.next/
 app/out/
 next-env.d.ts
