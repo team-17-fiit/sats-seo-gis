@@ -48,7 +48,6 @@ const sk = {
   homeDescription:
     'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.',
   homeH1: 'Slovensko pešo a na bicykli',
-  homeLead: 'Vrcholy, trasy a útulne na jednom mieste.',
   mainNav: 'Hlavná navigácia',
   peaksMap: 'Mapa vrcholov',
   trailsHeading: 'Tematické trasy',
@@ -107,7 +106,6 @@ const en: Dict = {
   homeDescription:
     'Interactive map of peaks and thematic trails in Slovakia for hikers and cyclists. Fast, clear and open.',
   homeH1: 'Slovakia on foot and by bike',
-  homeLead: 'Peaks, trails and shelters in one place.',
   mainNav: 'Main navigation',
   peaksMap: 'Map of peaks',
   trailsHeading: 'Thematic trails',

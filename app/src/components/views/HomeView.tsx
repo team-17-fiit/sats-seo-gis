@@ -40,7 +40,6 @@ export default function HomeView({ locale }: { locale: Locale }) {
         <Stripes />
         <LangSwitch locale={locale} kind="home" />
         <h1>{t.homeH1}</h1>
-        <p>{t.homeLead}</p>
         <nav className="nav" aria-label={t.mainNav}>
           <Link href={pagePath(locale, 'trails')}>{t.trailsHeading}</Link>
         </nav>
