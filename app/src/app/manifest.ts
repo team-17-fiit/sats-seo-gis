@@ -7,7 +7,7 @@ export const dynamic = 'force-static';
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: `${SITE_NAME} – aktívny turizmus na Slovensku`,
-    short_name: 'SATS-GIS',
+    short_name: SITE_NAME,
     description: 'Tematické trasy, vrcholy a miesta na Slovensku.',
     start_url: '/',
     scope: '/',

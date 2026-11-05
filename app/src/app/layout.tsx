@@ -11,15 +11,15 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'Aktívny turizmus na Slovensku – mapa vrcholov a trás',
+    default: `${SITE_NAME} – aktívny turizmus, vrcholy a trasy`,
     template: `%s | ${SITE_NAME}`,
   },
   description: DESCRIPTION,
   alternates: { canonical: '/' },
   icons: { apple: '/icons/icon-192.png' },
-  appleWebApp: { capable: true, title: 'SATS-GIS', statusBarStyle: 'default' },
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: 'default' },
   openGraph: {
-    title: 'Aktívny turizmus na Slovensku',
+    title: SITE_NAME,
     description: 'Interaktívna mapa vrcholov a trás.',
     type: 'website',
     locale: 'sk_SK',
