@@ -1,0 +1,54 @@
+# Ručne spúšťaný: prečíta Plane a repozitár, AI napíše texty a otvorí PR so zmenou docs/site.json.
+# Tímový web si tento súbor sťahuje pri builde. Zmeny sa na web dostanú až po zmergovaní PR.
+name: Sync site content
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Generovať aj keď sa nič nezmenilo"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Nainštalovať Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Vygenerovať docs/site.json
+        run: node scripts/sync-site.mjs
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          PLANE_API_KEY: ${{ secrets.PLANE_API_KEY }}
+          PLANE_WORKSPACE: sats-seo-gis
+          PLANE_PROJECT_ID: 5996353a-a783-4a1f-bc36-0157aa26810b
+          FORCE: ${{ inputs.force }}
+      - name: Otvoriť pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -z "$(git status --porcelain docs/site.json)" ]; then
+            echo "Žiadna zmena v docs/site.json."
+            exit 0
+          fi
+          branch="chore/site-content-$(date +%Y%m%d-%H%M)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add docs/site.json
+          git commit -m "chore(site): aktualizácia obsahu tímového webu"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "chore(site): aktualizácia obsahu tímového webu" \
+            --body "Vygenerované workflowom Sync site content. Skontroluj texty (šprinty, technológie, dokumenty) pred mergom. Čísla úloh sú z Plane."
