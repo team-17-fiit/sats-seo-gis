@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-11-08T00:00:00.000Z",
+  "generatedAt": "2026-11-08T15:28:41.756Z",
+  "sourceSha": "8261a990f0152b29264448f1cd39471e590852b5",
+  "inputHash": "ab5a0c47dd78ddbe",
   "tech": [
     {
       "area": "Frontend",
@@ -34,28 +36,28 @@
   ],
   "documents": [
     {
-      "title": "Metodiky",
-      "text": "Definition of Done, code review, testovanie, komunikácia",
+      "title": "Rozhodnutia (ADR)",
+      "text": "Záznamy architektonických rozhodnutí",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/methodology"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/adr"
     },
     {
       "title": "Architektúra",
       "text": "Cieľová architektúra systému",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/architecture"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/architecture"
     },
     {
-      "title": "Rozhodnutia (ADR)",
-      "text": "Záznamy architektonických rozhodnutí",
+      "title": "Metodiky",
+      "text": "Definition of Done, code review, testovanie, komunikácia",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/adr"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/methodology"
     },
     {
       "title": "Plánovanie",
       "text": "Šprinty a register licencií dát",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/planning"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/planning"
     }
   ],
   "sprints": [
@@ -71,7 +73,7 @@
       "n": 2,
       "range": "26. 10. – 8. 11. 2026",
       "status": "prebieha",
-      "done": 22,
+      "done": 23,
       "total": 32,
       "text": "Crawlovateľné stránky trás a miest, Wikidata, mapa s geometriou, SK/EN."
     }
