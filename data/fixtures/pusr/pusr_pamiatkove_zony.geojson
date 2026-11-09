@@ -1,0 +1,15 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {"type": "MultiPolygon", "coordinates": [[[[21.68, 48.46], [21.69, 48.46], [21.69, 48.47], [21.68, 48.47], [21.68, 48.46]]]]},
+   "properties": {"id": 1, "Nazov": "Pamiatková zóna Veľká Tŕňa", "Typ": "špeciálna", "Cislo_UZPF": 92}
+  },
+  {
+   "type": "Feature",
+   "geometry": {"type": "MultiPolygon", "coordinates": [[[[17.0, 48.0], [17.1, 48.0], [17.1, 48.1], [17.0, 48.1], [17.0, 48.0]]]]},
+   "properties": {"id": 2, "Nazov": null}
+  }
+ ]
+}

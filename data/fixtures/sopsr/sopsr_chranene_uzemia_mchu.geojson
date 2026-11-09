@@ -1,0 +1,16 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {"type": "Polygon", "coordinates": [[[19.58, 48.96], [19.59, 48.96], [19.59, 48.97], [19.58, 48.97], [19.58, 48.96]]]},
+   "properties": {"NATIONALSITECODE": "1364", "SITETITLE_SK": " NPP Starý hrad ", "CATEGORY": 3, "categoryName": "MCHU",
+                  "identificationName": "NPP Starý hrad (MCHU)", "ID": 842}
+  },
+  {
+   "type": "Feature",
+   "geometry": {"type": "Polygon", "coordinates": [[[21.0, 48.7], [21.1, 48.7], [21.1, 48.8], [21.0, 48.8], [21.0, 48.7]]]},
+   "properties": {"NATIONALSITECODE": "9999", "SITETITLE_SK": null, "categoryName": "MCHU", "ID": 9999}
+  }
+ ]
+}

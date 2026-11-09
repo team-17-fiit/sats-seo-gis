@@ -1,16 +1,19 @@
 """Quality score POI (rovnica 5.1 dokumentácie): Q = 100 * Σ w_j * f_j, Σ w_j = 1.
 
+Príznaky podľa kap. 5.2.2: meno SK+EN, Wikidata, obrázok, otváracie hodiny, opis, licencia (T2-05).
 Čistá funkcia bez DB – používa ju promote aj unit testy.
 """
 
 from __future__ import annotations
 
+# meno SK + licencia = 40 -> POI s menom z OSM ostáva nad prahom publikovania (K10)
 WEIGHTS: dict[str, float] = {
     "name_sk": 0.20,
     "name_en": 0.15,
     "wikidata": 0.20,
+    "image": 0.05,
+    "opening_hours": 0.05,
     "description": 0.15,
-    "website": 0.10,
     "licence_clear": 0.20,
 }
 

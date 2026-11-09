@@ -1,6 +1,6 @@
 # Licenčný register dát (US-11)
 
-*Zodpovedá: člen C (dáta) · založené v šprinte 1-1Z · strojová verzia: `data/db/migrations/002_seed_licences.sql`*
+*Zodpovedá: člen C (dáta) · založené v šprinte 1-1Z · strojová verzia: `data/db/migrations/002_seed_licences.sql`, `008_protected_areas.sql`, `009_heritage_areas.sql`*
 
 Pravidlo: **každý riadok** v kanonickej DB odkazuje na `source_id` a `licence_id`. Zdroj, ktorý tu nie je,
 sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom kontrakte).
@@ -24,8 +24,10 @@ sa nesmie importovať (licenčná brána v `pipelines.promote` a v CI dátovom k
 | `geonames` | GeoNames dump `SK` | CC-BY-4.0 | sídla, georeferencie, vyhľadávanie | `geonames_place` | štvrťročne | ✅ ingest skript |
 | `rurallure_ds1` | rurAllure DS1 – POI pútnických trás | CC-BY-4.0 ✓ | doplnkové POI (pilot B) | `staging.rurallure_ds1` | pri zmene | ✅ import (fixture), licencia overená |
 | `rurallure_ds6` | rurAllure DS6 – GPX/GeoJSON trasy | CC-BY-4.0 ✓ | geometria pútnických trás | `staging.rurallure_ds6` | pri zmene | ✅ import (fixture), licencia overená |
-| `wikidata` | Wikidata SPARQL | CC0-1.0 | dedičstvo, obrázky, preklady | – | týždenne | ⏳ šprint 2-2Z |
+| `wikidata` | Wikidata SPARQL | CC0-1.0 | opis SK/EN, obrázok, web, UNESCO pre POI s Wikidata ID | `staging.wikidata_item` → `poi` | týždenne | ✅ `load_wikidata` (S2-3) |
 | `natura2000` | EEA Natura 2000 | CC-BY-4.0 | chránené územia | – | ročne | ⏳ backlog |
+| `sopsr` | ŠOP SR – chránené územia VCHÚ a MCHÚ (WFS `chranene_objekty`) | CC-BY-4.0 | názov chráneného územia pri POI | `protected_area` | ročne | ✅ `load_sopsr` (T2-08) |
+| `pusr` | Pamiatkový úrad SR – PAMIS WFS (pamiatkové rezervácie, zóny, UNESCO lokality) | CC-BY-4.0 | názov pamiatkového územia pri POI | `heritage_area` | ročne | ✅ `load_pusr` (T2-08) |
 | `team_curated` | Kurátorské dáta tímu (`data/seed/paths.json`, `peaks.geojson`) | CC-BY-4.0 | 7 trás, zastávky, vrcholy | `path`, `poi`, `poi_path` | priebežne | ✅ seed |
 | `openfreemap` | OpenFreeMap štýl „liberty“ (dlaždice z OSM) | ODbL-1.0 | podkladová mapa do 3-3Z | – (runtime) | – | ✅ dočasné |
 
@@ -45,3 +47,4 @@ atribúcie sú v [`data/SOURCES.md`](../../data/SOURCES.md). Riadky z DS1/DS6 os
 | Dátum | Zmena | Kto |
 |---|---|---|
 | 2026-10-30 | založenie registra, 9 zdrojov, 5 licencií | tím |
+| 2026-11-04 | `wikidata` importovaná (S2-3); `sopsr` a `pusr` (obe CC-BY-4.0) pridané (T2-08) | Leon Rado |

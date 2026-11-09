@@ -44,12 +44,12 @@ def promote_osm(cur) -> tuple[int, int, int]:
     cur.execute(
         """
         SELECT osm_type, osm_id, name, name_en, category, wikidata, ele, website,
-               ST_X(geom), ST_Y(geom)
+               tags->>'opening_hours', ST_X(geom), ST_Y(geom)
         FROM staging.osm_poi
         """
     )
     inserted = matched = rejected = 0
-    for osm_type, osm_id, name, name_en, category, wikidata, ele, website, lon, lat in cur.fetchall():
+    for osm_type, osm_id, name, name_en, category, wikidata, ele, website, opening_hours, lon, lat in cur.fetchall():
         key = f"{osm_type.lower()}{osm_id}"
         payload = {"osm_id": key, "name": name, "category": category}
         if not name:
@@ -70,8 +70,9 @@ def promote_osm(cur) -> tuple[int, int, int]:
         if existing and existing[1] != src_id:
             cur.execute(
                 """UPDATE canonical.poi SET wikidata_id = COALESCE(wikidata_id, %s),
-                   elevation_m = COALESCE(elevation_m, %s), updated_at = now() WHERE id = %s""",
-                (wikidata, elevation, existing[0]),
+                   elevation_m = COALESCE(elevation_m, %s), opening_hours = COALESCE(opening_hours, %s),
+                   updated_at = now() WHERE id = %s""",
+                (wikidata, elevation, opening_hours, existing[0]),
             )
             matched += 1
             continue
@@ -90,8 +91,9 @@ def promote_osm(cur) -> tuple[int, int, int]:
         if hit and not existing:
             cur.execute(
                 """UPDATE canonical.poi SET osm_id = %s, wikidata_id = COALESCE(wikidata_id, %s),
-                   elevation_m = COALESCE(elevation_m, %s), updated_at = now() WHERE id = %s""",
-                (key, wikidata, elevation, hit[0]),
+                   elevation_m = COALESCE(elevation_m, %s), opening_hours = COALESCE(opening_hours, %s),
+                   updated_at = now() WHERE id = %s""",
+                (key, wikidata, elevation, opening_hours, hit[0]),
             )
             matched += 1
             continue
@@ -101,8 +103,9 @@ def promote_osm(cur) -> tuple[int, int, int]:
                 "name_sk": name,
                 "name_en": name_en,
                 "wikidata": wikidata,
+                "image": None,  # obrázok dopĺňa až load_wikidata
+                "opening_hours": opening_hours,
                 "description": None,
-                "website": website,
                 "licence_clear": licence_clear,
             }
         )
@@ -111,14 +114,15 @@ def promote_osm(cur) -> tuple[int, int, int]:
         cur.execute(
             """
             INSERT INTO canonical.poi (slug, name_sk, name_en, category, tier, status, quality_score,
-                                       elevation_m, osm_id, wikidata_id, website, geom,
+                                       elevation_m, osm_id, wikidata_id, website, opening_hours, geom,
                                        source_id, licence_id, fetched_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     ST_SetSRID(ST_MakePoint(%s, %s), 4326), %s, %s, now())
             ON CONFLICT (osm_id) WHERE osm_id IS NOT NULL DO UPDATE SET
               name_sk = EXCLUDED.name_sk, name_en = EXCLUDED.name_en, category = EXCLUDED.category,
               quality_score = EXCLUDED.quality_score, wikidata_id = EXCLUDED.wikidata_id,
-              elevation_m = EXCLUDED.elevation_m, website = EXCLUDED.website, geom = EXCLUDED.geom,
+              elevation_m = EXCLUDED.elevation_m, website = EXCLUDED.website,
+              opening_hours = EXCLUDED.opening_hours, geom = EXCLUDED.geom,
               updated_at = now()
             """,
             (
@@ -133,6 +137,7 @@ def promote_osm(cur) -> tuple[int, int, int]:
                 key,
                 wikidata,
                 website,
+                opening_hours,
                 lon,
                 lat,
                 src_id,
