@@ -6,7 +6,8 @@ import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
 import LocaleRoot from '@/components/LocaleRoot';
 import Stripes from '@/components/Stripes';
-import { alternatesFor, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
+import { alternatesFor, pagePath, T, type Locale } from '@/lib/i18n';
+import { socialMetadata } from '@/lib/og';
 import { getPeak, type Peak } from '@/lib/peaks';
 import { SITE_URL } from '@/lib/site';
 
@@ -19,7 +20,7 @@ export function peakMetadata(locale: Locale, slug: string): Metadata {
     title,
     description,
     alternates: alternatesFor(locale, 'peak', peak.slug),
-    openGraph: { title, description, type: 'article', locale: OG_LOCALE[locale] },
+    ...socialMetadata(locale, 'peak', peak.slug, title, description, 'article'),
   };
 }
 

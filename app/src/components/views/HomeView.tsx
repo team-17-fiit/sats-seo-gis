@@ -6,7 +6,8 @@ import LangSwitch from '@/components/LangSwitch';
 import LocaleRoot from '@/components/LocaleRoot';
 import MapLoader from '@/components/MapLoader';
 import Stripes from '@/components/Stripes';
-import { alternatesFor, mapTexts, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
+import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
+import { socialMetadata } from '@/lib/og';
 import type { FeatureCollection, PointFeature } from '@/lib/map';
 import { getPaths, trailName } from '@/lib/paths';
 import { getPeaks } from '@/lib/peaks';
@@ -17,7 +18,7 @@ export function homeMetadata(locale: Locale): Metadata {
     title: { absolute: t.homeTitle },
     description: t.homeDescription,
     alternates: alternatesFor(locale, 'home'),
-    openGraph: { title: t.homeTitle, description: t.homeDescription, type: 'website', locale: OG_LOCALE[locale] },
+    ...socialMetadata(locale, 'home', undefined, t.homeTitle, t.homeDescription, 'website'),
   };
 }
 

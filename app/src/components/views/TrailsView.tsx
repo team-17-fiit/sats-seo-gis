@@ -5,7 +5,8 @@ import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
 import LocaleRoot from '@/components/LocaleRoot';
 import Stripes from '@/components/Stripes';
-import { alternatesFor, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
+import { alternatesFor, pagePath, T, type Locale } from '@/lib/i18n';
+import { socialMetadata } from '@/lib/og';
 import { difficultyLabel, getPaths, trailName, trailSummary } from '@/lib/paths';
 import { SITE_URL } from '@/lib/site';
 
@@ -15,7 +16,7 @@ export function trailsMetadata(locale: Locale): Metadata {
     title: t.trailsTitle,
     description: t.trailsDescription,
     alternates: alternatesFor(locale, 'trails'),
-    openGraph: { title: t.trailsTitle, description: t.trailsDescription, type: 'website', locale: OG_LOCALE[locale] },
+    ...socialMetadata(locale, 'trails', undefined, t.trailsTitle, t.trailsDescription, 'website'),
   };
 }
 
