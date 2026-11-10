@@ -10,6 +10,8 @@ import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
+import { breadcrumbJsonLd, placeCrumbs } from '@/lib/breadcrumbs';
+import { alternatesFor, mapTexts, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
 import { getPath, trailName } from '@/lib/paths';
 import { categoryLabel, getPoi, poiDescription, poiJsonLd, poiName, poiToGeoJSON, type Poi } from '@/lib/pois';
 import { SITE_URL } from '@/lib/site';
@@ -40,9 +42,12 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
   const name = poiName(p, locale);
   const other = locale === 'en' ? p.name_sk : p.name_en;
   const osm = `https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=15/${p.lat}/${p.lon}`;
+  const mainTrail = paths[0] && { slug: paths[0].slug, name: paths[0].name_sk };
+  const crumbs = placeCrumbs(locale, { slug: p.slug, name }, mainTrail);
 
   return (
     <LocaleRoot locale={locale}>
+      <JsonLd data={breadcrumbJsonLd(crumbs, SITE_URL)} />
       <JsonLd data={poiJsonLd(p, SITE_URL, paths, locale)} />
       <header className="top">
         <Stripes />

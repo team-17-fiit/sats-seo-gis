@@ -9,6 +9,8 @@ import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, pick, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
+import { breadcrumbJsonLd, trailCrumbs } from '@/lib/breadcrumbs';
+import { alternatesFor, mapTexts, OG_LOCALE, pagePath, pick, T, type Locale } from '@/lib/i18n';
 import {
   difficultyLabel, getPath, localizeStops, pathLineGeoJSON, stopsToGeoJSON, trailName, trailSummary, viewFor,
   type TrailPath,
@@ -43,6 +45,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
 
   return (
     <LocaleRoot locale={locale}>
+      <JsonLd data={breadcrumbJsonLd(trailCrumbs(locale, { slug: p.slug, name }), SITE_URL)} />
       <JsonLd
         data={{
           '@context': 'https://schema.org',
