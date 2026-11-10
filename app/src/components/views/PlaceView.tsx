@@ -8,8 +8,9 @@ import LocaleRoot from '@/components/LocaleRoot';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
+import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
+import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, placeCrumbs } from '@/lib/breadcrumbs';
-import { alternatesFor, mapTexts, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
 import { getPath, trailName } from '@/lib/paths';
 import { categoryLabel, getPoi, poiDescription, poiJsonLd, poiName, poiToGeoJSON, type Poi } from '@/lib/pois';
 import { SITE_URL } from '@/lib/site';
@@ -30,7 +31,7 @@ export function placeMetadata(locale: Locale, slug: string): Metadata {
     title,
     description,
     alternates: alternatesFor(locale, 'place', p.slug),
-    openGraph: { title, description, type: 'article', locale: OG_LOCALE[locale] },
+    ...socialMetadata(locale, 'place', p.slug, title, description, 'article'),
   };
 }
 
