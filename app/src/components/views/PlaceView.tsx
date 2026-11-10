@@ -11,7 +11,6 @@ import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, placeCrumbs } from '@/lib/breadcrumbs';
-import { alternatesFor, mapTexts, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
 import { getPath, trailName } from '@/lib/paths';
 import { categoryLabel, getPoi, poiDescription, poiJsonLd, poiName, poiToGeoJSON, type Poi } from '@/lib/pois';
 import { SITE_URL } from '@/lib/site';

@@ -10,7 +10,6 @@ import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, pick, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, trailCrumbs } from '@/lib/breadcrumbs';
-import { alternatesFor, mapTexts, OG_LOCALE, pagePath, pick, T, type Locale } from '@/lib/i18n';
 import {
   difficultyLabel, getPath, localizeStops, pathLineGeoJSON, stopsToGeoJSON, trailName, trailSummary, viewFor,
   type TrailPath,

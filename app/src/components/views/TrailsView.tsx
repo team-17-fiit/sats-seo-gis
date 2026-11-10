@@ -8,7 +8,6 @@ import Stripes from '@/components/Stripes';
 import { alternatesFor, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, trailsCrumbs } from '@/lib/breadcrumbs';
-import { alternatesFor, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
 import { difficultyLabel, getPaths, trailName, trailSummary } from '@/lib/paths';
 import { SITE_URL } from '@/lib/site';
 
