@@ -44,11 +44,10 @@ export const OG_LOCALE: Record<Locale, string> = { sk: 'sk_SK', en: 'en_GB' };
 const sk = {
   langName: 'Slovensky',
   switchTo: 'English',
-  homeTitle: 'Aktívny turizmus na Slovensku – mapa vrcholov a trás',
+  homeTitle: 'Slovenské mapy – aktívny turizmus, vrcholy a trasy',
   homeDescription:
     'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.',
   homeH1: 'Slovensko pešo a na bicykli',
-  homeLead: 'Vrcholy, trasy a útulne na jednom mieste.',
   mainNav: 'Hlavná navigácia',
   peaksMap: 'Mapa vrcholov',
   trailsHeading: 'Tematické trasy',
@@ -103,11 +102,10 @@ export type Dict = typeof sk;
 const en: Dict = {
   langName: 'English',
   switchTo: 'Slovensky',
-  homeTitle: 'Active tourism in Slovakia – map of peaks and trails',
+  homeTitle: 'Slovenské mapy – active tourism, peaks and trails in Slovakia',
   homeDescription:
     'Interactive map of peaks and thematic trails in Slovakia for hikers and cyclists. Fast, clear and open.',
   homeH1: 'Slovakia on foot and by bike',
-  homeLead: 'Peaks, trails and shelters in one place.',
   mainNav: 'Main navigation',
   peaksMap: 'Map of peaks',
   trailsHeading: 'Thematic trails',
