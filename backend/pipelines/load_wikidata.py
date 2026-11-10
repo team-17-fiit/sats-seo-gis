@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -25,6 +26,9 @@ ENDPOINT = "https://query.wikidata.org/sparql"
 RAW_FILE = "wikidata-sk-heritage.json"
 BATCH = 200
 WORLD_HERITAGE_SITE = "Q9259"
+# dočasné chyby query.wikidata.org (preťaženie) – dávka sa zopakuje, celý beh sa kvôli nim nezahodí
+RETRY_STATUS = {429, 500, 502, 503, 504}
+RETRIES = 3
 
 QUERY = """
 SELECT ?item ?descSk ?descEn ?image ?website ?unesco WHERE {{
@@ -66,13 +70,33 @@ def parse(doc: dict) -> dict[str, dict]:
     return items
 
 
-def sparql(qids: list[str]) -> list[dict]:
+def retry_wait(attempt: int, retry_after: str | None) -> float:
+    """Pauza pred ďalším pokusom: Retry-After zo servera (max. 120 s), inak 5, 10, 20 s."""
+    if retry_after and retry_after.isdigit():
+        return min(int(retry_after), 120)
+    return 5 * 2**attempt
+
+
+def sparql(qids: list[str], retries: int = RETRIES, sleep=time.sleep) -> list[dict]:
+    """Jedna dávka; dočasné chyby verejnej služby (429, 5xx, výpadok siete) zopakuje, ostatné nie."""
     body = urllib.parse.urlencode({"query": build_query(qids)}).encode()
-    req = urllib.request.Request(
-        ENDPOINT, data=body, headers={"Accept": "application/sparql-results+json", "User-Agent": USER_AGENT}
-    )
-    with urllib.request.urlopen(req, timeout=120) as resp:
-        return json.load(resp)["results"]["bindings"]
+    for attempt in range(retries + 1):
+        req = urllib.request.Request(
+            ENDPOINT, data=body, headers={"Accept": "application/sparql-results+json", "User-Agent": USER_AGENT}
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.load(resp)["results"]["bindings"]
+        except urllib.error.HTTPError as err:
+            if err.code not in RETRY_STATUS or attempt == retries:
+                raise
+            wait, reason = retry_wait(attempt, err.headers.get("Retry-After")), f"HTTP {err.code}"
+        except (urllib.error.URLError, TimeoutError) as err:
+            if attempt == retries:
+                raise
+            wait, reason = retry_wait(attempt, None), str(err)
+        print(f"  ! Wikidata {reason}, pokus {attempt + 2}/{retries + 1} o {wait:.0f} s")
+        sleep(wait)
 
 
 def fetch(qids: list[str]):

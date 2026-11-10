@@ -1,10 +1,14 @@
 """Wikidata SPARQL fetcher (T2-07): parsovanie vzorky bez siete a bez DB + doplnenie POI v DB."""
 
+import io
 import json
+import urllib.error
+import urllib.request
 
 import psycopg
 import pytest
 
+from pipelines import load_wikidata
 from pipelines.common import FIXTURES_DIR
 from pipelines.load_wikidata import batches, build_query, parse
 
@@ -39,6 +43,51 @@ def test_query_lists_items_and_requested_properties():
 
 def test_batches_split_by_200():
     assert [len(b) for b in batches([f"Q{i}" for i in range(450)])] == [200, 200, 50]
+
+
+def _http_error(code: int, retry_after: str | None = None) -> urllib.error.HTTPError:
+    headers = {"Retry-After": retry_after} if retry_after else {}
+    return urllib.error.HTTPError(load_wikidata.ENDPOINT, code, "error", headers, None)
+
+
+def test_sparql_retries_temporary_errors(monkeypatch):
+    answers = [_http_error(502), _http_error(429, retry_after="7"), io.BytesIO(json.dumps(SAMPLE).encode())]
+
+    def fake_urlopen(req, timeout):
+        answer = answers.pop(0)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+    waits: list[float] = []
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    bindings = load_wikidata.sparql(["Q1033473"], sleep=waits.append)
+    assert len(bindings) == 3
+    assert waits == [5, 7]  # 1. pokus: 5 s, 2. pokus: Retry-After zo servera
+
+
+def test_sparql_does_not_retry_bad_requests(monkeypatch):
+    calls = []
+
+    def fake_urlopen(req, timeout):
+        calls.append(req)
+        raise _http_error(400)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    with pytest.raises(urllib.error.HTTPError):
+        load_wikidata.sparql(["Q1"], sleep=lambda _: None)
+    assert len(calls) == 1
+
+
+def test_sparql_gives_up_after_retries(monkeypatch):
+    def fake_urlopen(req, timeout):
+        raise _http_error(503)
+
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    waits: list[float] = []
+    with pytest.raises(urllib.error.HTTPError):
+        load_wikidata.sparql(["Q1"], sleep=waits.append)
+    assert waits == [5, 10, 20]
 
 
 @pytest.mark.db
