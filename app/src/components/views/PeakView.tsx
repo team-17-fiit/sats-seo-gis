@@ -6,6 +6,7 @@ import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
 import LocaleRoot from '@/components/LocaleRoot';
 import Stripes from '@/components/Stripes';
+import { breadcrumbJsonLd, peakCrumbs } from '@/lib/breadcrumbs';
 import { alternatesFor, OG_LOCALE, pagePath, T, type Locale } from '@/lib/i18n';
 import { getPeak, type Peak } from '@/lib/peaks';
 import { SITE_URL } from '@/lib/site';
@@ -29,6 +30,7 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
 
   return (
     <LocaleRoot locale={locale}>
+      <JsonLd data={breadcrumbJsonLd(peakCrumbs(locale, { slug: peak.slug, name: peak.name }), SITE_URL)} />
       <JsonLd
         data={{
           '@context': 'https://schema.org',
