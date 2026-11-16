@@ -50,6 +50,8 @@ Ostatné tabuľky (hranice krajov, GeoNames) sú pomocné. Celá schéma: `data/
 3. **Wikidata** – `load_wikidata` doplní miestam s Wikidata ID opis SK/EN, obrázok, web a príznak UNESCO.
 4. **Overenie** – `validate` skontroluje, že je všetko v poriadku.
 5. **Export** – `export_static` zapíše trasy do `app/public/data/paths.json`, odkiaľ ich berie web.
+   `export_tiles` zapíše vrstvy `paths` a `pois` z `marts.mart_tiles` do `data/processed/tiles/*.geojsonl` –
+   vstup pre tippecanoe (PMTiles z5–z15); len verejný obsah, každý prvok so svojou licenciou.
 
 ## Spustenie s databázou (Git Bash, voliteľné)
 
