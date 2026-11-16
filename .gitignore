@@ -34,3 +34,6 @@ __pycache__/
 *.egg-info/
 .venv/
 *.tsbuildinfo
+
+# lokálne nástroje (napr. osm2pgsql pre Windows)
+.tools/

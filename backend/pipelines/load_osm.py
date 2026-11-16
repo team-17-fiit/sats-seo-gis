@@ -25,7 +25,7 @@ def run_osm2pgsql(input_file) -> None:
         "--output=flex",
         f"--style={STYLE}",
         f"--database={database_url()}",
-        "--cache=1000",
+        # bez --cache: osm2pgsql 2.x ho mimo --slim odmietne; predvolená cache stačí aj pre celé SR
         str(input_file),
     ]
     print("$", " ".join(c if "postgresql://" not in c else "--database=***" for c in cmd))
