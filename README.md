@@ -41,6 +41,11 @@ cd backend && python -m pytest                # API a dáta
 cd app && npm run lint && npm run test:unit   # web
 ```
 
+## Nasadenie
+
+Po každom zmergovaní do `main` sa web sám nasadí na **https://team-17-fiit.github.io/sats-seo-gis/**
+(workflow `.github/workflows/deploy.yml`). Ručne: **Actions → Deploy → Run workflow**.
+
 ## Keď niečo nejde
 
 | Problém | Riešenie |

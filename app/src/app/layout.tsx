@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import JsonLd from '@/components/JsonLd';
 import ThemeToggle from '@/components/ThemeToggle';
-import { SITE_NAME, SITE_URL } from '@/lib/site';
+import { SITE_NAME, SITE_URL, withBasePath } from '@/lib/site';
 
 const DESCRIPTION =
   'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.';
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   description: DESCRIPTION,
   alternates: { canonical: '/' },
-  icons: { apple: '/icons/icon-192.png' },
+  icons: { apple: withBasePath('/icons/icon-192.png') },
   appleWebApp: { capable: true, title: 'SATS-GIS', statusBarStyle: 'default' },
   openGraph: {
     title: 'Aktívny turizmus na Slovensku',

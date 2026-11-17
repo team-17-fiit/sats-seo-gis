@@ -2,3 +2,8 @@
 // Nastav v CI/hostingu cez premennú NEXT_PUBLIC_SITE_URL, kým nemáte doménu, ostáva placeholder.
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com').replace(/\/$/, '');
 export const SITE_NAME = 'SATS-SEO-GIS';
+
+// Podcesta, na ktorej web beží (napr. '/sats-seo-gis' na GitHub Pages). Lokálne a v CI je prázdna.
+// Next.js ňou automaticky prefixuje <Link> a /_next/; ručné cesty (manifest, ikony) ju musia pridať samy.
+export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/$/, '');
+export const withBasePath = (path: string): string => `${BASE_PATH}${path}`;
