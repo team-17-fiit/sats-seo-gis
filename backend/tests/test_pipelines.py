@@ -114,6 +114,15 @@ def test_poi_export_covers_every_stop_as_t1():
     assert all(p["licence"] and p["source"] for p in pois.values())  # licenčná brána (US-11)
 
 
+def test_poi_export_has_enriched_fields_even_from_seed():
+    # T3-11: rovnaký tvar pois.json z DB aj zo seedu; seed tieto údaje nemá -> null
+    for p in pois_from_seed():
+        assert p["image"] is None
+        assert p["opening_hours"] is None
+        assert p["protected_area"] is None
+        assert p["heritage_area"] is None
+
+
 def _graph(*ways):
     graph = {}
     for cost, coords in ways:

@@ -24,6 +24,12 @@ export type Poi = {
   attribution: string | null;
   /** Slugy trás, na ktorých je miesto zastávkou (v poradí trás zo seedu). */
   paths: string[];
+  /** Doplnené z DB (T3-11): obrázok z Wikimedia Commons (URL), otváracie hodiny (syntax OSM),
+   *  chránené územie ŠOP SR a pamiatkové územie PÚSR, v ktorom miesto leží. Chýbajú pri exporte zo seedu. */
+  image?: string | null;
+  opening_hours?: string | null;
+  protected_area?: string | null;
+  heritage_area?: string | null;
 };
 
 export const CATEGORY_SK: Record<string, string> = {
