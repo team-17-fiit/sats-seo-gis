@@ -98,6 +98,9 @@ def pois_from_seed() -> list[dict]:
                 "opening_hours": None,
                 "protected_area": None,
                 "heritage_area": None,
+                "image_author": None,
+                "image_licence": None,
+                "image_licence_url": None,
             }
         )
     return out
@@ -122,7 +125,8 @@ def pois_from_db() -> list[dict]:
         cur.execute(
             """SELECT slug, name_sk, name_en, category, tier, unesco, lat, lon, elevation_m,
                       wikidata_id, description_sk, description_en, source, licence, attribution, paths,
-                      image, opening_hours, protected_area, heritage_area
+                      image, opening_hours, protected_area, heritage_area,
+                      image_author, image_licence, image_licence_url
                FROM marts.mart_poi_pages WHERE tier = %s ORDER BY slug""",
             (PAGE_TIER,),
         )

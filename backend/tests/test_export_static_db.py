@@ -18,6 +18,7 @@ def pois(db_url, monkeypatch):
 
 def test_export_has_enriched_fields(pois):
     fields = {"image", "opening_hours", "protected_area", "heritage_area"}
+    fields |= {"image_author", "image_licence", "image_licence_url"}  # T3-12
     assert pois and all(fields <= p.keys() for p in pois.values())
 
 

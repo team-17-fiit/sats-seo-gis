@@ -121,6 +121,9 @@ def test_poi_export_has_enriched_fields_even_from_seed():
         assert p["opening_hours"] is None
         assert p["protected_area"] is None
         assert p["heritage_area"] is None
+        assert p["image_author"] is None
+        assert p["image_licence"] is None
+        assert p["image_licence_url"] is None
 
 
 def _graph(*ways):

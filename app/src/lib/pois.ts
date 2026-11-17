@@ -30,6 +30,10 @@ export type Poi = {
   opening_hours?: string | null;
   protected_area?: string | null;
   heritage_area?: string | null;
+  /** Autor a licencia obrázka z Wikimedia Commons (T3-12) – potrebné na atribúciu, keď sa obrázok zobrazí. */
+  image_author?: string | null;
+  image_licence?: string | null;
+  image_licence_url?: string | null;
 };
 
 export const CATEGORY_SK: Record<string, string> = {
