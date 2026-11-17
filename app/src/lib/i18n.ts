@@ -88,6 +88,14 @@ const sk = {
   onTrails: 'Na trasách',
   showOnOsm: 'Zobraziť na OpenStreetMap',
   country: 'Slovensko',
+  ogTrail: 'Tematická trasa',
+  ogPeak: 'Vrchol',
+  ogOnTrail: (trail: string) => `Na trase ${trail}`,
+  ogHome: (trails: number, places: number, peaks: number) => `${trails} tematických trás · ${places} miest · ${peaks} vrcholov`,
+  ogTrails: (trails: number, stops: number) => `${trails} trás · ${stops} zastávok po celom Slovensku`,
+  ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
+    [km ? `~${km} km` : null, `${stops} zastávok`, `obťažnosť ${difficulty}`].filter(Boolean).join(' · '),
+  ogElevation: (m: number) => `${m} m n. m.`,
   peakDescription: (name: string, m: number) =>
     `Vrchol ${name} s výškou ${m} m n. m. Poloha, súradnice a odkaz na mapu.`,
   placeFallback: (name: string, category: string, unesco: boolean, trails: string[]) =>
@@ -148,6 +156,14 @@ const en: Dict = {
   onTrails: 'On the trails',
   showOnOsm: 'Show on OpenStreetMap',
   country: 'Slovakia',
+  ogTrail: 'Thematic trail',
+  ogPeak: 'Peak',
+  ogOnTrail: (trail: string) => `On the ${trail} trail`,
+  ogHome: (trails: number, places: number, peaks: number) => `${trails} thematic trails · ${places} places · ${peaks} peaks`,
+  ogTrails: (trails: number, stops: number) => `${trails} trails · ${stops} stops across Slovakia`,
+  ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
+    [km ? `~${km} km` : null, `${stops} stops`, `${difficulty} difficulty`].filter(Boolean).join(' · '),
+  ogElevation: (m: number) => `${m} m a.s.l.`,
   peakDescription: (name: string, m: number) =>
     `${name}, a peak ${m} m above sea level. Location, coordinates and a link to the map.`,
   placeFallback: (name: string, category: string, unesco: boolean, trails: string[]) =>
