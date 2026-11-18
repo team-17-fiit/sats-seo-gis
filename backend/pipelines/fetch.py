@@ -8,13 +8,53 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import shutil
+import time
+import urllib.error
 import urllib.request
 
 from .common import RAW_DIR
 
-# Popisný User-Agent – ŠOP SR aj Wikidata odmietajú anonymných klientov (aj predvolený Python-urllib)
+# Popisný User-Agent – ŠOP SR, Wikidata aj Wikimedia Commons odmietajú anonymných klientov (aj Python-urllib)
 USER_AGENT = "SATS-SEO-GIS/0.1 (https://github.com/team-17-fiit/sats-seo-gis)"
+
+# dočasné chyby verejných služieb (preťaženie) – požiadavka sa zopakuje, celý beh sa kvôli nim nezahodí
+RETRY_STATUS = {429, 500, 502, 503, 504}
+RETRIES = 3
+
+
+def retry_wait(attempt: int, retry_after: str | None) -> float:
+    """Pauza pred ďalším pokusom: Retry-After zo servera (max. 120 s), inak 5, 10, 20 s."""
+    if retry_after and retry_after.isdigit():
+        return min(int(retry_after), 120)
+    return 5 * 2**attempt
+
+
+def get_json(
+    url: str,
+    data: bytes | None = None,
+    headers: dict | None = None,
+    label: str = "",
+    retries: int = RETRIES,
+    sleep=time.sleep,
+) -> dict:
+    """GET/POST na verejnú službu; dočasné chyby (429, 5xx, výpadok siete) zopakuje, ostatné nie."""
+    for attempt in range(retries + 1):
+        req = urllib.request.Request(url, data=data, headers={"User-Agent": USER_AGENT, **(headers or {})})
+        try:
+            with urllib.request.urlopen(req, timeout=120) as resp:
+                return json.load(resp)
+        except urllib.error.HTTPError as err:
+            if err.code not in RETRY_STATUS or attempt == retries:
+                raise
+            wait, reason = retry_wait(attempt, err.headers.get("Retry-After")), f"HTTP {err.code}"
+        except (urllib.error.URLError, TimeoutError) as err:
+            if attempt == retries:
+                raise
+            wait, reason = retry_wait(attempt, None), str(err)
+        print(f"  ! {label} {reason}, pokus {attempt + 2}/{retries + 1} o {wait:.0f} s")
+        sleep(wait)
 
 
 def _sopsr_wfs(layer: str) -> str:
