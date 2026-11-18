@@ -46,6 +46,30 @@ cd app && npm run lint && npm run test:unit   # web
 Po každom zmergovaní do `main` sa web sám nasadí na **https://team-17-fiit.github.io/sats-seo-gis/**
 (workflow `.github/workflows/deploy.yml`). Ručne: **Actions → Deploy → Run workflow**.
 
+Pred nasadením beží `npm run check:urls -- --production`: nasadenie sa zastaví, ak by canonical, hreflang,
+og:image, JSON-LD, sitemap alebo robots.txt ukazovali inam ako na adresu webu, alebo ak by adresa bola
+zástupná (`example.com`). Lokálne po `npm run build` stačí `npm run check:urls`.
+
+Premenné repozitára (**Settings → Secrets and variables → Actions → Variables**):
+
+| Premenná | Načo |
+|---|---|
+| `SITE_URL` | vlastná doména, napr. `https://mapa.example.sk` (bez nej beží web na GitHub Pages) |
+| `GOOGLE_SITE_VERIFICATION` | hodnota `content` z meta tagu Google Search Console |
+| `BING_SITE_VERIFICATION` | hodnota `content` z meta tagu `msvalidate.01` (Bing Webmaster Tools) |
+
+### Google Search Console a Bing
+
+1. Search Console → **Pridať vlastníctvo → Predpona webovej adresy** → adresa webu (s lomkou na konci)
+   → overenie **Značka HTML**. Skopíruj iba hodnotu `content`.
+2. Ulož ju do premennej `GOOGLE_SITE_VERIFICATION`, spusti **Actions → Deploy → Run workflow**
+   a po nasadení klikni v Search Console na **Overiť**. Premennú nemaž, Google overenie priebežne kontroluje.
+3. **Sitemapy** → odošli `sitemap.xml`. **Kontrola webovej adresy** → úvodná stránka → **Požiadať o indexovanie**.
+4. Bing Webmaster Tools → **Import zo Search Console** (alebo meta tag cez `BING_SITE_VERIFICATION`).
+
+Pri prechode na vlastnú doménu: nastav `SITE_URL`, doménu v **Settings → Pages → Custom domain**,
+v Search Console pridaj nové vlastníctvo a odošli sitemap znova. Stará adresa github.io presmeruje na novú.
+
 ## Keď niečo nejde
 
 | Problém | Riešenie |
