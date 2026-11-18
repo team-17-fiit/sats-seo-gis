@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run",
+    "check:urls": "node scripts/check-site-urls.mjs out",
     "test:e2e": "playwright test",
     "test:smoke": "playwright test --grep @smoke",
     "lhci": "lhci autorun",
