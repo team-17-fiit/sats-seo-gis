@@ -28,3 +28,32 @@ describe('withBasePath', () => {
     expect(BASE_PATH).toBe('/sats-seo-gis');
   });
 });
+
+describe('siteVerification', () => {
+  it('bez tokenov nevráti nič, aby sa nevypísal prázdny meta tag', async () => {
+    const { siteVerification } = await load();
+    expect(siteVerification(undefined, '  ')).toBeUndefined();
+  });
+
+  it('Google token dá do google, Bing token do msvalidate.01', async () => {
+    const { siteVerification } = await load();
+    expect(siteVerification(' g-token ', 'b-token')).toEqual({
+      google: 'g-token',
+      other: { 'msvalidate.01': 'b-token' },
+    });
+  });
+
+  it('stačí iba jeden z tokenov', async () => {
+    const { siteVerification } = await load();
+    expect(siteVerification('g-token')).toEqual({ google: 'g-token' });
+    expect(siteVerification('', 'b-token')).toEqual({ other: { 'msvalidate.01': 'b-token' } });
+  });
+
+  it('číta tokeny z prostredia', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION', 'z-env');
+    vi.stubEnv('NEXT_PUBLIC_BING_SITE_VERIFICATION', '');
+    const { SITE_VERIFICATION } = await import('./site');
+    expect(SITE_VERIFICATION).toEqual({ google: 'z-env' });
+  });
+});

@@ -33,6 +33,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
+      NEXT_PUBLIC_BING_SITE_VERIFICATION: ${{ vars.BING_SITE_VERIFICATION }}
     defaults:
       run:
         working-directory: app
@@ -63,6 +66,9 @@ jobs:
 
       - name: Build (statický export)
         run: npm run build
+
+      - name: Kontrola URL (canonical, hreflang, og, JSON-LD, sitemap, robots)
+        run: npm run check:urls -- --production
 
       # Bez .nojekyll by GitHub Pages zahodil priečinok _next/ (podčiarknik = Jekyll ho ignoruje).
       - name: Pripraviť artefakt
