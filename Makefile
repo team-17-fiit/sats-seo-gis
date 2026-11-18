@@ -7,7 +7,7 @@ PY ?= python3
 BACKEND := backend
 export DATABASE_URL ?= postgresql://satsgis:satsgis@localhost:5432/satsgis
 
-.PHONY: help install db db-down migrate fetch data data-fixtures export api dev \
+.PHONY: help install db db-down migrate fetch data data-fixtures export tiles api dev \
         export-seed backend-lint backend-test app-lint app-test test lint
 
 help: ## zoznam cieľov
@@ -62,6 +62,9 @@ data-fixtures: migrate ## celá pipeline nad malými vzorkami (sekundy, aj v CI)
 export: ## zapíše app/public/data/*.json a vrstvy pre dlaždice (data/processed/tiles/) z DB
 	cd $(BACKEND) && $(PY) -m pipelines.export_static
 	cd $(BACKEND) && $(PY) -m pipelines.export_tiles
+
+tiles: ## vektorové dlaždice data/processed/tiles/sats.pmtiles z exportovaných vrstiev (vyžaduje tippecanoe)
+	cd $(BACKEND) && $(PY) -m pipelines.build_tiles
 
 export-seed: ## zapíše app/public/data/paths.json zo seedu (bez DB)
 	cd $(BACKEND) && $(PY) -m pipelines.export_static --from-seed

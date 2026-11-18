@@ -53,6 +53,9 @@ Ostatné tabuľky (hranice krajov, GeoNames) sú pomocné. Celá schéma: `data/
 5. **Export** – `export_static` zapíše trasy do `app/public/data/paths.json`, odkiaľ ich berie web.
    `export_tiles` zapíše vrstvy `paths` a `pois` z `marts.mart_tiles` do `data/processed/tiles/*.geojsonl` –
    vstup pre tippecanoe (PMTiles z5–z15); len verejný obsah, každý prvok so svojou licenciou.
+6. **Dlaždice** – `build_tiles` (`make tiles`) z nich cez tippecanoe vyrobí `data/processed/tiles/sats.pmtiles`
+   s vrstvami `paths` a `pois`; atribúcia v dlaždiciach vymenúva licencie prvkov. tippecanoe nie je pre Windows,
+   v Git Bash ho spusti cez WSL.
 
 ## Spustenie s databázou (Git Bash, voliteľné)
 
