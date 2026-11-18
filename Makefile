@@ -41,6 +41,7 @@ data: migrate ## celá pipeline nad skutočnými dátami (po `make fetch`)
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
 	cd $(BACKEND) && $(PY) -m pipelines.load_wikidata
+	cd $(BACKEND) && $(PY) -m pipelines.load_commons
 	cd $(BACKEND) && $(PY) -m pipelines.validate
 	cd $(BACKEND) && $(PY) -m pipelines.export_static
 	cd $(BACKEND) && $(PY) -m pipelines.export_tiles
@@ -55,6 +56,7 @@ data-fixtures: migrate ## celá pipeline nad malými vzorkami (sekundy, aj v CI)
 	cd $(BACKEND) && $(PY) -m pipelines.seed_paths
 	cd $(BACKEND) && $(PY) -m pipelines.promote
 	cd $(BACKEND) && $(PY) -m pipelines.load_wikidata --fixture
+	cd $(BACKEND) && $(PY) -m pipelines.load_commons --fixture
 	cd $(BACKEND) && $(PY) -m pipelines.validate
 
 export: ## zapíše app/public/data/*.json a vrstvy pre dlaždice (data/processed/tiles/) z DB

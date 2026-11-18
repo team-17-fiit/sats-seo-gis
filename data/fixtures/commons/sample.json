@@ -1,0 +1,25 @@
+{
+ "batchcomplete": true,
+ "query": {
+  "normalized": [{"fromencoded": false, "from": "File:Rysy_second.jpg", "to": "File:Rysy second.jpg"}],
+  "pages": [
+   {
+    "pageid": 1001, "ns": 6, "title": "File:Rysy fixture.jpg",
+    "imageinfo": [{"extmetadata": {
+     "Artist": {"value": "<a href=\"//commons.wikimedia.org/wiki/User:Example\" title=\"User:Example\">Example</a> &amp; Ján Novák", "source": "commons-desc-page"},
+     "LicenseShortName": {"value": "CC BY-SA 4.0", "source": "commons-desc-page", "hidden": ""},
+     "LicenseUrl": {"value": "https://creativecommons.org/licenses/by-sa/4.0", "source": "commons-desc-page"},
+     "AttributionRequired": {"value": "true", "source": "commons-desc-page", "hidden": ""}
+    }}]
+   },
+   {
+    "pageid": 1002, "ns": 6, "title": "File:Rysy second.jpg",
+    "imageinfo": [{"extmetadata": {
+     "LicenseShortName": {"value": "Public domain", "source": "commons-desc-page", "hidden": ""},
+     "AttributionRequired": {"value": "false", "source": "commons-desc-page", "hidden": ""}
+    }}]
+   },
+   {"ns": 6, "title": "File:Missing fixture.jpg", "missing": true}
+  ]
+ }
+}
