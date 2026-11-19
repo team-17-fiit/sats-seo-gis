@@ -67,8 +67,11 @@ jobs:
       - name: Build (statický export)
         run: npm run build
 
-      - name: Kontrola URL (canonical, hreflang, og, JSON-LD, sitemap, robots)
-        run: npm run check:urls -- --production
+      # Jedna kontrola produkčného buildu (skutočná adresa a basePath): URL webu (T3-06) + celé SEO
+      # a štruktúrované dáta (T3-22, T3-04). --production zakáže placeholder adresu (example.com,
+      # dokumentácia Z-B.8) a overí overovacie meta tagy Search Console, ak sú nastavené.
+      - name: Kontrola URL a SEO produkčného buildu
+        run: npm run test:seo -- --production
 
       # Bez .nojekyll by GitHub Pages zahodil priečinok _next/ (podčiarknik = Jekyll ho ignoruje).
       - name: Pripraviť artefakt

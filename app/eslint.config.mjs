@@ -10,7 +10,7 @@ export default tseslint.config(
   {
     ignores: [
       '.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts',
-      '.lighthouseci/**', '.lighthouseci-mobile/**', 'playwright-report/**', 'test-results/**',
+      '.lighthouseci/**', '.lighthouseci-mobile/**', 'playwright-report/**', 'test-results/**', 'seo-report/**',
     ],
   },
   js.configs.recommended,
