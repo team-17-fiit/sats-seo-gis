@@ -231,7 +231,9 @@ export function auditSite({ outDir, siteUrl, basePath = '', production = false, 
     // ---- favicon (bez nej prehliadač skúša /favicon.ico -> 404 a chyba v konzole)
     if (pg.icons.length === 0) err('favicon-missing', 'chýba <link rel="icon">');
     for (const href of pg.icons) {
-      const target = base && href.startsWith(base + '/') ? href.slice(base.length) : href;
+      // Next.js pridáva k ikonám verziu do adresy (/icon.svg?79f3bddf…) – súbor je bez nej
+      const clean = href.split('#')[0].split('?')[0];
+      const target = base && clean.startsWith(base + '/') ? clean.slice(base.length) : clean;
       if (target.startsWith('/') && !exists(target)) err('favicon-broken', `ikona ${href} neexistuje`);
     }
 

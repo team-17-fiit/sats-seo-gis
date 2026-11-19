@@ -223,6 +223,7 @@ describe('SEO audit – každá chyba sa naozaj zachytí', () => {
     ['odkaz bez koncovej lomky', { [T]: { body: '<a href="/trasy">Trasy</a>' } }, 'link-trailing-slash'],
     ['chýba favicon', { [T]: { iconTag: '' } }, 'favicon-missing'],
     ['favicon neexistuje', { [T]: { iconTag: '<link rel="icon" href="/favicon.ico"/>' } }, 'favicon-broken'],
+    ['favicon s verziou v adrese, ale bez súboru', { [T]: { iconTag: '<link rel="icon" href="/neexistuje.svg?79f3bddf"/>' } }, 'favicon-broken'],
     ['chýba JSON-LD', { [T]: { jsonld: [] } }, 'jsonld-missing'],
     ['neplatný JSON v JSON-LD', { [T]: { jsonld: ['{"@type": "Thing",}'] } }, 'jsonld-syntax'],
   ];
@@ -249,6 +250,11 @@ describe('SEO audit – každá chyba sa naozaj zachytí', () => {
     expect(errorsOf(res, 'h1-duplicate')).toEqual([]); // Rysy je v SK aj EN
     const bad = run(makeSite(() => {}, { '/miesta/p1/': { h1Tag: '<h1>Cesta Márie</h1>' } }));
     expect(errorsOf(bad, 'h1-duplicate').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('ikona s verziou v adrese (/icon.svg?hash, ako ju generuje Next.js) je v poriadku', () => {
+    const res = run(makeSite(() => {}, { '/trasy/t1/': { iconTag: '<link rel="icon" href="/icons/icon.png?79f3bddf275a4a5f"/>' } }));
+    expect(errorRules(res)).not.toContain('favicon-broken');
   });
 
   it('og:image s nesprávnymi rozmermi -> og-image-size', () => {
