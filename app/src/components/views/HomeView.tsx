@@ -42,7 +42,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
         <h1>{t.homeH1}</h1>
         <p>{t.homeLead}</p>
         <nav className="nav" aria-label={t.mainNav}>
-          <Link href={pagePath(locale, 'trails')}>{t.trailsHeading}</Link>
+          <Link prefetch={false} href={pagePath(locale, 'trails')}>{t.trailsHeading}</Link>
         </nav>
       </header>
       <main id="main" tabIndex={-1}>
@@ -55,7 +55,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
             {paths.map((p) => (
               <li key={p.slug}>
                 <span className="swatch" style={{ background: p.colour }} aria-hidden="true" />
-                <Link href={pagePath(locale, 'trail', p.slug)}>{trailName(p, locale)}</Link>
+                <Link prefetch={false} href={pagePath(locale, 'trail', p.slug)}>{trailName(p, locale)}</Link>
                 {` – ${t.stops(p.stops.length)}`}
               </li>
             ))}
@@ -66,7 +66,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
           <ul id="peak-list">
             {peaks.map((p) => (
               <li key={p.slug}>
-                <Link href={pagePath(locale, 'peak', p.slug)}>{p.name}</Link>
+                <Link prefetch={false} href={pagePath(locale, 'peak', p.slug)}>{p.name}</Link>
                 {` – ${p.elevation} m`}
               </li>
             ))}
