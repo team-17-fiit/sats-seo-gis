@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
-import LocaleRoot from '@/components/LocaleRoot';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
@@ -43,7 +42,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
   const first = p.stops[0];
 
   return (
-    <LocaleRoot locale={locale}>
+    <>
       <JsonLd data={breadcrumbJsonLd(trailCrumbs(locale, { slug: p.slug, name }), SITE_URL)} />
       <JsonLd
         data={{
@@ -118,6 +117,6 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
 
         <p className="note">{t.dataTeam(p.licence)}</p>
       </main>
-    </LocaleRoot>
+    </>
   );
 }
