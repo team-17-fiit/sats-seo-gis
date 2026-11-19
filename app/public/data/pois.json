@@ -19,7 +19,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": "CHKO Štiavnické vrchy",
+  "heritage_area": "Banská Štiavnica a technické pamiatky okolia",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "bardejov",
@@ -39,7 +46,14 @@
   "attribution": null,
   "paths": [
    "hlavna-os"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Bardejov",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "beckov",
@@ -52,8 +66,8 @@
   "lon": 17.897,
   "elevation_m": null,
   "wikidata_id": "Q1010951",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "hrad na Slovensku",
+  "description_en": "castle ruins in Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
@@ -61,7 +75,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Beckov-castel%206.jpg",
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Beckov",
+  "image_author": "Pierre Bona",
+  "image_licence": "CC BY-SA 3.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  {
   "slug": "bojnicky-zamok",
@@ -73,16 +94,23 @@
   "lat": 48.7803,
   "lon": 18.5775,
   "elevation_m": null,
-  "wikidata_id": null,
-  "description_sk": null,
-  "description_en": null,
+  "wikidata_id": "Q1520849",
+  "description_sk": "zámok na Slovensku",
+  "description_en": "medieval castle in Bojnice, Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "hlavna-os",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Bojnice%20Castle%20Slovakia.jpg",
+  "opening_hours": "May Tu-Su 09:00-12:00,12:30-17:00; Jun-Sep Mo-Su 09:00-12:00,12:30-17:00; Oct-Apr Tu-Su 10:00-12:00,12:30-15:00",
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": "Studiowacho",
+  "image_licence": "CC BY-SA 4.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  {
   "slug": "bratislava-start",
@@ -105,7 +133,14 @@
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Bratislava",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "cerveny-kamen",
@@ -118,15 +153,22 @@
   "lon": 17.334,
   "elevation_m": null,
   "wikidata_id": "Q1014752",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "hrad na Slovensku",
+  "description_en": "castle in Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "hlavna-os",
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Cerveny%20Kamen%20z%20Kukly%2002.jpg",
+  "opening_hours": null,
+  "protected_area": "CHKO Malé Karpaty",
+  "heritage_area": null,
+  "image_author": "Teslaton",
+  "image_licence": "CC BY 3.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by/3.0"
  },
  {
   "slug": "devin",
@@ -138,15 +180,22 @@
   "lat": 48.1737,
   "lon": 16.9783,
   "elevation_m": null,
-  "wikidata_id": null,
-  "description_sk": null,
-  "description_en": null,
+  "wikidata_id": "Q830976",
+  "description_sk": "zrúcanina hradu v Bratislave, mestskej časti Devín, Slovensko",
+  "description_en": "castle ruins in Bratislava, suburb Devín, Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "hlavna-os"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Devin02.jpg",
+  "opening_hours": "Apr,May,Sep Tu-Su 10:00-18:00; Jun-Aug Tu-Su 10:00-19:00; Mar,Oct Tu-Su 10:00-17:00; Nov-Feb Tu-Su 10:00-16:00",
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": "CC BY-SA 3.0",
+  "image_licence_url": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  {
   "slug": "drazovce-sv-michal",
@@ -168,7 +217,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "gabcikovo-vodne-dielo",
@@ -188,7 +244,14 @@
   "attribution": null,
   "paths": [
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "hlohovec-zamok",
@@ -210,7 +273,14 @@
    "povazska-hradna-cesta",
    "cyklotrasa-ev6-ev13-vah",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "komarno-pristav",
@@ -230,7 +300,14 @@
   "attribution": null,
   "paths": [
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Komárno",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "kopcany-sv-margita",
@@ -251,7 +328,14 @@
   "paths": [
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "levoca-spissky-hrad",
@@ -264,8 +348,8 @@
   "lon": 20.7681,
   "elevation_m": null,
   "wikidata_id": "Q205558",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "zrúcanina hradu na Slovensku",
+  "description_en": "castle in Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
@@ -273,7 +357,14 @@
    "hlavna-os",
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/SK%20SN%20Spis%20castle%202024%201.jpg",
+  "opening_hours": null,
+  "protected_area": "NPP Spišský hradný vrch",
+  "heritage_area": "Levoča, Spišský hrad a pamiatky okolia",
+  "image_author": "Andrei Stroe",
+  "image_licence": "CC BY-SA 4.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  {
   "slug": "mala-fatra-vratna",
@@ -295,7 +386,14 @@
    "hlavna-os",
    "povazska-hradna-cesta",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": "NP Malá Fatra",
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "marianka",
@@ -315,7 +413,14 @@
   "attribution": null,
   "paths": [
    "cesta-marie"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "modra",
@@ -336,7 +441,14 @@
   "paths": [
    "hlavna-os",
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "muzeum-snp",
@@ -357,7 +469,14 @@
   "paths": [
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "nitriansky-hrad",
@@ -379,7 +498,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "oravsky-hrad",
@@ -392,15 +518,22 @@
   "lon": 19.359,
   "elevation_m": null,
   "wikidata_id": "Q29894",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "hrad na Slovensku",
+  "description_en": "castle in Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/JBZamekOrawski%20v2.jpg",
+  "opening_hours": "Jan 01-Mar 31 10:00-15:00; Apr off; May 1-Jun 30 08:30-17:00; Jul 01-Aug 31 08:30-18:00; Sep 08:30-17:00; Oct 08:30-16:00; Nov 01-Dec 23 10:00-15:00; Dec 24-31 off",
+  "protected_area": "CHA Oravské hradné bralo",
+  "heritage_area": "Pamiatková zóna Oravský Podzámok",
+  "image_author": "The original uploader was Jurbox at Polish Wikipedia .",
+  "image_licence": "CC BY-SA 2.5",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  {
   "slug": "pezinok",
@@ -421,7 +554,14 @@
   "paths": [
    "hlavna-os",
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Pezinok",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "piestany-kupele",
@@ -444,7 +584,14 @@
    "malokarpatska-vinna-cesta",
    "povazska-hradna-cesta",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Piešťany",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "poloniny-park-tmavej-oblohy",
@@ -465,7 +612,14 @@
   "paths": [
    "hlavna-os",
    "medvedi-chodnik"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "skalka-klastor",
@@ -487,7 +641,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "slovensky-kras-jaskyne",
@@ -499,15 +660,22 @@
   "lat": 48.478,
   "lon": 20.471,
   "elevation_m": null,
-  "wikidata_id": null,
-  "description_sk": null,
-  "description_en": null,
+  "wikidata_id": "Q908287",
+  "description_sk": "jaskyňa na Slovensku",
+  "description_en": "cave in Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "hlavna-os"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Domica%20Cave%2022.jpg",
+  "opening_hours": "Feb-May, Sep 01-Dec 23 Tu-Su 09:30-14:00; Jun-Aug Tu-Su 09:00-16:00",
+  "protected_area": "NP Slovenský kras",
+  "heritage_area": null,
+  "image_author": "Jojo , en:Jojo_1 , pl:Jojo",
+  "image_licence": "CC BY-SA 3.0",
+  "image_licence_url": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  {
   "slug": "slovensky-raj",
@@ -527,7 +695,14 @@
   "attribution": null,
   "paths": [
    "hlavna-os"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "smolenicky-zamok",
@@ -547,7 +722,14 @@
   "attribution": null,
   "paths": [
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": "CHKO Malé Karpaty",
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "sng-bratislava",
@@ -560,7 +742,7 @@
   "lon": 17.106,
   "elevation_m": null,
   "wikidata_id": "Q112086366",
-  "description_sk": null,
+  "description_sk": "národná kultúrna pamiatka v Bratislave, okrese Bratislava I",
   "description_en": null,
   "source": "team_curated",
   "licence": "CC-BY-4.0",
@@ -570,7 +752,14 @@
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Bibiana%201.jpg",
+  "opening_hours": "Mo off; Tu-Su 10:00-18:00",
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Bratislava - CMO",
+  "image_author": "Wizzard",
+  "image_licence": "Public domain",
+  "image_licence_url": null
  },
  {
   "slug": "snm-martin",
@@ -591,7 +780,14 @@
   "paths": [
    "hlavna-os",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "strbske-pleso",
@@ -611,7 +807,14 @@
   "attribution": null,
   "paths": [
    "hlavna-os"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": "NPR Furkotská dolina",
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "sturovo",
@@ -632,7 +835,14 @@
   "paths": [
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "svaty-jur",
@@ -653,7 +863,14 @@
   "paths": [
    "hlavna-os",
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Svätý Jur (Jur pri Bratislave)",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "trenciansky-hrad",
@@ -666,8 +883,8 @@
   "lon": 18.044,
   "elevation_m": null,
   "wikidata_id": "Q678465",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "hrad na Slovensku",
+  "description_en": "castle in Trenčín, Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
@@ -675,7 +892,14 @@
    "povazska-hradna-cesta",
    "cesta-marie",
    "cyklotrasa-ev6-ev13-vah"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Trencin%20Castle%20030.jpg",
+  "opening_hours": "May-Jun Mo-Fr 09:00-18:45; May-Jun Sa,Su 09:00-19:00; Jul 01-Oct 13 09:00-19:00; Oct 14-Mar 31 09:00-17:00; Apr Mo-Su 09:00-18:00",
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Trenčín",
+  "image_author": "Ingo Mehling",
+  "image_licence": "CC BY-SA 4.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  {
   "slug": "trnava",
@@ -695,7 +919,14 @@
   "attribution": null,
   "paths": [
    "malokarpatska-vinna-cesta"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Trnava",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "vihorlat-medvedi-chodnik",
@@ -715,7 +946,14 @@
   "attribution": null,
   "paths": [
    "medvedi-chodnik"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": null,
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "vlkolinec",
@@ -737,7 +975,14 @@
    "hlavna-os",
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Rezervácia ľudovej architektúry Vlkolínec",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "vychodoslovenske-muzeum",
@@ -758,7 +1003,14 @@
   "paths": [
    "hlavna-os",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková rezervácia Košice",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  },
  {
   "slug": "zehra-kostol",
@@ -771,15 +1023,22 @@
   "lon": 20.793,
   "elevation_m": null,
   "wikidata_id": "Q13425266",
-  "description_sk": null,
-  "description_en": null,
+  "description_sk": "národná kultúrna pamiatka v obci Žehra na Slovensku",
+  "description_en": "church building in Žehra, Slovakia",
   "source": "team_curated",
   "licence": "CC-BY-4.0",
   "attribution": null,
   "paths": [
    "cesta-marie",
    "okruh-muzei-a-galerii"
-  ]
+  ],
+  "image": "https://commons.wikimedia.org/wiki/Special:FilePath/Church%20in%20%C5%BDehra.jpg",
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Levoča, Spišský hrad a pamiatky okolia",
+  "image_author": "Marekkacir",
+  "image_licence": "CC BY-SA 4.0",
+  "image_licence_url": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  {
   "slug": "zvolensky-zamok",
@@ -799,6 +1058,13 @@
   "attribution": null,
   "paths": [
    "cesta-marie"
-  ]
+  ],
+  "image": null,
+  "opening_hours": null,
+  "protected_area": null,
+  "heritage_area": "Pamiatková zóna Zvolen",
+  "image_author": null,
+  "image_licence": null,
+  "image_licence_url": null
  }
 ]
