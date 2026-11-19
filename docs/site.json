@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-11-08T00:00:00.000Z",
+  "generatedAt": "2026-11-19T10:51:26.949Z",
+  "sourceSha": "84ce2f88447d8ba3a140df60a8f43a59904ebbd5",
+  "inputHash": "226d97dfbd30efca",
   "tech": [
     {
       "area": "Frontend",
@@ -10,6 +12,11 @@
       "area": "Mapa",
       "name": "MapLibre GL",
       "text": "Mapa za rozhraním MapAdapter, bez WebGL ju nahradí statický obrázok."
+    },
+    {
+      "area": "Dlaždice",
+      "name": "PMTiles (tippecanoe)",
+      "text": "Vrstvy sa exportujú z PostGIS, dlaždice PMTiles generuje tippecanoe (make tiles)."
     },
     {
       "area": "Backend",
@@ -34,28 +41,28 @@
   ],
   "documents": [
     {
-      "title": "Metodiky",
-      "text": "Definition of Done, code review, testovanie, komunikácia",
+      "title": "Rozhodnutia (ADR)",
+      "text": "Záznamy architektonických rozhodnutí",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/methodology"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/adr"
     },
     {
       "title": "Architektúra",
       "text": "Cieľová architektúra systému",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/architecture"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/architecture"
     },
     {
-      "title": "Rozhodnutia (ADR)",
-      "text": "Záznamy architektonických rozhodnutí",
+      "title": "Metodiky",
+      "text": "Definition of Done, code review, testovanie, komunikácia",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/adr"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/methodology"
     },
     {
       "title": "Plánovanie",
       "text": "Šprinty a register licencií dát",
       "type": "GitHub",
-      "href": "https://github.com/Matus17/sats-seo-gis/tree/main/docs/planning"
+      "href": "https://github.com/team-17-fiit/sats-seo-gis/tree/main/docs/planning"
     }
   ],
   "sprints": [
@@ -70,10 +77,18 @@
     {
       "n": 2,
       "range": "26. 10. – 8. 11. 2026",
-      "status": "prebieha",
-      "done": 22,
-      "total": 32,
+      "status": "hotovo",
+      "done": 29,
+      "total": 29,
       "text": "Crawlovateľné stránky trás a miest, Wikidata, mapa s geometriou, SK/EN."
+    },
+    {
+      "n": 3,
+      "range": "9. 11. – 22. 11. 2026",
+      "status": "prebieha",
+      "done": 11,
+      "total": 34,
+      "text": "SEO (náhľady pri zdieľaní, drobčeková navigácia, verejná adresa), mapové dlaždice PMTiles, dáta z Wikidata na stránkach miest, budgety v CI a dokumentácia ku KB1."
     }
   ]
 }
