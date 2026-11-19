@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { getPaths } from './paths';
 import {
-  categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiName, poiToGeoJSON, schemaTypes,
+  DESCRIPTION_MAX, FALLBACK_MIN, categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiName, poiToGeoJSON, schemaTypes,
   type Poi,
 } from './pois';
 
@@ -44,8 +44,40 @@ describe('pois helpers', () => {
   it('prefers curated description, otherwise builds one from facts', () => {
     expect(poiDescription({ ...sample, description_sk: 'Opis.' })).toBe('Opis.');
     expect(poiDescription({ ...sample, unesco: true }, ['Hlavná os'])).toBe(
-      'Devín – hrad na Slovensku, pamiatka UNESCO. Zastávka na trase Hlavná os.',
+      'Devín – hrad na Slovensku, pamiatka UNESCO. Zastávka na trase Hlavná os. Poloha na mape, súradnice a súvisiace trasy.',
     );
+  });
+
+  it('extends a short generated description (SEO audit: min. 70 characters), never a curated one', () => {
+    const long = ['Malokarpatská vínna cesta', 'Cesta Márie', 'Považská hradná cesta'];
+    const short = poiDescription(sample);
+    expect(short.length).toBeGreaterThanOrEqual(70);
+    expect(short.endsWith('Poloha na mape, súradnice a súvisiace trasy.')).toBe(true);
+    // dosť dlhý opis z faktov sa už nedopĺňa
+    const plain = poiDescription({ ...sample, unesco: true }, long);
+    expect(plain.length).toBeGreaterThanOrEqual(FALLBACK_MIN);
+    expect(plain).not.toContain('Poloha na mape');
+    expect(poiDescription({ ...sample, description_sk: 'Krátky opis.' })).toBe('Krátky opis.');
+  });
+
+  it('uses plural for several trails and lists only as many as fit into 160 characters', () => {
+    const trails = ['Hlavná os Slovenska', 'Malokarpatská vínna cesta', 'Považská hradná cesta', 'Cyklotrasa EV6 · EV13 · Váh'];
+    const two = poiDescription(sample, trails.slice(0, 2));
+    expect(two).toContain('Zastávka na trasách Hlavná os Slovenska a Malokarpatská vínna cesta.');
+    const long = { ...sample, name_sk: 'Piešťany – Kúpeľný ostrov', category: 'spa' };
+    const d = poiDescription(long, trails);
+    expect(d.length).toBeLessThanOrEqual(DESCRIPTION_MAX);
+    expect(d).toMatch(/Zastávka na trasách .+ a (jednej ďalšej|ďalších \d)\.$/);
+    // každá vymenovaná trasa je celá – žiadne odseknuté slovo
+    expect(trails.filter((t) => d.includes(t)).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('English: "… trails and N more" when the list does not fit', () => {
+    const trails = ['Small-Carpathian wine trail', 'Pilgrimage – Way of Mary', 'Bicycle – EV6 · EV13 · Váh', 'Museums and galleries loop'];
+    const d = poiDescription({ ...sample, name_en: 'Bratislava – trailhead', category: 'trailhead' }, trails, 'en');
+    expect(d.length).toBeLessThanOrEqual(DESCRIPTION_MAX);
+    expect(d).toMatch(/A stop on the .+ trails? and \d more\.$/);
+    expect(poiDescription(sample, ['A', 'B'], 'en')).toContain('A stop on the A and B trails.');
   });
 
   it('builds GeoJSON in lon,lat order', () => {
@@ -68,7 +100,7 @@ describe('pois in English', () => {
     expect(poiName({ ...sample, name_en: null }, 'en')).toBe('Devín');
     expect(categoryLabel('dam', 'en')).toBe('reservoir');
     expect(poiDescription(sample, ['Main corridor spine'], 'en')).toBe(
-      'Devín castle – castle in Slovakia. A stop on the Main corridor spine trail.',
+      'Devín castle – castle in Slovakia. A stop on the Main corridor spine trail. Location on the map, coordinates and related trails.',
     );
   });
 
@@ -80,4 +112,5 @@ describe('pois in English', () => {
     expect(ld.alternateName).toBe('Devín');
     expect(ld.subjectOf).toEqual([{ '@type': 'TouristTrip', name: 'Main corridor spine', url: 'https://x.sk/en/trails/hlavna-os/' }]);
   });
+
 });
