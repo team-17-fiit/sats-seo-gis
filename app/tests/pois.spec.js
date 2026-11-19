@@ -17,6 +17,14 @@ test.describe('bez JavaScriptu (pohľad crawlera)', () => {
     expect(html).toContain('"@type":["TouristAttraction"');
   });
 
+  test('stránka miesta ukazuje obohatené údaje (foto, územia, otváracie hodiny)', async ({ request }) => {
+    const html = await (await request.get('/miesta/oravsky-hrad/')).text();
+    expect(html).toContain('class="place-image"');
+    for (const label of ['Chránené územie', 'Pamiatkové územie', 'Otváracie hodiny']) {
+      expect(html).toContain(`<dt>${label}</dt>`);
+    }
+  });
+
   test('sitemap obsahuje miesta', async ({ request }) => {
     const xml = await (await request.get('/sitemap.xml')).text();
     expect(xml).toContain('/miesta/devin/');
