@@ -31,7 +31,8 @@ export class StaticImageAdapter implements MapAdapter {
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
     svg.setAttribute('role', 'img');
-    svg.setAttribute('aria-label', 'Zjednodušená mapa (bez WebGL)');
+    // Názov preberá z kontajnera (#map má aria-label v jazyku stránky), inak by EN stránka čítala po slovensky.
+    svg.setAttribute('aria-label', el.getAttribute('aria-label') || 'Mapa');
     svg.setAttribute('class', 'static-map');
     el.appendChild(svg);
     this.svg = svg;

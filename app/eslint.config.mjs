@@ -31,4 +31,9 @@ export default tseslint.config(
     languageOptions: { globals: { ...globals.node } },
     rules: { '@typescript-eslint/no-require-imports': 'off' },
   },
+  {
+    // Playwright: kód v page.evaluate()/addInitScript() beží v prehliadači (document, window, performance)
+    files: ['tests/**'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
 );

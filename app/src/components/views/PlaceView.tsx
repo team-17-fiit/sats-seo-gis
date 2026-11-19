@@ -63,7 +63,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         <h1>{name}</h1>
         {other && other !== name && <p lang={locale === 'en' ? 'sk' : 'en'} className="muted">{other}</p>}
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         {image && (
           <figure className="place-image">
             {/* statický export: obrázok ide priamo z Commons, next/image by ho aj tak neoptimalizoval */}

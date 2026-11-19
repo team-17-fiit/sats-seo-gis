@@ -34,6 +34,8 @@ export default function RootDocument({ locale, children }: { locale: Locale; chi
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
       </head>
       <body>
+        {/* Preskočenie navigácie pre klávesnicu (WCAG 2.4.1); viditeľné až pri fokuse. */}
+        <a className="skip-link" href="#main">{t.skipToContent}</a>
         <JsonLd
           data={{
             '@context': 'https://schema.org',
@@ -45,7 +47,7 @@ export default function RootDocument({ locale, children }: { locale: Locale; chi
           }}
         />
         {children}
-        <ThemeToggle />
+        <ThemeToggle label={t.toggleTheme} />
       </body>
     </html>
   );

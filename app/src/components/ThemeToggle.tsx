@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 type Theme = 'light' | 'dark';
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ label }: { label: string }) {
   const [theme, setTheme] = useState<Theme | null>(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button type="button" className="theme-toggle" onClick={toggle} aria-label="Zmeniť tému / Toggle theme" title="Zmeniť tému / Toggle theme">
+    <button type="button" className="theme-toggle" onClick={toggle} aria-label={label} title={label} aria-pressed={theme === null ? undefined : theme === 'dark'}>
       <span aria-hidden="true" className={theme === 'dark' ? 'is-dark' : undefined}>{theme === 'dark' ? '☀' : '☾'}</span>
     </button>
   );
