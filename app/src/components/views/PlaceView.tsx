@@ -62,7 +62,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         <h1>{name}</h1>
         {other && other !== name && <p lang={locale === 'en' ? 'sk' : 'en'} className="muted">{other}</p>}
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <p>{poiDescription(p, paths.map((x) => x.name_sk), locale)}</p>
 
         <dl className="facts">
