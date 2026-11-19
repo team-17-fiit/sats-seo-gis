@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
-import LocaleRoot from '@/components/LocaleRoot';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
@@ -25,7 +24,11 @@ function pathsOf(p: Poi, locale: Locale) {
 export function placeMetadata(locale: Locale, slug: string): Metadata {
   const p = getPoi(slug);
   if (!p) return {};
-  const title = poiName(p, locale);
+  // Bez vlastného anglického názvu by mala EN stránka rovnaký title ako SK – doplníme kategóriu.
+  const sameName = locale === 'en' && (!p.name_en || p.name_en === p.name_sk);
+  const title = sameName
+    ? T[locale].placeTitleWithCategory(poiName(p, locale), categoryLabel(p.category, locale))
+    : poiName(p, locale);
   const description = poiDescription(p, pathsOf(p, locale).map((x) => x.name_sk), locale);
   return {
     title,
@@ -45,7 +48,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
   const crumbs = placeCrumbs(locale, { slug: p.slug, name }, mainTrail);
 
   return (
-    <LocaleRoot locale={locale}>
+    <>
       <JsonLd data={breadcrumbJsonLd(crumbs, SITE_URL)} />
       <JsonLd data={poiJsonLd(p, SITE_URL, paths, locale)} />
       <header className="top">
@@ -105,6 +108,6 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         </p>
         <p className="note">{t.dataBy(p.attribution ?? t.team, p.licence)}</p>
       </main>
-    </LocaleRoot>
+    </>
   );
 }

@@ -35,7 +35,8 @@ test.describe('bez JavaScriptu (pohľad crawlera)', () => {
 
   test('anglická stránka má anglický obsah a lang="en"', async ({ page }) => {
     await page.goto('/en/trails/malokarpatska-vinna-cesta/');
-    await expect(page.locator('div[lang="en"] h1')).toHaveText('Small-Carpathian wine trail');
+    await expect(page.locator('html')).toHaveAttribute('lang', 'en'); // jazyk celého dokumentu (2 root layouty)
+    await expect(page.locator('h1')).toHaveText('Small-Carpathian wine trail');
     await expect(page.locator('#stop-list > li')).toHaveCount(8);
     await expect(page.locator('#stop-list a').first()).toHaveAttribute('href', /^\/en\/places\//);
   });

@@ -11,5 +11,7 @@ const nextConfig = {
   ...(basePath ? { basePath } : {}),
   trailingSlash: true,
   images: { unoptimized: true }, // statický export nepodporuje optimalizáciu obrázkov za behu
+  // Dva root layouty ((sk) a (en)) kvôli správnemu <html lang>; 404 sa potom generuje z app/global-not-found.tsx.
+  experimental: { globalNotFound: true },
 };
 export default nextConfig;
