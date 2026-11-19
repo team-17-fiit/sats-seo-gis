@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { validateJsonLd } from '../../scripts/seo/jsonld.mjs';
 import { getPaths } from './paths';
 import {
   DESCRIPTION_MAX, FALLBACK_MIN, categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiName, poiToGeoJSON, schemaTypes,
@@ -107,10 +108,16 @@ describe('pois in English', () => {
   it('builds English JSON-LD with /en/ URLs and the Slovak name as alternateName', () => {
     const ld = poiJsonLd(sample, 'https://x.sk', [{ slug: 'hlavna-os', name_sk: 'Main corridor spine' }], 'en');
     expect(ld.url).toBe('https://x.sk/en/places/devin/');
-    expect(ld.inLanguage).toBe('en');
     expect(ld.name).toBe('Devín castle');
     expect(ld.alternateName).toBe('Devín');
-    expect(ld.subjectOf).toEqual([{ '@type': 'TouristTrip', name: 'Main corridor spine', url: 'https://x.sk/en/trails/hlavna-os/' }]);
   });
 
+  it('produces JSON-LD that is valid against the schema.org vocabulary (T3-04)', () => {
+    for (const locale of ['sk', 'en'] as const) {
+      for (const category of ['castle', 'church', 'museum', 'lake', 'winery', 'town', 'peak', 'gorge']) {
+        const ld = poiJsonLd({ ...sample, category, wikidata_id: 'Q1', elevation_m: 212 }, 'https://x.sk', [{ slug: 'hlavna-os', name_sk: 'Hlavná os' }], locale);
+        expect(validateJsonLd(ld).filter((f: { level: string }) => f.level === 'error'), `${locale}/${category}`).toEqual([]);
+      }
+    }
+  });
 });

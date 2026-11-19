@@ -1,5 +1,5 @@
 // =============================================================================
-// SEO audit vygenerovaného webu (S3-7: T3-21, T3-22).
+// SEO audit vygenerovaného webu (S3-7: T3-21, T3-22; S3-4/K19: T3-04).
 // -----------------------------------------------------------------------------
 // Číta statický export (out/) presne tak, ako ho dostane crawler – bez JavaScriptu – a kontroluje
 // KAŽDÚ stránku (nie vzorku). HTML sa parsuje parse5 (cez cheerio), teda rovnakým algoritmom
@@ -11,6 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { load } from 'cheerio';
+import { breadcrumbUrls, checkBreadcrumb, isA, loadVocab, topNodes, validateJsonLd } from './jsonld.mjs';
 
 // ---------------------------------------------------------------- limity (dokumentované v seo-checks.md)
 export const LIMITS = {
@@ -18,6 +19,8 @@ export const LIMITS = {
   titleMin: 15, titleWarn: 60, titleMax: 70,
   // Snippet má ~150–160 znakov; kratší opis Google často nahradí vlastným výrezom textu.
   descMin: 70, descWarn: 160, descMax: 200,
+  // Slovensko + 50 km rezerva (DoD dátových úloh): pilotné trasy zasahujú aj do HU/PL/AT.
+  bbox: { minLat: 47.3, maxLat: 49.9, minLon: 16.5, maxLon: 22.9 },
   ogWidth: 1200, ogHeight: 630,
 };
 
@@ -166,6 +169,7 @@ export function parseSitemap(xml) {
  * @param {{ outDir: string, siteUrl: string, basePath?: string, production?: boolean, verification?: { google?: string, bing?: string } }} opts
  */
 export function auditSite({ outDir, siteUrl, basePath = '', production = false, verification = {} }) {
+  const vocab = loadVocab();
   const site = siteUrl.replace(/\/$/, '');
   const base = basePath.replace(/\/$/, '');
   const findings = [];
@@ -375,6 +379,8 @@ export function auditSite({ outDir, siteUrl, basePath = '', production = false, 
       }
     }
 
+    // ---- štruktúrované dáta (T3-04)
+    checkStructuredData(pg, { err, warn, vocab, expected, toPath, byPath, siteRoot: site });
   }
 
   // --------------------------------------------------------------------- unikátnosť naprieč webom
@@ -453,4 +459,104 @@ export function auditSite({ outDir, siteUrl, basePath = '', production = false, 
   }
 
   return { pages: indexable.length, findings, site };
+}
+
+// ============================================================================= JSON-LD na stránke
+// Očakávané entity podľa typu stránky (dokumentácia 5.6, Z-B.8): navigačná cesta na všetkých
+// podstránkach, hlavná entita stránky s url = canonical, názvom = <h1> a polohou v SR.
+const MAIN_ENTITY = {
+  home: 'WebSite',
+  trails: 'ItemList',
+  trail: 'TouristTrip',
+  place: 'TouristAttraction',
+  peak: 'Mountain',
+};
+
+function checkStructuredData(pg, { err, warn, vocab, expected, toPath, byPath, siteRoot }) {
+  if (pg.jsonld.length === 0) return err('jsonld-missing', 'stránka nemá žiadne štruktúrované dáta (JSON-LD)');
+  const nodes = [];
+  pg.jsonld.forEach((block, i) => {
+    if (!block.ok) return err('jsonld-syntax', `JSON-LD blok ${i + 1} nie je platný JSON: ${block.error}`);
+    for (const f of validateJsonLd(block.data, vocab)) {
+      (f.level === 'error' ? err : warn)('jsonld-schema', `blok ${i + 1} ${f.path}: ${f.message}`);
+    }
+    nodes.push(...topNodes(block.data));
+  });
+
+  const ofType = (t) => nodes.filter((n) => isA(n, t, vocab));
+  const websites = ofType('WebSite');
+  if (websites.length > 1) err('jsonld-website', `${websites.length}× WebSite na stránke`);
+
+  // ---- navigačná cesta (Google rich result) – na všetkých podstránkach okrem úvodu
+  const crumbs = ofType('BreadcrumbList');
+  if (pg.kind !== 'home' && pg.kind !== 'other') {
+    if (crumbs.length !== 1) err('breadcrumb-count', `stránka má ${crumbs.length}× BreadcrumbList (má mať 1)`);
+    for (const bc of crumbs) {
+      for (const f of checkBreadcrumb(bc)) err('breadcrumb-google', `${f.path}: ${f.message}`);
+      const urls = breadcrumbUrls(bc);
+      const last = urls[urls.length - 1];
+      if (last !== undefined && last !== expected) err('breadcrumb-last', `posledná položka navigačnej cesty ${last} ≠ canonical ${expected}`);
+      const first = urls[0];
+      const home = pg.locale === 'en' ? '/en/' : '/';
+      if (first && toPath(first) !== home) err('breadcrumb-first', `navigačná cesta má začínať úvodnou stránkou ${home}`);
+      for (const url of urls) {
+        const p = toPath(url);
+        const t = p && byPath.get(p);
+        if (url && !t) err('breadcrumb-target', `položka ${url} nie je stránka tohto webu`);
+        else if (t && t.locale !== pg.locale) err('breadcrumb-locale', `položka ${url} je v inom jazyku`);
+      }
+      const lastName = bc.itemListElement?.at?.(-1)?.name;
+      if (pg.h1[0] && lastName && lastName !== pg.h1[0]) err('breadcrumb-name', `názov poslednej položky "${lastName}" ≠ <h1> "${pg.h1[0]}"`);
+    }
+  }
+
+  // ---- hlavná entita stránky
+  const type = MAIN_ENTITY[pg.kind];
+  if (!type) return;
+  const mains = ofType(type).filter((n) => !isA(n, 'BreadcrumbList', vocab));
+  if (mains.length !== 1) return err('jsonld-main-entity', `stránka typu "${pg.kind}" má mať práve 1 entitu ${type} (má ${mains.length})`);
+  const m = mains[0];
+  const expectUrl = pg.kind === 'home' ? siteRoot : expected;
+  if (pg.kind !== 'home' && m.url !== expectUrl) err('jsonld-url', `${type}.url "${m.url}" ≠ canonical ${expectUrl}`);
+  if (pg.kind === 'home' && m.url !== siteRoot + '/') err('jsonld-url', `WebSite.url "${m.url}" ≠ ${siteRoot}/`);
+  if (['trail', 'place', 'peak'].includes(pg.kind) && m.name !== pg.h1[0]) err('jsonld-name', `${type}.name "${m.name}" ≠ <h1> "${pg.h1[0]}"`);
+  if (['place', 'peak'].includes(pg.kind)) checkGeo(m.geo, `${type}.geo`, err, pg.kind === 'peak');
+  if (pg.kind === 'place' && m.sameAs) {
+    for (const s of [m.sameAs].flat()) if (!/^https:\/\/www\.wikidata\.org\/wiki\/Q\d+$/.test(s) && !/^https:\/\//.test(s)) err('jsonld-sameas', `sameAs "${s}" nie je platná URL`);
+  }
+  if (pg.kind === 'trail' || pg.kind === 'trails') {
+    const list = pg.kind === 'trail' ? m.itinerary : m;
+    const items = [list?.itemListElement ?? []].flat();
+    if (pg.kind === 'trail' && !isA(list ?? {}, 'ItemList', vocab)) err('jsonld-itinerary', 'TouristTrip.itinerary má byť ItemList zastávok');
+    if (items.length === 0) err('jsonld-list-empty', 'zoznam (ItemList) je prázdny');
+    items.forEach((li, i) => {
+      if (li?.position !== i + 1) err('jsonld-list-position', `položka ${i + 1} má position ${JSON.stringify(li?.position)} (očakávané ${i + 1})`);
+      const url = li?.item?.url ?? li?.url;
+      if (!url) err('jsonld-list-url', `položka ${i + 1} nemá url`);
+      else {
+        const t = byPath.get(toPath(url));
+        if (!t) err('jsonld-list-url', `položka ${i + 1} odkazuje na neexistujúcu stránku ${url}`);
+        else if (t.locale !== pg.locale) err('jsonld-list-locale', `položka ${i + 1} odkazuje na stránku v inom jazyku ${url}`);
+      }
+      if (pg.kind === 'trail') checkGeo(li?.item?.geo, `itinerary[${i + 1}].geo`, err, false);
+    });
+    // počet položiek v JSON-LD = počet položiek zoznamu na stránke (dáta nesmú klamať)
+    if (pg.kind === 'trails') {
+      const visible = pg.headings.filter((h) => h.level === 2).length;
+      if (visible && visible !== items.length) err('jsonld-list-count', `ItemList má ${items.length} trás, stránka zobrazuje ${visible}`);
+    }
+  }
+}
+
+function checkGeo(geo, where, err, needElevation) {
+  if (!geo || typeof geo !== 'object') return err('jsonld-geo', `${where} chýba`);
+  const { latitude: lat, longitude: lon } = geo;
+  const b = LIMITS.bbox;
+  if (typeof lat !== 'number' || typeof lon !== 'number') return err('jsonld-geo', `${where}: latitude/longitude musia byť čísla`);
+  if (lat < b.minLat || lat > b.maxLat || lon < b.minLon || lon > b.maxLon) {
+    err('jsonld-geo', `${where}: ${lat}, ${lon} je mimo Slovenska (+ rezerva) – prehodené lat/lon?`);
+  }
+  if (needElevation && !(typeof geo.elevation === 'number' && geo.elevation > 0 && geo.elevation < 2700)) {
+    err('jsonld-geo', `${where}.elevation ${JSON.stringify(geo.elevation)} nie je reálna výška v SR (0–2655 m)`);
+  }
 }

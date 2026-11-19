@@ -162,7 +162,8 @@ export function poiToGeoJSON(p: Poi, locale: Locale = 'sk'): FeatureCollection<P
   };
 }
 
-/** JSON-LD stránky miesta (schema.org). Čistá funkcia, aby sa dala testovať bez buildu. */
+/** JSON-LD stránky miesta (schema.org). Čistá funkcia, aby sa dala testovať bez buildu.
+ *  Jazyk stránky nesie <html lang> a hreflang – inLanguage na Place schema.org nepovoľuje. */
 /** `paths` nesú názov trasy už v jazyku stránky (name_sk = zobrazený názov). */
 export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_sk: string }[] = [], locale: Locale = 'sk') {
   const data: Record<string, unknown> = {
@@ -171,7 +172,6 @@ export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_s
     name: poiName(p, locale),
     description: poiDescription(p, paths.map((x) => x.name_sk), locale),
     url: siteUrl + pagePath(locale, 'place', p.slug),
-    inLanguage: locale === 'en' ? 'en' : 'sk-SK',
     geo: {
       '@type': 'GeoCoordinates',
       latitude: p.lat,
@@ -184,12 +184,7 @@ export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_s
   const other = locale === 'en' ? p.name_sk : p.name_en;
   if (other && other !== data.name) data.alternateName = other;
   if (p.wikidata_id) data.sameAs = `https://www.wikidata.org/wiki/${p.wikidata_id}`;
-  if (paths.length) {
-    data.subjectOf = paths.map((x) => ({
-      '@type': 'TouristTrip',
-      name: x.name_sk,
-      url: siteUrl + pagePath(locale, 'trail', x.slug),
-    }));
-  }
+  // Väzbu miesto -> trasa nesie TouristTrip.itinerary na stránke trasy. Opačný smer (subjectOf)
+  // schema.org nepovoľuje: subjectOf očakáva CreativeWork/Event, TouristTrip je Intangible.
   return data;
 }

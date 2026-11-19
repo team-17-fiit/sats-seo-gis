@@ -1,4 +1,4 @@
-# SEO – automatická kontrola (T3-22)
+# SEO a štruktúrované dáta – automatická kontrola (T3-22, T3-04)
 
 **Účel:** každá stránka webu (SK aj EN, všetky typy) spĺňa základné pravidlá SEO a jej štruktúrované
 dáta sú platné. Kontrola beží v CI pri každom PR a pred každým nasadením; červená = merge/deploy sa zastaví.
@@ -66,6 +66,41 @@ Prepínače: `--production` (deploy – zakáže placeholder adresu `example.com
 | `verification-missing` | ak je nastavená premenná `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION`, úvodná stránka má príslušný overovací meta tag (Search Console, Bing) |
 | `sitemap-noindex`, `sitemap-hreflang-target` | stránka s noindex nie je v sitemap; hreflang odkazy v sitemap vedú na existujúce stránky |
 | `no-pages` | prázdny `out/` je chyba, nie „0 nálezov“ |
+
+## Štruktúrované dáta (T3-04, K19 „100 % Rich Results pass“)
+
+Google Rich Results Test nemá verejné API, preto ho CI nevie zavolať. CI preto overuje to isté, čo by overil človek:
+
+1. **Slovník schema.org** (ako [validator.schema.org](https://validator.schema.org)): každý `@type` existuje;
+   každá vlastnosť existuje a patrí k typu vrátane nadtypov (`domainIncludes`); hodnota má povolený typ
+   (`rangeIncludes`); žiadne `null` ani prázdne reťazce; `url`/`sameAs` sú absolútne URL; `position` je celé číslo.
+   Slovník je uložený v gite (`schemaorg-vocab.json`), aby CI nezáviselo od siete. Aktualizácia:
+   `node scripts/seo/build-schemaorg-vocab.mjs`.
+2. **Pravidlá Google pre BreadcrumbList** – jediný typ na našich stránkach, pre ktorý Google zobrazuje
+   rich výsledok: aspoň 2 položky, pozície 1…n, každá má `name` a `item` (URL), posledná smie `item` vynechať.
+3. **Obsahové pravidlá podľa typu stránky** (dokumentácia 5.6, Z-B.8):
+
+| Stránka | Očakávané entity | Kontroly |
+|---|---|---|
+| úvod | `WebSite` | url = adresa webu, len jedna `WebSite` |
+| zoznam trás | `BreadcrumbList`, `ItemList` | počet trás v JSON-LD = počet trás na stránke, pozície 1…n, URL existujú a sú v jazyku stránky |
+| trasa | `BreadcrumbList`, `TouristTrip` + `itinerary` (`ItemList` zastávok) | url = canonical, name = H1, zastávky existujú, geo každej zastávky v SR (+ rezerva) |
+| miesto | `BreadcrumbList`, `TouristAttraction` (+ konkrétny typ) | url = canonical, name = H1, geo v SR, `sameAs` = Wikidata URL |
+| vrchol | `BreadcrumbList`, `Mountain` | url = canonical, name = H1, geo v SR, výška 0–2 655 m |
+
+Každá URL na doméne webu v JSON-LD musí začínať adresou webu vrátane podcesty a lomky
+(`jsonld-url-outside`, napr. `https://…github.io/sats-seo-gis` bez lomky je chyba).
+
+Navigačná cesta: začína úvodom jazyka, končí canonical adresou, názov poslednej položky = H1,
+všetky položky sú stránky webu v tom istom jazyku. Žiadna URL webu v JSON-LD nesmie viesť na neexistujúcu stránku.
+
+Typy a vlastnosti v stave *pending* kontrola povolí, ale hlási varovanie. Výnimka: `TouristTrip` a
+`itinerary` – model trasy, ktorý tím vedome používa (rozhodnutie v [audite](../audits/2026-11-19-seo-audit.md),
+bod „Model trasy“; zoznam `ACCEPTED_PENDING` v `jsonld.mjs`).
+
+**Ručná kontrola (raz za šprint, dôkaz pre K19):** jedna stránka každého typu v SK aj EN
+v [Rich Results Test](https://search.google.com/test/rich-results) a
+[Schema Markup Validator](https://validator.schema.org); screenshot do zápisnice zo sprint review.
 
 ## Ako vedieť, že kontrola naozaj kontroluje
 
