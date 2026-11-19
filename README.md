@@ -49,7 +49,7 @@ Po každom zmergovaní do `main` sa web sám nasadí na **https://team-17-fiit.g
 Pred nasadením beží `npm run test:seo -- --production` (starý názov `npm run check:urls` funguje tiež):
 nasadenie sa zastaví, ak by canonical, hreflang, og:image, JSON-LD, sitemap alebo robots.txt ukazovali inam
 ako na adresu webu, ak by adresa bola zástupná (`example.com`) alebo ak chýba overovací meta tag Search Console.
-Tá istá kontrola overí aj celé SEO stránok – pravidlá v
+Tá istá kontrola overí aj celé SEO stránok a štruktúrované dáta – pravidlá v
 [docs/methodology/seo-checks.md](docs/methodology/seo-checks.md). Lokálne po `npm run build` stačí `npm run test:seo`.
 
 Premenné repozitára (**Settings → Secrets and variables → Actions → Variables**):

@@ -31,7 +31,8 @@ export default function TrailsView({ locale }: { locale: Locale }) {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
           name: t.trailsHeading,
-          inLanguage: locale,
+          url: SITE_URL + pagePath(locale, 'trails'),
+          numberOfItems: paths.length,
           itemListElement: paths.map((p, i) => ({
             '@type': 'ListItem',
             position: i + 1,

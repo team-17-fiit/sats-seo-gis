@@ -38,7 +38,6 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
           '@type': 'Mountain',
           name: peak.name,
           url: SITE_URL + pagePath(locale, 'peak', peak.slug),
-          inLanguage: locale,
           geo: {
             '@type': 'GeoCoordinates',
             latitude: peak.lat,
