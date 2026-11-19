@@ -10,7 +10,7 @@ export default tseslint.config(
   {
     ignores: [
       '.next/**', 'out/**', 'node_modules/**', 'next-env.d.ts',
-      '.lighthouseci/**', '.lighthouseci-mobile/**', 'playwright-report/**', 'test-results/**',
+      '.lighthouseci/**', '.lighthouseci-mobile/**', 'playwright-report/**', 'test-results/**', 'seo-report/**',
     ],
   },
   js.configs.recommended,
@@ -30,5 +30,10 @@ export default tseslint.config(
     files: ['**/*.{js,cjs,mjs}', 'tests/**'],
     languageOptions: { globals: { ...globals.node } },
     rules: { '@typescript-eslint/no-require-imports': 'off' },
+  },
+  {
+    // Playwright: kód v page.evaluate()/addInitScript() beží v prehliadači (document, window, performance)
+    files: ['tests/**'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 );

@@ -6,11 +6,15 @@
 #             2) backend-lint-unit  ruff + pytest (API a ETL, bez DB)
 #             3) data-contract      PostGIS service: migracie + ETL nad fixtures,
 #                                   datove kontrakty a licencna brana (US-11)
-#             4) quality-gate       build, smoke + E2E (Playwright), Lighthouse CI
-#                                   (bezi az ked prejdu 1 a 2 - setri minuty)
+#             4) quality-gate       build, SEO + JSON-LD kontrola vsetkych stranok (T3-22, T3-04),
+#                                   smoke + E2E (Playwright) vratane axe-core (T3-15) a mobilnych
+#                                   budgetov LCP/CLS/JS (T3-14)
+#             5) lighthouse         Lighthouse CI desktop + mobil s budgetmi (T3-14), paralelne s 4
+#                                   (4 a 5 bezia az ked prejdu 1 a 2 - setri minuty)
 # Ak nieco zlyha, PR sa nema mergovat (nastav v GitHub: Settings > Branches).
-# Tazke testy (viac prehliadacov, mobilny Lighthouse) su zamerne mimo:
+# Tazke testy (Firefox, WebKit, mobilny Playwright profil) su zamerne mimo:
 # bezia rucne v heavy-gis.yml, aby rychle iteracie neboli pomale.
+# Popis kontrol: docs/methodology/testing.md, seo-checks.md, performance-budgets.md.
 # =============================================================================
 name: CI
 
@@ -105,7 +109,7 @@ jobs:
   quality-gate:
     needs: [ app-lint-unit, backend-lint-unit ]
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     defaults:
       run:
         working-directory: app   # frontend je v priecinku app/
@@ -126,6 +130,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # SEO (T3-22) + strukturovane data (T3-04): kazda stranka z out/, bez prehliadaca, ~1 s.
+      # Zhrnutie ide do "Summary" behu, cely zoznam do artefaktu ci-reports/seo-report.
+      - name: SEO a JSON-LD kontrola (vsetky stranky)
+        run: npm run test:seo
+
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
 
@@ -138,7 +147,9 @@ jobs:
         env:
           PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report/smoke.zip
 
-      - name: E2E testy (Playwright, desktop)
+      # Plna sada vratane tests/a11y.spec.js (axe-core, WCAG 2.2 AA) a tests/budgets.spec.js
+      # (mobilny profil: LCP, CLS, velkost JS, CLS po nacitani mapy).
+      - name: E2E + pristupnost + budgety (Playwright, desktop)
         run: npm run test:e2e -- --project=desktop --grep-invert @smoke --reporter=blob,list
         env:
           PLAYWRIGHT_BLOB_OUTPUT_FILE: blob-report/e2e.zip
@@ -147,9 +158,6 @@ jobs:
         if: always() && hashFiles('app/blob-report/*.zip') != ''
         run: npx playwright merge-reports --reporter=html blob-report
 
-      - name: Lighthouse CI (desktop, prahy >= 80)
-        run: npm run lhci
-
       - name: Upload reportov (aj pri zlyhani)
         if: always()
         uses: actions/upload-artifact@v4
@@ -157,8 +165,54 @@ jobs:
           name: ci-reports
           path: |
             app/playwright-report
+            app/seo-report
+          if-no-files-found: ignore
+          retention-days: 14
+
+  lighthouse:
+    needs: [ app-lint-unit, backend-lint-unit ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+      # Budgety a prahy: app/lighthouse/budgets.cjs, app/lighthouse/lhci-config.cjs.
+      # Obidva profily sa spustia vzdy (aj ked desktop padne), aby bolo vidno cely stav.
+      - name: Lighthouse CI – desktop (6 typov stranok × 3 behy)
+        id: desktop
+        continue-on-error: true
+        run: npm run lhci
+
+      - name: Lighthouse CI – mobil (6 typov stranok × 5 behov)
+        id: mobile
+        continue-on-error: true
+        run: npm run lhci:mobile
+
+      - name: Upload reportov (aj pri zlyhani)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: |
             app/.lighthouseci
+            app/.lighthouseci-mobile
           if-no-files-found: ignore
           # .lighthouseci zacina bodkou; upload-artifact@v4 skryte subory bez tohto vynecha.
           include-hidden-files: true
           retention-days: 14
+
+      - name: Vysledok budgetov
+        if: steps.desktop.outcome == 'failure' || steps.mobile.outcome == 'failure'
+        run: |
+          echo "::error::Lighthouse budgety neprešli (desktop: ${{ steps.desktop.outcome }}, mobil: ${{ steps.mobile.outcome }}). Detaily v logu a v artefakte lighthouse-reports."
+          exit 1

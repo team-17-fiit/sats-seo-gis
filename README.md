@@ -46,9 +46,11 @@ cd app && npm run lint && npm run test:unit   # web
 Po každom zmergovaní do `main` sa web sám nasadí na **https://team-17-fiit.github.io/sats-seo-gis/**
 (workflow `.github/workflows/deploy.yml`). Ručne: **Actions → Deploy → Run workflow**.
 
-Pred nasadením beží `npm run check:urls -- --production`: nasadenie sa zastaví, ak by canonical, hreflang,
-og:image, JSON-LD, sitemap alebo robots.txt ukazovali inam ako na adresu webu, alebo ak by adresa bola
-zástupná (`example.com`). Lokálne po `npm run build` stačí `npm run check:urls`.
+Pred nasadením beží `npm run test:seo -- --production` (starý názov `npm run check:urls` funguje tiež):
+nasadenie sa zastaví, ak by canonical, hreflang, og:image, JSON-LD, sitemap alebo robots.txt ukazovali inam
+ako na adresu webu, ak by adresa bola zástupná (`example.com`) alebo ak chýba overovací meta tag Search Console.
+Tá istá kontrola overí aj celé SEO stránok a štruktúrované dáta – pravidlá v
+[docs/methodology/seo-checks.md](docs/methodology/seo-checks.md). Lokálne po `npm run build` stačí `npm run test:seo`.
 
 Premenné repozitára (**Settings → Secrets and variables → Actions → Variables**):
 

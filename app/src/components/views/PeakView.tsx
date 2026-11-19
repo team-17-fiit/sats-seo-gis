@@ -38,7 +38,6 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
           '@type': 'Mountain',
           name: peak.name,
           url: SITE_URL + pagePath(locale, 'peak', peak.slug),
-          inLanguage: locale,
           geo: {
             '@type': 'GeoCoordinates',
             latitude: peak.lat,
@@ -50,11 +49,11 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
       />
       <header className="top">
         <Stripes />
-        <p><Link href={pagePath(locale, 'home')}>{t.backToMap}</Link></p>
+        <p><Link prefetch={false} href={pagePath(locale, 'home')}>{t.backToMap}</Link></p>
         <LangSwitch locale={locale} kind="peak" slug={peak.slug} />
         <h1>{peak.name}</h1>
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="peak-detail">
           <dl>
             <dt>{t.elevation}</dt>
