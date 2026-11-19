@@ -53,7 +53,7 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
         <LangSwitch locale={locale} kind="peak" slug={peak.slug} />
         <h1>{peak.name}</h1>
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="peak-detail">
           <dl>
             <dt>{t.elevation}</dt>

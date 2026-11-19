@@ -48,7 +48,7 @@ export default function TrailsView({ locale }: { locale: Locale }) {
         <h1>{t.trailsHeading}</h1>
         <p>{t.trailsLead}</p>
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <ul className="path-list" id="path-list">
           {paths.map((p) => {
             const summary = trailSummary(p, locale);

@@ -14,7 +14,7 @@
 | **SEO (T3-21, T3-22)** | vlastný audit nad `out/` (parse5) | každá stránka: unikátny title a description, práve 1 H1, poradie nadpisov, canonical, hreflang (vzájomný), alt texty, Open Graph, funkčné odkazy, sitemap = web, robots.txt | 0 chýb (`error`) | `app/scripts/seo/`, pravidlá v [seo-checks.md](seo-checks.md) |
 | **Štruktúrované dáta (T3-04, K19)** | ten istý audit + slovník schema.org | JSON-LD platný voči schema.org, BreadcrumbList podľa pravidiel Google, url = canonical, názov = H1, geo v SR | 0 chýb na 100 % stránok | `app/scripts/seo/jsonld.mjs` |
 | E2E | Playwright | používateľské scenáre mobil + desktop | 100 % (K7) | `app/tests/` |
-| Prístupnosť | axe-core | WCAG 2.2 AA | K17 | (šprint 4-4Z) |
+| **Prístupnosť (T3-15, K17)** | axe-core v Playwright + vlastné testy | WCAG 2.2 AA na každej stránke zo sitemap, tmavá téma, mobil, načítaná mapa; klávesnica, viditeľný fokus, reflow 320 px, text 200 %, reduced motion | 0 porušení WCAG A/AA, 0 serious/critical best-practice | `app/tests/a11y.spec.js` |
 | Výkon | LHCI, k6 | CWV budgety, p95 API | K1–K4 | `app/lighthouserc*.cjs` |
 
 ## Spustenie lokálne (v `app/`)
@@ -33,5 +33,6 @@ npm run test:e2e       # Playwright
 4. Červená brána blokuje merge; nestabilný test sa opraví v rámci šprintu.
 5. Unit testy nesmú potrebovať sieť ani databázu (repozitáre sa podvrhnú – `FilePoiRepository`, `FakeMapAdapter`).
 6. **Kontrola musí vedieť zlyhať.** Každé SEO pravidlo má unit test, ktorý mu podstrčí chybnú stránku
-   (`scripts/seo/audit.test.mjs`). Test, ktorý nikdy nespadne, nič nedokazuje.
-7. Kontroluje sa celý web, nie vzorka: SEO audit prechádza všetky stránky.
+   (`scripts/seo/audit.test.mjs`); a11y sada má „kontrolu kontroly“, ktorá do stránky vloží známe chyby
+   a overí, že ich axe a test fokusu nájdu. Test, ktorý nikdy nespadne, nič nedokazuje.
+7. Kontroluje sa celý web, nie vzorka: SEO audit a axe prechádzajú všetky stránky zo sitemap.

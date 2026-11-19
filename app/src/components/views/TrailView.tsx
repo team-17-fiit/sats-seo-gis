@@ -75,7 +75,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
         <h1>{name}</h1>
         {summary && <p>{summary}</p>}
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <dl className="facts">
           {p.length_km && (<><dt>{t.length}</dt><dd>≈ {p.length_km} km</dd></>)}
           <dt>{t.difficulty}</dt><dd>{difficultyLabel(p.difficulty, locale)}</dd>
