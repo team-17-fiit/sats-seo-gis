@@ -3,12 +3,27 @@
 // Mapu kreslí výhradne cez MapAdapter (ADR-0003) – komponent nevie, či je to MapLibre alebo statický náhľad.
 // Kontrakt pre E2E testy: tlačidlo "Zobraziť interaktívnu mapu", #map canvas, #map[data-ready="true"].
 import { useEffect, useRef, useState } from 'react';
-import type { LayerSpec, LngLat, MapAdapter } from '@/lib/map';
+import type { FeatureCollection, LayerSpec, LineFeature, LngLat, MapAdapter } from '@/lib/map';
 
 type Status = 'idle' | 'loading' | 'ready' | 'error';
 
+/**
+ * Čiara trasy môže prísť ako URL (`dataUrl`) – stiahne sa až po kliknutí na mapu, nie je v HTML
+ * (T3-14: geometria trasy zväčšovala HTML stránky až na 170 kB). Adaptéry dostanú vždy hotové dáta.
+ */
+export type LineLayerFromUrl = Omit<Extract<LayerSpec, { kind: 'line' }>, 'data'> & { dataUrl: string };
+export type LoaderLayer = LayerSpec | LineLayerFromUrl;
+
+async function resolveLayer(l: LoaderLayer): Promise<LayerSpec> {
+  if (!('dataUrl' in l)) return l;
+  const res = await fetch(l.dataUrl);
+  if (!res.ok) throw new Error(`${l.dataUrl}: HTTP ${res.status}`);
+  const { dataUrl: _url, ...rest } = l;
+  return { ...rest, data: (await res.json()) as FeatureCollection<LineFeature> };
+}
+
 type Props = {
-  layers: LayerSpec[];
+  layers: LoaderLayer[];
   center?: LngLat;
   zoom?: number;
   label?: string;
@@ -48,11 +63,12 @@ export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, l
     setStatus('loading');
     try {
       const { createMap } = await import('@/lib/map/createMap');
-      const map = await createMap();
+      // knižnica mapy a dáta vrstiev sa sťahujú súbežne
+      const [map, resolved] = await Promise.all([createMap(), Promise.all(layers.map(resolveLayer))]);
       mapRef.current = map;
       setKind(map.kind);
       await map.mount(boxRef.current, { center, zoom });
-      layers.forEach((l) => map.addLayer(l));
+      resolved.forEach((l) => map.addLayer(l));
       setStatus('ready');
     } catch (err) {
       // napr. výpadok siete pri sťahovaní štýlu: vráť tlačidlo, nech sa dá skúsiť znova

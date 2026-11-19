@@ -1,27 +1,10 @@
 // =============================================================================
-// Lighthouse CI - MOBILNY profil (Lighthouse default = emulovany mobil + throttling)
+// Lighthouse CI – MOBILNÝ profil (T3-14). Lighthouse default = emulovaný mobil, Slow 4G, CPU 4×.
 // -----------------------------------------------------------------------------
-// Spusti sa cez:  npm run lhci:mobile
-// Prahy su zatial "warn", lebo mobil byva prisnejsi; po optimalizacii prepni na "error".
+// Spustenie:  npm run lhci:mobile
+// Rovnaké budgety ako desktop: cieľ Z3 v dokumentácii je LCP ≤ 2,5 s a CLS ≤ 0,1 NA MOBILE (K3, K4),
+// preto je mobil v CI brána (error). 5 behov, medián; TBT len varovanie (kolíše, pozri lhci-config.cjs).
 // =============================================================================
-module.exports = {
-  ci: {
-    collect: {
-      startServerCommand: 'npm run preview',
-      startServerReadyPattern: 'Accepting connections',
-      url: ['http://localhost:4173/'],
-      numberOfRuns: 3,
-      // bez "preset" = mobilny profil
-    },
-    assert: {
-      assertions: {
-        'categories:performance':   ['warn', { minScore: 0.8 }],
-        'categories:seo':           ['warn', { minScore: 0.8 }],
-        'categories:accessibility': ['warn', { minScore: 0.8 }],
-        'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
-        'cumulative-layout-shift':  ['warn', { maxNumericValue: 0.1 }],
-      },
-    },
-    upload: { target: 'filesystem', outputDir: '.lighthouseci-mobile' },
-  },
-};
+const { makeConfig } = require('./lighthouse/lhci-config.cjs');
+
+module.exports = makeConfig({ outputDir: '.lighthouseci-mobile', numberOfRuns: 5, cwvAggregation: 'median', tbtLevel: 'warn' });
