@@ -49,7 +49,7 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
       />
       <header className="top">
         <Stripes />
-        <p><Link href={pagePath(locale, 'home')}>{t.backToMap}</Link></p>
+        <p><Link prefetch={false} href={pagePath(locale, 'home')}>{t.backToMap}</Link></p>
         <LangSwitch locale={locale} kind="peak" slug={peak.slug} />
         <h1>{peak.name}</h1>
       </header>

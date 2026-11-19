@@ -10,10 +10,10 @@ import { alternatesFor, mapTexts, pagePath, pick, T, type Locale } from '@/lib/i
 import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, trailCrumbs } from '@/lib/breadcrumbs';
 import {
-  difficultyLabel, getPath, localizeStops, pathLineGeoJSON, stopsToGeoJSON, trailName, trailSummary, viewFor,
+  difficultyLabel, getPath, localizeStops, stopsToGeoJSON, trailName, trailSummary, viewFor,
   type TrailPath,
 } from '@/lib/paths';
-import { SITE_URL } from '@/lib/site';
+import { SITE_URL, withBasePath } from '@/lib/site';
 
 function description(p: TrailPath, locale: Locale): string {
   const name = trailName(p, locale);
@@ -70,7 +70,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
       />
       <header className="top">
         <Stripes />
-        <p><Link href={pagePath(locale, 'trails')}>{t.allTrails}</Link></p>
+        <p><Link prefetch={false} href={pagePath(locale, 'trails')}>{t.allTrails}</Link></p>
         <LangSwitch locale={locale} kind="trail" slug={p.slug} />
         <h1>{name}</h1>
         {summary && <p>{summary}</p>}
@@ -90,7 +90,8 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
             center={view.center}
             zoom={view.zoom}
             layers={[
-              { id: 'path-line', kind: 'line', color: p.colour, data: pathLineGeoJSON(p) },
+              // geometria sa stiahne až po kliknutí na mapu (nie je v HTML) – app/geo/trasy/[file]/route.ts
+              { id: 'path-line', kind: 'line', color: p.colour, dataUrl: withBasePath(`/geo/trasy/${p.slug}.json`) },
               { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(localizeStops(p, locale)), cluster: true },
             ]}
             legend={[
@@ -106,7 +107,7 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
           <ol className="stops" id="stop-list">
             {p.stops.map((s) => (
               <li key={s.slug}>
-                <Link href={pagePath(locale, 'place', s.slug)}>{pick(locale, s.name_sk, s.name_en)}</Link>
+                <Link prefetch={false} href={pagePath(locale, 'place', s.slug)}>{pick(locale, s.name_sk, s.name_en)}</Link>
                 {s.unesco && <span className="badge" title={t.unescoTitle}>UNESCO</span>}
               </li>
             ))}
