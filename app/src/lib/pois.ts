@@ -162,6 +162,35 @@ export function poiToGeoJSON(p: Poi, locale: Locale = 'sk'): FeatureCollection<P
   };
 }
 
+export type PoiImage = {
+  /** Náhľad v rozumnej veľkosti (Special:FilePath s width), vždy cez https. */
+  src: string;
+  /** Stránka súboru na Wikimedia Commons (zdroj, plná atribúcia). */
+  page: string;
+  author: string | null;
+  licence: string | null;
+  licenceUrl: string | null;
+};
+
+const IMAGE_WIDTH = 960;
+
+/** Obrázok miesta z Wikimedia Commons (T3-13) alebo null, ak ho miesto nemá alebo URL nie je z Commons. */
+export function poiImage(p: Poi, width = IMAGE_WIDTH): PoiImage | null {
+  if (!p.image || !URL.canParse(p.image)) return null;
+  const url = new URL(p.image);
+  const marker = '/wiki/Special:FilePath/';
+  if (!/(^|\.)wikimedia\.org$/.test(url.hostname) || !url.pathname.startsWith(marker)) return null;
+  const file = decodeURIComponent(url.pathname.slice(marker.length));
+  const encoded = encodeURIComponent(file.replace(/ /g, '_'));
+  return {
+    src: `https://commons.wikimedia.org${marker}${encoded}?width=${width}`,
+    page: `https://commons.wikimedia.org/wiki/File:${encoded}`,
+    author: p.image_author ?? null,
+    licence: p.image_licence ?? null,
+    licenceUrl: p.image_licence_url ?? null,
+  };
+}
+
 /** JSON-LD stránky miesta (schema.org). Čistá funkcia, aby sa dala testovať bez buildu. */
 /** `paths` nesú názov trasy už v jazyku stránky (name_sk = zobrazený názov). */
 export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_sk: string }[] = [], locale: Locale = 'sk') {
@@ -184,6 +213,8 @@ export function poiJsonLd(p: Poi, siteUrl: string, paths: { slug: string; name_s
   const other = locale === 'en' ? p.name_sk : p.name_en;
   if (other && other !== data.name) data.alternateName = other;
   if (p.wikidata_id) data.sameAs = `https://www.wikidata.org/wiki/${p.wikidata_id}`;
+  const image = poiImage(p);
+  if (image) data.image = image.src;
   if (paths.length) {
     data.subjectOf = paths.map((x) => ({
       '@type': 'TouristTrip',
