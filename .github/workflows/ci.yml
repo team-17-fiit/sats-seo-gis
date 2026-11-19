@@ -6,7 +6,8 @@
 #             2) backend-lint-unit  ruff + pytest (API a ETL, bez DB)
 #             3) data-contract      PostGIS service: migracie + ETL nad fixtures,
 #                                   datove kontrakty a licencna brana (US-11)
-#             4) quality-gate       build, smoke + E2E (Playwright), Lighthouse CI
+#             4) quality-gate       build, SEO + JSON-LD kontrola vsetkych stranok (T3-22, T3-04),
+#                                   smoke + E2E (Playwright), Lighthouse CI
 #                                   (bezi az ked prejdu 1 a 2 - setri minuty)
 # Ak nieco zlyha, PR sa nema mergovat (nastav v GitHub: Settings > Branches).
 # Tazke testy (viac prehliadacov, mobilny Lighthouse) su zamerne mimo:
@@ -126,6 +127,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # SEO (T3-22): kazda stranka z out/, bez prehliadaca, ~1 s. Pravidla: docs/methodology/seo-checks.md.
+      # Zhrnutie ide do "Summary" behu, cely zoznam do artefaktu ci-reports/seo-report.
+      - name: SEO kontrola (vsetky stranky)
+        run: npm run test:seo
+
       - name: Install Chromium for Playwright
         run: npx playwright install --with-deps chromium
 
@@ -158,6 +164,7 @@ jobs:
           path: |
             app/playwright-report
             app/.lighthouseci
+            app/seo-report
           if-no-files-found: ignore
           # .lighthouseci zacina bodkou; upload-artifact@v4 skryte subory bez tohto vynecha.
           include-hidden-files: true
