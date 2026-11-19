@@ -56,6 +56,8 @@ function listEn(items: string[]): string {
 const sk = {
   langName: 'Slovensky',
   switchTo: 'English',
+  skipToContent: 'Preskočiť na obsah',
+  toggleTheme: 'Prepnúť svetlú / tmavú tému',
   homeTitle: 'Aktívny turizmus na Slovensku – mapa vrcholov a trás',
   homeDescription:
     'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.',
@@ -132,6 +134,8 @@ export type Dict = typeof sk;
 const en: Dict = {
   langName: 'English',
   switchTo: 'Slovensky',
+  skipToContent: 'Skip to content',
+  toggleTheme: 'Switch light / dark theme',
   homeTitle: 'Active tourism in Slovakia – map of peaks and trails',
   homeDescription:
     'Interactive map of peaks and thematic trails in Slovakia for hikers and cyclists. Fast, clear and open.',

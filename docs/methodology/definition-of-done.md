@@ -9,7 +9,7 @@
 |---|---|---|
 | **Task** (≤ 1 deň) | kód zreviewovaný (1 schválenie), unit testy prechádzajú, lint čistý, čas zapísaný v denníku | reviewer |
 | **Story** | akceptačné kritériá splnené, E2E scenár existuje a prechádza, dokumentácia/ADR aktualizované, ukážka na review | product owner na sprint review |
-| **Feature** | všetky story hotové, Lighthouse brány zelené (≥ 80, CLS ≤ 0,1), prístupnosť bez vážnych axe chýb | test manažér |
+| **Feature** | všetky story hotové, Lighthouse brány a budgety zelené (≥ 80, LCP ≤ 2,5 s, CLS ≤ 0,1, JS v budgete – [performance-budgets.md](performance-budgets.md)), axe 0 porušení WCAG 2.2 AA, SEO kontrola 0 chýb ([seo-checks.md](seo-checks.md)) | test manažér |
 | **Epic** | používateľsky otestovaný, story karty a preklady SK/EN skontrolované | product owner |
 | **Projekt** | release otagovaný, manuály a e-médium kompletné | vedúci tímu |
 
