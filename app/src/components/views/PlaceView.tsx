@@ -12,7 +12,7 @@ import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
 import { breadcrumbJsonLd, placeCrumbs } from '@/lib/breadcrumbs';
 import { getPath, trailName } from '@/lib/paths';
-import { categoryLabel, getPoi, poiDescription, poiJsonLd, poiName, poiToGeoJSON, type Poi } from '@/lib/pois';
+import { categoryLabel, getPoi, poiDescription, poiImage, poiJsonLd, poiName, poiToGeoJSON, type Poi } from '@/lib/pois';
 import { SITE_URL } from '@/lib/site';
 
 function pathsOf(p: Poi, locale: Locale) {
@@ -43,6 +43,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
   const osm = `https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=15/${p.lat}/${p.lon}`;
   const mainTrail = paths[0] && { slug: paths[0].slug, name: paths[0].name_sk };
   const crumbs = placeCrumbs(locale, { slug: p.slug, name }, mainTrail);
+  const image = poiImage(p);
 
   return (
     <LocaleRoot locale={locale}>
@@ -60,6 +61,23 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         {other && other !== name && <p lang={locale === 'en' ? 'sk' : 'en'} className="muted">{other}</p>}
       </header>
       <main>
+        {image && (
+          <figure className="place-image">
+            {/* statický export: obrázok ide priamo z Commons, next/image by ho aj tak neoptimalizoval */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={image.src} alt={name} width={960} height={640} decoding="async" />
+            <figcaption className="note">
+              {t.photo}{image.author && <>: {image.author}</>}
+              {image.licence && (
+                <> · {image.licenceUrl
+                  ? <a href={image.licenceUrl} rel="license noopener noreferrer">{image.licence}</a>
+                  : image.licence}</>
+              )}
+              {' · '}<a href={image.page} rel="noopener noreferrer">Wikimedia Commons</a>
+            </figcaption>
+          </figure>
+        )}
+
         <p>{poiDescription(p, paths.map((x) => x.name_sk), locale)}</p>
 
         <dl className="facts">
@@ -69,6 +87,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
             {p.unesco && <span className="badge" title={t.unescoTitle}>UNESCO</span>}
           </dd>
           {p.elevation_m != null && (<><dt>{t.elevation}</dt><dd>{t.elevationValue(p.elevation_m)}</dd></>)}
+          {p.protected_area && (<><dt>{t.protectedArea}</dt><dd>{p.protected_area}</dd></>)}
           <dt>{t.coordinates}</dt>
           <dd>{p.lat.toFixed(4)} °N, {p.lon.toFixed(4)} °E {t.approx}</dd>
         </dl>
