@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
-import LocaleRoot from '@/components/LocaleRoot';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
@@ -25,7 +24,7 @@ export default function TrailsView({ locale }: { locale: Locale }) {
   const t = T[locale];
   const paths = getPaths();
   return (
-    <LocaleRoot locale={locale}>
+    <>
       <JsonLd data={breadcrumbJsonLd(trailsCrumbs(locale), SITE_URL)} />
       <JsonLd
         data={{
@@ -65,6 +64,6 @@ export default function TrailsView({ locale }: { locale: Locale }) {
           })}
         </ul>
       </main>
-    </LocaleRoot>
+    </>
   );
 }
