@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
-import LocaleRoot from '@/components/LocaleRoot';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
@@ -15,7 +14,8 @@ import { SITE_URL } from '@/lib/site';
 export function peakMetadata(locale: Locale, slug: string): Metadata {
   const peak = getPeak(slug);
   if (!peak) return {};
-  const title = `${peak.name} (${peak.elevation} m)`;
+  // Názov vrcholu je v oboch jazykoch rovnaký – title sa líši opisom, aby SK a EN neboli duplicitné.
+  const title = T[locale].peakTitle(peak.name, peak.elevation);
   const description = T[locale].peakDescription(peak.name, peak.elevation);
   return {
     title,
@@ -30,7 +30,7 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
   const osm = `https://www.openstreetmap.org/?mlat=${peak.lat}&mlon=${peak.lon}#map=14/${peak.lat}/${peak.lon}`;
 
   return (
-    <LocaleRoot locale={locale}>
+    <>
       <JsonLd data={breadcrumbJsonLd(peakCrumbs(locale, { slug: peak.slug, name: peak.name }), SITE_URL)} />
       <JsonLd
         data={{
@@ -67,6 +67,6 @@ export default function PeakView({ locale, peak }: { locale: Locale; peak: Peak 
           </p>
         </section>
       </main>
-    </LocaleRoot>
+    </>
   );
 }

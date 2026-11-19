@@ -3,7 +3,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import LangSwitch from '@/components/LangSwitch';
-import LocaleRoot from '@/components/LocaleRoot';
 import MapLoader from '@/components/MapLoader';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
@@ -36,7 +35,7 @@ export default function HomeView({ locale }: { locale: Locale }) {
   };
 
   return (
-    <LocaleRoot locale={locale}>
+    <>
       <header className="top">
         <Stripes />
         <LangSwitch locale={locale} kind="home" />
@@ -74,6 +73,6 @@ export default function HomeView({ locale }: { locale: Locale }) {
           </ul>
         </section>
       </main>
-    </LocaleRoot>
+    </>
   );
 }
