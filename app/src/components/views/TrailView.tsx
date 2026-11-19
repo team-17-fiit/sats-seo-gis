@@ -49,9 +49,9 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
           '@context': 'https://schema.org',
           '@type': 'TouristTrip',
           name,
-          description: summary,
+          // null by bol neplatný JSON-LD: bez kurátorského zhrnutia použijeme meta description
+          description: summary ?? description(p, locale),
           url: SITE_URL + pagePath(locale, 'trail', p.slug),
-          inLanguage: locale,
           touristType: p.theme,
           itinerary: {
             '@type': 'ItemList',

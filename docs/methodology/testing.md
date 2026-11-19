@@ -12,6 +12,7 @@
 | Kontrakt dát | SQL + pytest | schéma, platná geometria, licencie | žiadna neznáma licencia | `data/db/checks.sql` |
 | Geodáta (T2-11) | SQL + Python | nadväznosť úsekov (≤ 50 m), zastávky pri trase (≤ 200 m), poradie zastávok, súradnice v SR / prehodené lat-lon; varovania: duplicity, nadmorská výška, dĺžka trasy | 0 chýb (`check`), varovania (`warn`) len vypíše | `data/db/checks.sql`, `backend/pipelines/geocheck.py` (export pre web, aj v `export_static`) |
 | **SEO (T3-21, T3-22)** | vlastný audit nad `out/` (parse5) | každá stránka: unikátny title a description, práve 1 H1, poradie nadpisov, canonical, hreflang (vzájomný), alt texty, Open Graph, funkčné odkazy, sitemap = web, robots.txt | 0 chýb (`error`) | `app/scripts/seo/`, pravidlá v [seo-checks.md](seo-checks.md) |
+| **Štruktúrované dáta (T3-04, K19)** | ten istý audit + slovník schema.org | JSON-LD platný voči schema.org, BreadcrumbList podľa pravidiel Google, url = canonical, názov = H1, geo v SR | 0 chýb na 100 % stránok | `app/scripts/seo/jsonld.mjs` |
 | E2E | Playwright | používateľské scenáre mobil + desktop | 100 % (K7) | `app/tests/` |
 | Prístupnosť | axe-core | WCAG 2.2 AA | K17 | (šprint 4-4Z) |
 | Výkon | LHCI, k6 | CWV budgety, p95 API | K1–K4 | `app/lighthouserc*.cjs` |

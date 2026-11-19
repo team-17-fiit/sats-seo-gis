@@ -1,4 +1,4 @@
-// Unit testy SEO auditu (T3-22).
+// Unit testy SEO auditu (T3-22) a validátora JSON-LD (T3-04).
 // Princíp: test nad správnym miniwebom musí prejsť s 0 chybami a KAŽDÁ jednotlivá pokazená
 // vlastnosť musí vyvolať konkrétne pravidlo. Tak vieme, že kontrola v CI nie je len "zelená vždy".
 import fs from 'node:fs';
@@ -6,6 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { auditSite, classify, extractPage, listPages, pngSize } from './audit.mjs';
+import { checkBreadcrumb, validateJsonLd } from './jsonld.mjs';
 
 const SITE = 'https://tura.sk';
 
@@ -222,6 +223,8 @@ describe('SEO audit – každá chyba sa naozaj zachytí', () => {
     ['odkaz bez koncovej lomky', { [T]: { body: '<a href="/trasy">Trasy</a>' } }, 'link-trailing-slash'],
     ['chýba favicon', { [T]: { iconTag: '' } }, 'favicon-missing'],
     ['favicon neexistuje', { [T]: { iconTag: '<link rel="icon" href="/favicon.ico"/>' } }, 'favicon-broken'],
+    ['chýba JSON-LD', { [T]: { jsonld: [] } }, 'jsonld-missing'],
+    ['neplatný JSON v JSON-LD', { [T]: { jsonld: ['{"@type": "Thing",}'] } }, 'jsonld-syntax'],
   ];
   for (const [name, overrides, rule] of cases) {
     it(`${name} -> ${rule}`, () => {
@@ -292,6 +295,118 @@ describe('SEO audit – každá chyba sa naozaj zachytí', () => {
     });
     expect(errorRules(run(ok, { basePath: '/sub' }))).not.toContain('link-basepath');
     expect(errorRules(run(makeSite(), { basePath: '/sub' }))).toContain('link-basepath');
+  });
+});
+
+describe('SEO audit – štruktúrované dáta na stránke (T3-04)', () => {
+  const T = '/trasy/t1/';
+  const ldOf = (l, kind, patch) => {
+    const docs = [mainEntity('sk', 'home'), crumbsFor(l, kind), mainEntity(l, kind)];
+    patch(docs);
+    return docs.map((d) => JSON.stringify(d));
+  };
+  const cases = [
+    ['chýba navigačná cesta', (d) => d.splice(1, 1), 'breadcrumb-count'],
+    ['posledná položka navigácie ≠ canonical', (d) => { d[1].itemListElement.at(-1).item = `${SITE}/trasy/`; }, 'breadcrumb-last'],
+    ['navigácia nezačína úvodom', (d) => { d[1].itemListElement[0].item = `${SITE}/trasy/`; }, 'breadcrumb-first'],
+    ['názov v navigácii ≠ h1', (d) => { d[1].itemListElement.at(-1).name = 'Iný názov'; }, 'breadcrumb-name'],
+    ['navigácia s preskočenou pozíciou', (d) => { d[1].itemListElement[1].position = 5; }, 'breadcrumb-google'],
+    ['url entity ≠ canonical', (d) => { d[2].url = `${SITE}/trasy/`; }, 'jsonld-url'],
+    ['názov entity ≠ h1', (d) => { d[2].name = 'Iná trasa'; }, 'jsonld-name'],
+    ['chýba hlavná entita', (d) => d.splice(2, 1), 'jsonld-main-entity'],
+    ['zastávka na neexistujúcej stránke', (d) => { d[2].itinerary.itemListElement[0].item.url = `${SITE}/miesta/zz/`; }, 'jsonld-url-broken'],
+    ['prehodené lat/lon zastávky', (d) => { Object.assign(d[2].itinerary.itemListElement[0].item.geo, { latitude: 16.98, longitude: 48.17 }); }, 'jsonld-geo'],
+    ['zlé poradie zastávok', (d) => { d[2].itinerary.itemListElement[0].position = 0; }, 'jsonld-list-position'],
+    ['vlastnosť mimo slovníka schema.org', (d) => { d[2].inLanguage = 'sk'; }, 'jsonld-schema'],
+    ['dve WebSite', (d) => d.push(mainEntity('sk', 'home')), 'jsonld-website'],
+  ];
+  for (const [name, patch, rule] of cases) {
+    it(`${name} -> ${rule}`, () => {
+      const res = run(makeSite(() => {}, { [T]: { jsonld: ldOf('sk', 'trail', patch) } }));
+      expect(errorRules(res)).toContain(rule);
+    });
+  }
+
+  it('vrchol bez reálnej výšky -> jsonld-geo', () => {
+    const ld = ldOf('sk', 'peak', (d) => { d[2].geo.elevation = 0; });
+    expect(errorRules(run(makeSite(() => {}, { '/vrcholy/v1/': { jsonld: ld } })))).toContain('jsonld-geo');
+  });
+
+  it('počet trás v ItemList ≠ počet trás na stránke -> jsonld-list-count', () => {
+    const ld = ldOf('sk', 'trails', (d) => { d[2].itemListElement.push({ '@type': 'ListItem', position: 2, url: `${SITE}/trasy/t1/`, name: 'x' }); });
+    expect(errorRules(run(makeSite(() => {}, { '/trasy/': { jsonld: ld } })))).toContain('jsonld-list-count');
+  });
+});
+
+describe('validateJsonLd – slovník schema.org', () => {
+  const errors = (doc) => validateJsonLd(doc).filter((f) => f.level === 'error').map((f) => f.message);
+  const ok = { '@context': 'https://schema.org', '@type': 'Mountain', name: 'Rysy', url: 'https://x.sk/vrcholy/rysy/', geo: { '@type': 'GeoCoordinates', latitude: 49.18, longitude: 20.09, elevation: 2503 } };
+
+  it('platný dokument nemá chyby', () => expect(errors(ok)).toEqual([]));
+  it('chýbajúci alebo cudzí @context', () => {
+    expect(errors({ ...ok, '@context': undefined })[0]).toMatch(/@context/);
+    expect(errors({ ...ok, '@context': 'https://example.org' })[0]).toMatch(/@context/);
+  });
+  it('chýbajúci @type', () => expect(errors({ '@context': 'https://schema.org', name: 'x' })[0]).toMatch(/chýba @type/));
+  it('neznámy typ', () => expect(errors({ ...ok, '@type': 'HikingTrail' })[0]).toMatch(/neznámy typ/));
+  it('neznáma vlastnosť', () => expect(errors({ ...ok, heightAboveSea: 1 })[0]).toMatch(/neznáma vlastnosť/));
+  it('vlastnosť, ktorá k typu nepatrí (inLanguage na Place)', () => expect(errors({ ...ok, inLanguage: 'sk' })[0]).toMatch(/nepatrí k typu Mountain/));
+  it('vlastnosť zdedená z nadtypu je povolená (containedInPlace z Place)', () => {
+    expect(errors({ ...ok, containedInPlace: { '@type': 'Country', name: 'Slovensko' } })).toEqual([]);
+  });
+  it('hodnota nesprávneho typu (subjectOf: TouristTrip)', () => {
+    expect(errors({ ...ok, subjectOf: { '@type': 'TouristTrip', name: 'x' } })[0]).toMatch(/očakáva CreativeWork/);
+  });
+  it('null a prázdny reťazec', () => {
+    expect(errors({ ...ok, description: null })[0]).toMatch(/null/);
+    expect(errors({ ...ok, description: '  ' })[0]).toMatch(/prázdny/);
+  });
+  it('url musí byť absolútna', () => expect(errors({ ...ok, url: '/vrcholy/rysy/' })[0]).toMatch(/absolútna/));
+  it('boolean tam, kde nie je povolený', () => expect(errors({ ...ok, name: true })[0]).toMatch(/true\/false/));
+  it('číslo tam, kde nie je povolené', () => expect(errors({ ...ok, geo: 5 })[0]).toMatch(/nepovoľuje číslo/));
+  it('position musí byť celé číslo', () => {
+    expect(errors({ '@context': 'https://schema.org', '@type': 'ListItem', position: 1.5, name: 'x' })[0]).toMatch(/celé číslo/);
+  });
+  it('vnorený objekt bez @type', () => expect(errors({ ...ok, geo: { latitude: 1, longitude: 2 } })[0]).toMatch(/chýba @type/));
+  it('odkaz cez @id je platný', () => expect(errors({ ...ok, containedInPlace: { '@id': 'https://x.sk/#sk' } })).toEqual([]));
+  it('člen enumerácie musí patriť k rozsahu', () => {
+    expect(errors({ '@context': 'https://schema.org', '@type': 'Place', name: 'x', isAccessibleForFree: 'https://schema.org/True' })).toEqual([]);
+    expect(errors({ '@context': 'https://schema.org', '@type': 'Place', name: 'x', isAccessibleForFree: 'https://schema.org/Monday' })[0]).toMatch(/nie je povolená/);
+  });
+  it('rozpracovaný (pending) typ je len varovanie', () => {
+    const f = validateJsonLd({ '@context': 'https://schema.org', '@type': 'ConferenceEvent', name: 'x' });
+    expect(f.filter((x) => x.level === 'error')).toEqual([]);
+    expect(f.some((x) => x.level === 'warn' && /pending/.test(x.message))).toBe(true);
+  });
+  it('vedome prijatý pending typ (TouristTrip + itinerary) nehlási varovanie', () => {
+    const f = validateJsonLd({
+      '@context': 'https://schema.org', '@type': 'TouristTrip', name: 'x',
+      itinerary: { '@type': 'ItemList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'a' }] },
+    });
+    expect(f).toEqual([]);
+  });
+  it('@graph aj pole dokumentov', () => {
+    expect(errors({ '@context': 'https://schema.org', '@graph': [ok, { '@type': 'Mountain', name: 'Kriváň' }] })).toEqual([]);
+    expect(errors([ok, { ...ok, '@type': 'Nič' }]).length).toBe(1);
+  });
+});
+
+describe('checkBreadcrumb – pravidlá Google', () => {
+  const li = (position, name, item) => ({ '@type': 'ListItem', position, name, ...(item ? { item } : {}) });
+  const bc = (...items) => ({ '@type': 'BreadcrumbList', itemListElement: items });
+  it('platná cesta; posledná položka smie byť bez item', () => {
+    expect(checkBreadcrumb(bc(li(1, 'Domov', 'https://x.sk/'), li(2, 'Trasy', 'https://x.sk/trasy/')))).toEqual([]);
+    expect(checkBreadcrumb(bc(li(1, 'Domov', 'https://x.sk/'), li(2, 'Trasy')))).toEqual([]);
+  });
+  it('menej ako 2 položky', () => expect(checkBreadcrumb(bc(li(1, 'Domov', 'https://x.sk/')))[0].message).toMatch(/aspoň 2/));
+  it('item chýba v strede cesty', () => {
+    expect(checkBreadcrumb(bc(li(1, 'Domov'), li(2, 'Trasy', 'https://x.sk/trasy/'))).map((f) => f.message).join()).toMatch(/chýba item/);
+  });
+  it('relatívny item, chýbajúci name, zlé pozície', () => {
+    const msgs = checkBreadcrumb(bc(li(1, 'Domov', '/'), li(3, '', 'https://x.sk/a/'))).map((f) => f.message).join(' | ');
+    expect(msgs).toMatch(/absolútna URL/);
+    expect(msgs).toMatch(/chýba name/);
+    expect(msgs).toMatch(/pozícia má byť 2/);
   });
 });
 
