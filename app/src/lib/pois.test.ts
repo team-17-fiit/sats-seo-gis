@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { getPaths } from './paths';
 import {
-  DESCRIPTION_MAX, FALLBACK_MIN, categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiJsonLd, poiName, poiToGeoJSON, schemaTypes,
+  DESCRIPTION_MAX, FALLBACK_MIN, categoryLabel, categorySk, getPoi, getPois, parsePois, poiDescription, poiImage, poiJsonLd,
+  poiName, poiToGeoJSON, schemaTypes,
   type Poi,
 } from './pois';
 
@@ -113,4 +114,35 @@ describe('pois in English', () => {
     expect(ld.subjectOf).toEqual([{ '@type': 'TouristTrip', name: 'Main corridor spine', url: 'https://x.sk/en/trails/hlavna-os/' }]);
   });
 
+});
+
+describe('poi image (T3-13)', () => {
+  const withImage: Poi = {
+    ...sample,
+    image: 'http://commons.wikimedia.org/wiki/Special:FilePath/Hrad%20Dev%C3%ADn.jpg',
+    image_author: 'Ján Novák',
+    image_licence: 'CC BY-SA 4.0',
+    image_licence_url: 'https://creativecommons.org/licenses/by-sa/4.0',
+  };
+
+  it('builds an https thumbnail and the Commons file page', () => {
+    expect(poiImage(withImage)).toEqual({
+      src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hrad_Dev%C3%ADn.jpg?width=960',
+      page: 'https://commons.wikimedia.org/wiki/File:Hrad_Dev%C3%ADn.jpg',
+      author: 'Ján Novák',
+      licence: 'CC BY-SA 4.0',
+      licenceUrl: 'https://creativecommons.org/licenses/by-sa/4.0',
+    });
+  });
+
+  it('ignores missing and non-Commons images', () => {
+    expect(poiImage(sample)).toBeNull();
+    expect(poiImage({ ...sample, image: 'https://example.com/a.jpg' })).toBeNull();
+    expect(poiImage({ ...sample, image: 'not a url' })).toBeNull();
+  });
+
+  it('adds the image to JSON-LD only when there is one', () => {
+    expect(poiJsonLd(withImage, 'https://x.sk').image).toBe(poiImage(withImage)?.src);
+    expect(poiJsonLd(sample, 'https://x.sk')).not.toHaveProperty('image');
+  });
 });
