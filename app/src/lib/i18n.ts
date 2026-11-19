@@ -40,6 +40,18 @@ export function alternatesFor(locale: Locale, kind: PageKind, slug?: string) {
 
 export const OG_LOCALE: Record<Locale, string> = { sk: 'sk_SK', en: 'en_GB' };
 
+/** „A, B a C“ / „A, B a ďalších 2“ – zoznam trás v slovenskej vete. */
+function listSk(items: string[], more: number): string {
+  const tail = more > 0 ? (more === 1 ? 'jednej ďalšej' : `ďalších ${more}`) : null;
+  const all = tail ? [...items, tail] : items;
+  return all.length === 1 ? all[0] : `${all.slice(0, -1).join(', ')} a ${all[all.length - 1]}`;
+}
+
+/** "A, B and C" – trail list in an English sentence. */
+function listEn(items: string[]): string {
+  return items.length === 1 ? items[0] : `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
 /** Texty rozhrania. Dátové texty (názvy, opisy) idú z dát – name_en, summary_en, description_en. */
 const sk = {
   langName: 'Slovensky',
@@ -98,11 +110,15 @@ const sk = {
   ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
     [km ? `~${km} km` : null, `${stops} zastávok`, `obťažnosť ${difficulty}`].filter(Boolean).join(' · '),
   ogElevation: (m: number) => `${m} m n. m.`,
+  peakTitle: (name: string, m: number) => `${name} – vrchol, ${m} m n. m.`,
   peakDescription: (name: string, m: number) =>
-    `Vrchol ${name} s výškou ${m} m n. m. Poloha, súradnice a odkaz na mapu.`,
-  placeFallback: (name: string, category: string, unesco: boolean, trails: string[]) =>
+    `${name} – vrchol s výškou ${m} m n. m. na Slovensku. Poloha na mape, GPS súradnice a odkaz na OpenStreetMap.`,
+  placeTitleWithCategory: (name: string, category: string) => `${name} – ${category}`,
+  placeMore: 'Poloha na mape, súradnice a súvisiace trasy.',
+  /** `more` = počet ďalších trás, ktoré sa do opisu nezmestili (meta description ≤ 160 znakov). */
+  placeFallback: (name: string, category: string, unesco: boolean, trails: string[], more = 0) =>
     [`${name} – ${category} na Slovensku${unesco ? ', pamiatka UNESCO' : ''}`,
-      ...(trails.length ? [`Zastávka na trase ${trails.join(', ')}`] : [])].join('. ') + '.',
+      ...(trails.length ? [trails.length + more === 1 ? `Zastávka na trase ${trails[0]}` : `Zastávka na trasách ${listSk(trails, more)}`] : [])].join('. ') + '.',
   mapLoad: 'Zobraziť interaktívnu mapu',
   mapLoading: 'Načítavam mapu…',
   mapError: 'Mapu sa nepodarilo načítať – skúsiť znova',
@@ -168,11 +184,14 @@ const en: Dict = {
   ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
     [km ? `~${km} km` : null, `${stops} stops`, `${difficulty} difficulty`].filter(Boolean).join(' · '),
   ogElevation: (m: number) => `${m} m a.s.l.`,
+  peakTitle: (name: string, m: number) => `${name} – peak, ${m} m a.s.l.`,
   peakDescription: (name: string, m: number) =>
-    `${name}, a peak ${m} m above sea level. Location, coordinates and a link to the map.`,
-  placeFallback: (name: string, category: string, unesco: boolean, trails: string[]) =>
+    `${name}, a peak in Slovakia ${m} m above sea level. Location on the map, GPS coordinates and a link to OpenStreetMap.`,
+  placeTitleWithCategory: (name: string, category: string) => `${name} – ${category} in Slovakia`,
+  placeMore: 'Location on the map, coordinates and related trails.',
+  placeFallback: (name: string, category: string, unesco: boolean, trails: string[], more = 0) =>
     [`${name} – ${category} in Slovakia${unesco ? ', UNESCO World Heritage site' : ''}`,
-      ...(trails.length ? [`A stop on the ${trails.join(', ')} trail${trails.length > 1 ? 's' : ''}`] : [])].join('. ') + '.',
+      ...(trails.length ? [`A stop on the ${listEn(trails)} trail${trails.length > 1 ? 's' : ''}${more ? ` and ${more} more` : ''}`] : [])].join('. ') + '.',
   mapLoad: 'Show interactive map',
   mapLoading: 'Loading the map…',
   mapError: 'The map could not be loaded – try again',
