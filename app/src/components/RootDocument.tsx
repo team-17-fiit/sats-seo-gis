@@ -6,7 +6,7 @@ import '@/app/globals.css';
 import JsonLd from '@/components/JsonLd';
 import ThemeToggle from '@/components/ThemeToggle';
 import { OG_LOCALE, T, type Locale } from '@/lib/i18n';
-import { SITE_NAME, SITE_URL, SITE_VERIFICATION, withBasePath } from '@/lib/site';
+import { SITE_NAME, SITE_URL, SITE_VERIFICATION } from '@/lib/site';
 
 export function rootMetadata(locale: Locale): Metadata {
   const t = T[locale];
@@ -16,8 +16,7 @@ export function rootMetadata(locale: Locale): Metadata {
     description: t.homeDescription,
     // overovacie meta tagy Search Console / Bing Webmaster (T3-06); prázdne = nič sa nevloží
     verification: SITE_VERIFICATION,
-    // bez <link rel="icon"> prehliadač skúša /favicon.ico -> 404 v konzole (Lighthouse Best Practices)
-    icons: { icon: withBasePath('/icons/icon-192.png'), apple: withBasePath('/icons/icon-192.png') },
+    // favicon.ico, icon.svg a apple-icon.png v src/app/ – <link rel="icon"> vloží Next.js sám (T3-03)
     appleWebApp: { capable: true, title: 'SATS-GIS', statusBarStyle: 'default' },
     openGraph: { type: 'website', locale: OG_LOCALE[locale], siteName: SITE_NAME },
   };
