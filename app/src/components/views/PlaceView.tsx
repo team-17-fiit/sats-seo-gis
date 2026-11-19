@@ -55,8 +55,8 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         <Stripes />
         <p>
           {paths[0]
-            ? <Link href={pagePath(locale, 'trail', paths[0].slug)}>← {paths[0].name_sk}</Link>
-            : <Link href={pagePath(locale, 'trails')}>{t.allTrails}</Link>}
+            ? <Link prefetch={false} href={pagePath(locale, 'trail', paths[0].slug)}>← {paths[0].name_sk}</Link>
+            : <Link prefetch={false} href={pagePath(locale, 'trails')}>{t.allTrails}</Link>}
         </p>
         <LangSwitch locale={locale} kind="place" slug={p.slug} />
         <h1>{name}</h1>
@@ -93,7 +93,7 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
               {paths.map((x) => (
                 <li key={x.slug}>
                   <span className="swatch" style={{ background: x.colour }} aria-hidden="true" />
-                  <Link href={pagePath(locale, 'trail', x.slug)}>{x.name_sk}</Link>
+                  <Link prefetch={false} href={pagePath(locale, 'trail', x.slug)}>{x.name_sk}</Link>
                 </li>
               ))}
             </ul>

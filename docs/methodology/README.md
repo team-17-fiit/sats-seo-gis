@@ -8,7 +8,7 @@ Plné znenie ide do príloh B–I záverečnej dokumentácie; tu je pracovná ve
 | B | Definition of Done | [definition-of-done.md](definition-of-done.md) |
 | C | Komunikácia | [communication.md](communication.md) |
 | D | Práca s úlohami | [tasks.md](tasks.md) |
-| E | Testovanie | [testing.md](testing.md) |
+| E | Testovanie | [testing.md](testing.md) – podrobnosti: [seo-checks.md](seo-checks.md), [performance-budgets.md](performance-budgets.md) |
 | F | Verziovanie | [../../CONTRIBUTING.md](../../CONTRIBUTING.md) |
 | G | Code review | [code-review.md](code-review.md) |
 

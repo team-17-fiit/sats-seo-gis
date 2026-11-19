@@ -8,7 +8,7 @@ export default function LangSwitch({ locale, kind, slug }: Props) {
   const other: Locale = locale === 'sk' ? 'en' : 'sk';
   return (
     <p className="lang-switch">
-      <Link href={pagePath(other, kind, slug)} hrefLang={HREFLANG[other]} lang={other} id="lang-switch">
+      <Link prefetch={false} href={pagePath(other, kind, slug)} hrefLang={HREFLANG[other]} lang={other} id="lang-switch">
         {T[locale].switchTo}
       </Link>
     </p>
