@@ -67,9 +67,12 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
         {image && (
           <figure className="place-image">
             {/* statický export: obrázok ide priamo z Commons, next/image by ho aj tak neoptimalizoval */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={image.src} alt={name} width={960} height={640} decoding="async" />
-            <figcaption className="note">
+            <picture>
+              {/* na mobile 500 px (LCP budget), na širšej obrazovke ostrejších 960 px */}
+              <source media="(min-width: 600px)" srcSet={poiImage(p, 960)?.src} />
+              <img src={image.src} alt={name} width={960} height={640} decoding="async" />
+            </picture>
+            <figcaption>
               {t.photo}{image.author && <>: {image.author}</>}
               {image.licence && (
                 <> · {image.licenceUrl
@@ -91,6 +94,8 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
           </dd>
           {p.elevation_m != null && (<><dt>{t.elevation}</dt><dd>{t.elevationValue(p.elevation_m)}</dd></>)}
           {p.protected_area && (<><dt>{t.protectedArea}</dt><dd>{p.protected_area}</dd></>)}
+          {p.heritage_area && (<><dt>{t.heritageArea}</dt><dd>{p.heritage_area}</dd></>)}
+          {p.opening_hours && (<><dt>{t.openingHours}</dt><dd>{p.opening_hours}</dd></>)}
           <dt>{t.coordinates}</dt>
           <dd>{p.lat.toFixed(4)} °N, {p.lon.toFixed(4)} °E {t.approx}</dd>
         </dl>
