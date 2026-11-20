@@ -40,6 +40,30 @@ export function alternatesFor(locale: Locale, kind: PageKind, slug?: string) {
 
 export const OG_LOCALE: Record<Locale, string> = { sk: 'sk_SK', en: 'en_GB' };
 
+export type PluralForms = { one: string; few?: string; other: string };
+
+const PLURAL_RULES: Record<Locale, Intl.PluralRules> = {
+  sk: new Intl.PluralRules('sk'),
+  en: new Intl.PluralRules('en'),
+};
+
+export function plural(locale: Locale, n: number, forms: PluralForms): string {
+  const category = PLURAL_RULES[locale].select(n);
+  const word = category === 'one' ? forms.one : category === 'few' ? (forms.few ?? forms.other) : forms.other;
+  return `${n} ${word}`;
+}
+
+const SK_STOPS: PluralForms = { one: 'zastávka', few: 'zastávky', other: 'zastávok' };
+const SK_TRAILS: PluralForms = { one: 'trasa', few: 'trasy', other: 'trás' };
+const SK_THEMATIC_TRAILS: PluralForms = { one: 'tematická trasa', few: 'tematické trasy', other: 'tematických trás' };
+const SK_PLACES: PluralForms = { one: 'miesto', few: 'miesta', other: 'miest' };
+const SK_PEAKS: PluralForms = { one: 'vrchol', few: 'vrcholy', other: 'vrcholov' };
+const EN_STOPS: PluralForms = { one: 'stop', other: 'stops' };
+const EN_TRAILS: PluralForms = { one: 'trail', other: 'trails' };
+const EN_THEMATIC_TRAILS: PluralForms = { one: 'thematic trail', other: 'thematic trails' };
+const EN_PLACES: PluralForms = { one: 'place', other: 'places' };
+const EN_PEAKS: PluralForms = { one: 'peak', other: 'peaks' };
+
 /** „A, B a C“ / „A, B a ďalších 2“ – zoznam trás v slovenskej vete. */
 function listSk(items: string[], more: number): string {
   const tail = more > 0 ? (more === 1 ? 'jednej ďalšej' : `ďalších ${more}`) : null;
@@ -56,6 +80,8 @@ function listEn(items: string[]): string {
 const sk = {
   langName: 'Slovensky',
   switchTo: 'English',
+  skipToContent: 'Preskočiť na obsah',
+  toggleTheme: 'Prepnúť svetlú / tmavú tému',
   homeTitle: 'Aktívny turizmus na Slovensku – mapa vrcholov a trás',
   homeDescription:
     'Interaktívna mapa vrcholov a tematických trás Slovenska pre turistov a cyklistov. Rýchla, prehľadná a otvorená.',
@@ -64,7 +90,7 @@ const sk = {
   mainNav: 'Hlavná navigácia',
   peaksMap: 'Mapa vrcholov',
   trailsHeading: 'Tematické trasy',
-  stops: (n: number) => `${n} zastávok`,
+  stops: (n: number) => plural('sk', n, SK_STOPS),
   peaksHeading: 'Najvyššie vrcholy',
   trailsTitle: 'Tematické trasy po Slovensku',
   trailsDescription:
@@ -89,7 +115,7 @@ const sk = {
   dataBy: (by: string, licence: string) => `Dáta: ${by} (${licence}). Podklad mapy © OpenStreetMap contributors.`,
   team: 'tím SATS-SEO-GIS',
   trailDescription: (summary: string, stops: number, difficulty: string) =>
-    `${summary} ${stops} zastávok, obťažnosť ${difficulty}.`,
+    `${summary} ${plural('sk', stops, SK_STOPS)}, obťažnosť ${difficulty}.`,
   type: 'Typ',
   elevation: 'Výška',
   elevationValue: (m: number) => `${m} m n. m.`,
@@ -107,10 +133,12 @@ const sk = {
   ogTrail: 'Tematická trasa',
   ogPeak: 'Vrchol',
   ogOnTrail: (trail: string) => `Na trase ${trail}`,
-  ogHome: (trails: number, places: number, peaks: number) => `${trails} tematických trás · ${places} miest · ${peaks} vrcholov`,
-  ogTrails: (trails: number, stops: number) => `${trails} trás · ${stops} zastávok po celom Slovensku`,
+  ogHome: (trails: number, places: number, peaks: number) =>
+    [plural('sk', trails, SK_THEMATIC_TRAILS), plural('sk', places, SK_PLACES), plural('sk', peaks, SK_PEAKS)].join(' · '),
+  ogTrails: (trails: number, stops: number) =>
+    `${plural('sk', trails, SK_TRAILS)} · ${plural('sk', stops, SK_STOPS)} po celom Slovensku`,
   ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
-    [km ? `~${km} km` : null, `${stops} zastávok`, `obťažnosť ${difficulty}`].filter(Boolean).join(' · '),
+    [km ? `~${km} km` : null, plural('sk', stops, SK_STOPS), `obťažnosť ${difficulty}`].filter(Boolean).join(' · '),
   ogElevation: (m: number) => `${m} m n. m.`,
   peakTitle: (name: string, m: number) => `${name} – vrchol, ${m} m n. m.`,
   peakDescription: (name: string, m: number) =>
@@ -132,6 +160,8 @@ export type Dict = typeof sk;
 const en: Dict = {
   langName: 'English',
   switchTo: 'Slovensky',
+  skipToContent: 'Skip to content',
+  toggleTheme: 'Switch light / dark theme',
   homeTitle: 'Active tourism in Slovakia – map of peaks and trails',
   homeDescription:
     'Interactive map of peaks and thematic trails in Slovakia for hikers and cyclists. Fast, clear and open.',
@@ -140,7 +170,7 @@ const en: Dict = {
   mainNav: 'Main navigation',
   peaksMap: 'Map of peaks',
   trailsHeading: 'Thematic trails',
-  stops: (n: number) => `${n} stops`,
+  stops: (n: number) => plural('en', n, EN_STOPS),
   peaksHeading: 'Highest peaks',
   trailsTitle: 'Thematic trails across Slovakia',
   trailsDescription:
@@ -165,7 +195,7 @@ const en: Dict = {
   dataBy: (by: string, licence: string) => `Data: ${by} (${licence}). Base map © OpenStreetMap contributors.`,
   team: 'SATS-SEO-GIS team',
   trailDescription: (summary: string, stops: number, difficulty: string) =>
-    `${summary} ${stops} stops, ${difficulty} difficulty.`,
+    `${summary} ${plural('en', stops, EN_STOPS)}, ${difficulty} difficulty.`,
   type: 'Type',
   elevation: 'Elevation',
   elevationValue: (m: number) => `${m} m a.s.l.`,
@@ -183,10 +213,12 @@ const en: Dict = {
   ogTrail: 'Thematic trail',
   ogPeak: 'Peak',
   ogOnTrail: (trail: string) => `On the ${trail} trail`,
-  ogHome: (trails: number, places: number, peaks: number) => `${trails} thematic trails · ${places} places · ${peaks} peaks`,
-  ogTrails: (trails: number, stops: number) => `${trails} trails · ${stops} stops across Slovakia`,
+  ogHome: (trails: number, places: number, peaks: number) =>
+    [plural('en', trails, EN_THEMATIC_TRAILS), plural('en', places, EN_PLACES), plural('en', peaks, EN_PEAKS)].join(' · '),
+  ogTrails: (trails: number, stops: number) =>
+    `${plural('en', trails, EN_TRAILS)} · ${plural('en', stops, EN_STOPS)} across Slovakia`,
   ogTrailFacts: (km: number | null, stops: number, difficulty: string) =>
-    [km ? `~${km} km` : null, `${stops} stops`, `${difficulty} difficulty`].filter(Boolean).join(' · '),
+    [km ? `~${km} km` : null, plural('en', stops, EN_STOPS), `${difficulty} difficulty`].filter(Boolean).join(' · '),
   ogElevation: (m: number) => `${m} m a.s.l.`,
   peakTitle: (name: string, m: number) => `${name} – peak, ${m} m a.s.l.`,
   peakDescription: (name: string, m: number) =>

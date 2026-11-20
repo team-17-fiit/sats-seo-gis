@@ -54,4 +54,21 @@ test('PWA manifest je dostupný a odkazovaný', async ({ page, request }) => {
   const manifest = await (await request.get('/manifest.webmanifest')).json();
   expect(manifest.display).toBe('standalone');
   expect(manifest.icons.length).toBeGreaterThanOrEqual(2);
+  for (const purpose of ['any', 'maskable']) {
+    for (const size of ['192x192', '512x512']) {
+      const icon = manifest.icons.find((i) => i.purpose === purpose && i.sizes === size);
+      expect(icon, `${purpose} ${size}`).toBeTruthy();
+      expect((await request.get(icon.src)).status()).toBe(200);
+    }
+  }
+});
+
+test('favicon a apple-touch-icon sú odkazované a dostupné (T3-03)', async ({ page, request }) => {
+  await page.goto('/');
+  const hrefs = [
+    await page.locator('link[rel="icon"][href*="favicon.ico"]').getAttribute('href'),
+    await page.locator('link[rel="icon"][type="image/svg+xml"]').getAttribute('href'),
+    await page.locator('link[rel="apple-touch-icon"]').getAttribute('href'),
+  ];
+  for (const href of hrefs) expect((await request.get(href)).status(), href).toBe(200);
 });

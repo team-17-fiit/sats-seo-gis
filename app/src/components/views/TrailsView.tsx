@@ -31,7 +31,8 @@ export default function TrailsView({ locale }: { locale: Locale }) {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
           name: t.trailsHeading,
-          inLanguage: locale,
+          url: SITE_URL + pagePath(locale, 'trails'),
+          numberOfItems: paths.length,
           itemListElement: paths.map((p, i) => ({
             '@type': 'ListItem',
             position: i + 1,
@@ -42,18 +43,18 @@ export default function TrailsView({ locale }: { locale: Locale }) {
       />
       <header className="top">
         <Stripes />
-        <p><Link href={pagePath(locale, 'home')}>{t.home}</Link></p>
+        <p><Link prefetch={false} href={pagePath(locale, 'home')}>{t.home}</Link></p>
         <LangSwitch locale={locale} kind="trails" />
         <h1>{t.trailsHeading}</h1>
         <p>{t.trailsLead}</p>
       </header>
-      <main>
+      <main id="main" tabIndex={-1}>
         <ul className="path-list" id="path-list">
           {paths.map((p) => {
             const summary = trailSummary(p, locale);
             return (
               <li key={p.slug} className="path-card" style={{ borderLeftColor: p.colour }}>
-                <h2><Link href={pagePath(locale, 'trail', p.slug)}>{trailName(p, locale)}</Link></h2>
+                <h2><Link prefetch={false} href={pagePath(locale, 'trail', p.slug)}>{trailName(p, locale)}</Link></h2>
                 <p className="path-meta">
                   {p.length_km ? `≈ ${p.length_km} km · ` : ''}
                   {t.stops(p.stops.length)} · {t.difficultyWord} {difficultyLabel(p.difficulty, locale)} · {t.pilot.toLowerCase()} {p.pilot_code}
