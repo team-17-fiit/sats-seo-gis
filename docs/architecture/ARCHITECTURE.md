@@ -56,6 +56,9 @@ Ostatné tabuľky (hranice krajov, GeoNames) sú pomocné. Celá schéma: `data/
 6. **Dlaždice** – `build_tiles` (`make tiles`) z nich cez tippecanoe vyrobí `data/processed/tiles/sats.pmtiles`
    s vrstvami `paths` a `pois`; atribúcia v dlaždiciach vymenúva licencie prvkov. tippecanoe nie je pre Windows,
    v Git Bash ho spusti cez WSL.
+   Pri nasadení (workflow Deploy) sa dlaždice vyrobia bez DB z exportu webu (`export_tiles --from-static`)
+   a uložia do `app/public/tiles/sats.pmtiles`; mapa na úvodnej stránke z nich kreslí trasy a miesta (T3-09).
+   Podkladová mapa je zatiaľ z OpenFreeMap. Lokálne a v CI súbor nie je a mapa kreslí len vrstvy z JSON.
 
 ## Spustenie s databázou (Git Bash, voliteľné)
 

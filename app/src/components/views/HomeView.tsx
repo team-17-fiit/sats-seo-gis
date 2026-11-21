@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import LangSwitch from '@/components/LangSwitch';
 import MapLoader from '@/components/MapLoader';
+import { TILES_URL } from '@/lib/site';
 import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
@@ -47,7 +48,15 @@ export default function HomeView({ locale }: { locale: Locale }) {
       </header>
       <main id="main" tabIndex={-1}>
         <section id="map-section" aria-label={t.peaksMap}>
-          <MapLoader texts={mapTexts(locale)} label={t.peaksMap} layers={[{ id: 'peaks', kind: 'points', color: '#c62828', data: peakLayer, cluster: true }]} />
+          <MapLoader
+            texts={mapTexts(locale)}
+            label={t.peaksMap}
+            layers={[
+              // trasy a miesta z vlastných dlaždíc (T3-09) pod vrcholmi, len ak ich nasadenie vyrobilo
+              ...(TILES_URL ? [{ id: 'sats', kind: 'tiles' as const, url: TILES_URL, color: '#1f4d3a' }] : []),
+              { id: 'peaks', kind: 'points', color: '#c62828', data: peakLayer, cluster: true },
+            ]}
+          />
         </section>
         <section className="paths-teaser">
           <h2>{t.trailsHeading}</h2>

@@ -54,3 +54,18 @@ describe('static projection', () => {
     expect(xBa).toBeLessThan(xKe);
   });
 });
+
+describe('vlastné dlaždice PMTiles (T3-09)', () => {
+  it('robí z relatívnej cesty absolútnu adresu pmtiles:// aj s podcestou GitHub Pages', async () => {
+    const { pmtilesSource } = await import('./pmtilesSource');
+    expect(pmtilesSource('/sats-seo-gis/tiles/sats.pmtiles', 'https://team-17-fiit.github.io/sats-seo-gis/trasy/'))
+      .toBe('pmtiles://https://team-17-fiit.github.io/sats-seo-gis/tiles/sats.pmtiles');
+    expect(pmtilesSource('/tiles/sats.pmtiles', 'http://localhost:3000/')).toBe('pmtiles://http://localhost:3000/tiles/sats.pmtiles');
+  });
+
+  it('adaptér dostane vrstvu dlaždíc s URL súboru', () => {
+    const map = new FakeMapAdapter();
+    map.addLayer({ id: 'sats', kind: 'tiles', url: '/tiles/sats.pmtiles', color: '#1f4d3a' });
+    expect(map.layers[0]).toMatchObject({ id: 'sats', kind: 'tiles', url: '/tiles/sats.pmtiles' });
+  });
+});

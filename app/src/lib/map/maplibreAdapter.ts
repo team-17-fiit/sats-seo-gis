@@ -1,13 +1,26 @@
 // MapLibre GL JS implementácia MapAdapter. Jediné miesto v aplikácii, ktoré importuje maplibre-gl.
 import maplibregl, { type GeoJSONSource } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { Protocol } from 'pmtiles';
 import { resolveClusterOptions } from './cluster';
-import { UNESCO_COLOR, type LayerSpec, type LngLat, type MapAdapter, type MapOptions, type Unsubscribe } from './types';
+import { pmtilesSource } from './pmtilesSource';
+import {
+  UNESCO_COLOR, type LayerSpec, type LngLat, type MapAdapter, type MapOptions, type TilesLayerSpec, type Unsubscribe,
+} from './types';
 
 const IS_UNESCO: maplibregl.ExpressionSpecification = ['==', ['get', 'unesco'], true];
 
-// Dočasný podklad (OSM, ODbL) – v šprinte 3-3Z ho nahradia vlastné PMTiles.
+// Podkladová mapa (OSM, ODbL) zatiaľ z OpenFreeMap; vlastné PMTiles nesú naše vrstvy trás a miest (T3-09).
 export const DEFAULT_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
+
+// pmtiles:// URL čítajú dlaždice priamo zo súboru .pmtiles cez HTTP Range – bez dlaždicového servera.
+let pmtilesRegistered = false;
+function registerPmtiles(): void {
+  if (pmtilesRegistered) return;
+  maplibregl.addProtocol('pmtiles', new Protocol().tile);
+  pmtilesRegistered = true;
+}
+
 
 export class MapLibreAdapter implements MapAdapter {
   readonly kind = 'maplibre' as const;
@@ -70,6 +83,10 @@ export class MapLibreAdapter implements MapAdapter {
   private applyLayer(spec: LayerSpec): void {
     const map = this.map;
     if (!map) return;
+    if (spec.kind === 'tiles') {
+      this.addTilesLayers(spec);
+      return;
+    }
     const cluster = spec.kind === 'points' ? resolveClusterOptions(spec.cluster) : null;
     map.addSource(spec.id, {
       type: 'geojson',
@@ -111,6 +128,50 @@ export class MapLibreAdapter implements MapAdapter {
     });
     map.on('mouseenter', spec.id, () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', spec.id, () => { map.getCanvas().style.cursor = ''; });
+  }
+
+  /**
+   * Trasy a miesta z vlastných dlaždíc: čiara trasy vo farbe jej značenia (vlastnosť `colour`) s bielym lemom,
+   * miesto ako kruh – vlajkové (tier 1) väčšie, UNESCO s jantárovým okrajom ako pri zastávkach.
+   */
+  private addTilesLayers(spec: TilesLayerSpec): void {
+    const map = this.map;
+    if (!map) return;
+    registerPmtiles();
+    map.addSource(spec.id, { type: 'vector', url: pmtilesSource(spec.url) });
+
+    const layout = { 'line-cap': 'round', 'line-join': 'round' } as const;
+    const pathsId = `${spec.id}-paths`;
+    const poisId = `${spec.id}-pois`;
+    map.addLayer({ id: `${pathsId}-casing`, type: 'line', source: spec.id, 'source-layer': 'paths', layout,
+      paint: { 'line-color': '#fff', 'line-width': 6 } });
+    map.addLayer({ id: pathsId, type: 'line', source: spec.id, 'source-layer': 'paths', layout,
+      paint: { 'line-color': ['coalesce', ['get', 'colour'], spec.color], 'line-width': 3 } });
+    map.addLayer({
+      id: poisId,
+      type: 'circle',
+      source: spec.id,
+      'source-layer': 'pois',
+      paint: {
+        'circle-radius': ['case', ['==', ['get', 'tier'], 1], 6, 4],
+        'circle-color': spec.color,
+        'circle-stroke-width': ['case', IS_UNESCO, 3, 1.5],
+        'circle-stroke-color': ['case', IS_UNESCO, UNESCO_COLOR, '#fff'],
+      },
+    });
+
+    for (const id of [pathsId, poisId]) {
+      map.on('click', id, (e) => {
+        const props = e.features?.[0]?.properties as { slug?: string; name_sk?: string; name_en?: string } | undefined;
+        if (!props) return;
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'sk';
+        const name = (lang === 'en' ? props.name_en : props.name_sk) ?? props.name_sk ?? '';
+        new maplibregl.Popup().setLngLat(e.lngLat).setText(name).addTo(map);
+        if (id === poisId && props.slug) this.clickHandlers.forEach((cb) => cb(props.slug as string));
+      });
+      map.on('mouseenter', id, () => { map.getCanvas().style.cursor = 'pointer'; });
+      map.on('mouseleave', id, () => { map.getCanvas().style.cursor = ''; });
+    }
   }
 
   /** Zhluk = kruh veľkosti podľa počtu bodov + číslo; klik priblíži mapu, kým sa zhluk nerozpadne. */
