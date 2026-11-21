@@ -63,8 +63,12 @@ main{max-width:var(--page-width);margin:0 auto;padding:0 var(--space-3) var(--sp
 .facts dt{font-weight:600}
 .facts dd{margin:0}
 .place-image{margin:var(--space-3) 0}
-.place-image img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;background:var(--color-surface);border:1px solid var(--color-line)}
-.place-image figcaption{margin-top:var(--space-1)}
+.place-image summary{display:inline-block;list-style:none;font-weight:600;padding:.6rem 1rem;background:var(--color-forest);color:var(--color-on-forest);cursor:pointer}
+.place-image summary::-webkit-details-marker{display:none}
+.place-image details[open] summary .show,.place-image details:not([open]) summary .hide{display:none}
+.place-image summary:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
+.place-image img{display:block;margin-top:var(--space-2);width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;background:var(--color-surface);border:1px solid var(--color-line)}
+.place-image figcaption{margin-top:var(--space-1);font-size:var(--text-sm)}
 .stops li{margin:.2rem 0}
 .badge{margin-left:var(--space-2);padding:0 .4rem;font-size:var(--text-xs);font-weight:700;border:1px solid currentColor;border-radius:var(--radius-sm)}
 .note,.muted{opacity:.75;font-size:var(--text-sm)}

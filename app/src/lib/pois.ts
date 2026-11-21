@@ -130,21 +130,26 @@ export function getPoi(slug: string): Poi | undefined {
   return getPois().find((p) => p.slug === slug);
 }
 
-/** Meta description: kurátorský opis, ak existuje, inak veta poskladaná z faktov. */
+/** Meta description: kurátorský opis, ak je dosť dlhý, inak veta poskladaná z faktov (s krátkym opisom na začiatku). */
 export function poiDescription(p: Poi, pathNames: string[] = [], locale: Locale = 'sk'): string {
   const curated = locale === 'en' ? p.description_en : p.description_sk;
-  if (curated) return curated;
+  if (curated && curated.length >= DESCRIPTION_MIN) return curated;
   const t = T[locale];
+  // Krátky opis z Wikidata („hrad na Slovensku“) by SEO kontrola odmietla (dĺžka, duplicita) – ide pred vetu z faktov.
+  const lead = curated ? `${curated[0].toUpperCase()}${curated.slice(1)}. ` : '';
   const build = (shown: number) =>
-    t.placeFallback(poiName(p, locale), categoryLabel(p.category, locale), p.unesco, pathNames.slice(0, shown), pathNames.length - shown);
-  // Miesto na veľa trasách: vymenujeme len toľko trás, aby opis neprekročil 160 znakov (Google ho inak skráti).
+    lead + t.placeFallback(poiName(p, locale), categoryLabel(p.category, locale), p.unesco, pathNames.slice(0, shown), pathNames.length - shown);
+  // Miesto na veľa trasách: vymenujeme len toľko trás, aby opis neprekročil 160 znakov (Google ho inak skráti);
+  // ak sa nezmestí ani jedna, veta o trasách vypadne (trasy sú na stránke v zozname „Na trasách“).
   let shown = pathNames.length;
-  while (shown > 1 && build(shown).length > DESCRIPTION_MAX) shown--;
+  while (shown > 0 && build(shown).length > DESCRIPTION_MAX) shown--;
   const base = build(shown);
   // Krátky opis Google často nahradí náhodným výrezom stránky (SEO audit T3-21) – doplníme, čo stránka ponúka.
   return base.length < FALLBACK_MIN ? `${base} ${t.placeMore}` : base;
 }
 
+/** Najkratšia description, ktorú SEO kontrola pripustí (description-length). */
+export const DESCRIPTION_MIN = 70;
 /** Pod túto dĺžku sa poskladaný opis miesta doplní o vetu o obsahu stránky. */
 export const FALLBACK_MIN = 100;
 /** Dĺžka, nad ktorú Google meta description skracuje (SEO kontrola: description-length). */
@@ -173,7 +178,8 @@ export type PoiImage = {
   licenceUrl: string | null;
 };
 
-const IMAGE_WIDTH = 960;
+// 500 px (štandardná veľkosť náhľadu Commons): 960 px má ~230 kB a na mobile (Slow 4G) prekročí LCP budget.
+const IMAGE_WIDTH = 500;
 
 /** Obrázok miesta z Wikimedia Commons (T3-13) alebo null, ak ho miesto nemá alebo URL nie je z Commons. */
 export function poiImage(p: Poi, width = IMAGE_WIDTH): PoiImage | null {

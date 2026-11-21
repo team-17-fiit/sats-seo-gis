@@ -44,13 +44,18 @@ describe('pois helpers', () => {
   });
 
   it('prefers curated description, otherwise builds one from facts', () => {
-    expect(poiDescription({ ...sample, description_sk: 'Opis.' })).toBe('Opis.');
+    const curated = 'Zrúcanina hradu nad sútokom Moravy a Dunaja, jeden z najstarších hradov na Slovensku.';
+    expect(poiDescription({ ...sample, description_sk: curated })).toBe(curated);
+    // krátky opis z Wikidata ide pred vetu z faktov
+    expect(poiDescription({ ...sample, description_sk: 'zrúcanina hradu' }, ['Hlavná os'])).toBe(
+      'Zrúcanina hradu. Devín – hrad na Slovensku. Zastávka na trase Hlavná os. Poloha na mape, súradnice a súvisiace trasy.',
+    );
     expect(poiDescription({ ...sample, unesco: true }, ['Hlavná os'])).toBe(
       'Devín – hrad na Slovensku, pamiatka UNESCO. Zastávka na trase Hlavná os. Poloha na mape, súradnice a súvisiace trasy.',
     );
   });
 
-  it('extends a short generated description (SEO audit: min. 70 characters), never a curated one', () => {
+  it('extends a short generated description (SEO audit: min. 70 characters)', () => {
     const long = ['Malokarpatská vínna cesta', 'Cesta Márie', 'Považská hradná cesta'];
     const short = poiDescription(sample);
     expect(short.length).toBeGreaterThanOrEqual(70);
@@ -59,7 +64,6 @@ describe('pois helpers', () => {
     const plain = poiDescription({ ...sample, unesco: true }, long);
     expect(plain.length).toBeGreaterThanOrEqual(FALLBACK_MIN);
     expect(plain).not.toContain('Poloha na mape');
-    expect(poiDescription({ ...sample, description_sk: 'Krátky opis.' })).toBe('Krátky opis.');
   });
 
   it('uses plural for several trails and lists only as many as fit into 160 characters', () => {
@@ -134,7 +138,7 @@ describe('poi image (T3-13)', () => {
 
   it('builds an https thumbnail and the Commons file page', () => {
     expect(poiImage(withImage)).toEqual({
-      src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hrad_Dev%C3%ADn.jpg?width=960',
+      src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hrad_Dev%C3%ADn.jpg?width=500',
       page: 'https://commons.wikimedia.org/wiki/File:Hrad_Dev%C3%ADn.jpg',
       author: 'Ján Novák',
       licence: 'CC BY-SA 4.0',
