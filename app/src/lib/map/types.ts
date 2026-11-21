@@ -5,8 +5,11 @@ export type LngLat = [lon: number, lat: number];
 
 export type PointFeature = {
   type: 'Feature';
-  /** `unesco` = zastávka ⋆ zo Zoznamu svetového dedičstva (kap. 4.6) – kreslí sa zvýraznená. */
-  properties: { id: string; name: string; label?: string; unesco?: boolean };
+  /**
+   * `unesco` = zastávka ⋆ zo Zoznamu svetového dedičstva (kap. 4.6) – kreslí sa zvýraznená.
+   * `color` = farba bodu podľa skupiny kategórie (T3-10); bez nej sa použije farba vrstvy.
+   */
+  properties: { id: string; name: string; label?: string; unesco?: boolean; color?: string };
   geometry: { type: 'Point'; coordinates: LngLat };
 };
 

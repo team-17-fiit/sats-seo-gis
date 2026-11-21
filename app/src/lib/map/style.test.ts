@@ -41,3 +41,16 @@ describe('štýl mapy (T3-10)', () => {
     expect(expr.at(-1)).toBe(poiGroupOf('ufo').color);
   });
 });
+
+describe('farby bodov na stránkach trás a miest (T3-10)', () => {
+  it('zastávky trasy a bod miesta nesú farbu skupiny svojej kategórie', async () => {
+    const { getPaths, stopsToGeoJSON } = await import('../paths');
+    const { getPois, poiToGeoJSON } = await import('../pois');
+    const [trail] = getPaths();
+    for (const [i, f] of stopsToGeoJSON(trail).features.entries()) {
+      expect(f.properties.color).toBe(poiGroupOf(trail.stops[i].category).color);
+    }
+    const [poi] = getPois();
+    expect(poiToGeoJSON(poi).features[0].properties.color).toBe(poiGroupOf(poi.category).color);
+  });
+});

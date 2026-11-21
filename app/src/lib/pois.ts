@@ -1,6 +1,7 @@
 // Miesta (POI) tieru T1 pre SSG stránky /miesta/<slug>/ (T2-10, US-1b).
 // Zdroj: public/data/pois.json, ktorý vyrába `python -m pipelines.export_static` (z PostGIS alebo --from-seed).
 // Číta sa len pri builde. Polia opisu, výšky a Wikidata sú zatiaľ prázdne – doplní ich T2-05 / T2-07.
+import { poiGroupOf } from './map/style';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pagePath, pick, T, type Locale } from './i18n';
@@ -155,7 +156,7 @@ export function poiToGeoJSON(p: Poi, locale: Locale = 'sk'): FeatureCollection<P
     features: [
       {
         type: 'Feature',
-        properties: { id: p.slug, name: poiName(p, locale) },
+        properties: { id: p.slug, name: poiName(p, locale), color: poiGroupOf(p.category).color },
         geometry: { type: 'Point', coordinates: [p.lon, p.lat] },
       },
     ],

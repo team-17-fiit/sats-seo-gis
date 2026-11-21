@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
+import { poiGroupOf } from '@/lib/map/style';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
@@ -101,7 +102,9 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
             label={t.placeMap(name)}
             center={[p.lon, p.lat]}
             zoom={13}
-            layers={[{ id: 'poi', kind: 'points', color: paths[0]?.colour ?? '#1f4d3a', data: poiToGeoJSON(p, locale) }]}
+            layers={[{ id: 'poi', kind: 'points', color: poiGroupOf(p.category).color, data: poiToGeoJSON(p, locale) }]}
+            // legenda (T3-10): farba bodu = skupina kategórie, rovnaká ako na úvodnej mape a pri trasách
+            legend={[{ label: t.legendGroups[poiGroupOf(p.category).id], color: poiGroupOf(p.category).color, kind: 'point' as const }]}
           />
         </section>
 

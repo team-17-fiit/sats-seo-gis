@@ -114,7 +114,7 @@ export class MapLibreAdapter implements MapAdapter {
       // UNESCO zastávka (⋆): väčší kruh s jantárovým okrajom
       paint: {
         'circle-radius': ['case', IS_UNESCO, 9, 7],
-        'circle-color': spec.color,
+        'circle-color': ['coalesce', ['get', 'color'], spec.color],
         'circle-stroke-width': ['case', IS_UNESCO, 3, 2],
         'circle-stroke-color': ['case', IS_UNESCO, UNESCO_COLOR, '#fff'],
       },

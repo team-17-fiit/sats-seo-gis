@@ -1,5 +1,6 @@
 // Tematické trasy pre SSG. Zdroj: public/data/paths.json, ktorý vyrába `python -m pipelines.export_static`
 // (z PostGIS, alebo s --from-seed bez databázy). Číta sa len pri builde.
+import { poiGroupOf } from './map/style';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pick, type Locale } from './i18n';
@@ -91,7 +92,7 @@ export function stopsToGeoJSON(p: TrailPath): FeatureCollection<PointFeature> {
     type: 'FeatureCollection',
     features: p.stops.map((s) => ({
       type: 'Feature',
-      properties: { id: s.slug, name: s.name_sk, label: `${s.seq}. ${s.unesco ? '⋆ ' : ''}${s.name_sk}`, unesco: s.unesco },
+      properties: { id: s.slug, name: s.name_sk, label: `${s.seq}. ${s.unesco ? '⋆ ' : ''}${s.name_sk}`, unesco: s.unesco, color: poiGroupOf(s.category).color },
       geometry: { type: 'Point', coordinates: [s.lon, s.lat] },
     })),
   };
