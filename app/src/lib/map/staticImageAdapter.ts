@@ -59,14 +59,14 @@ export class StaticImageAdapter implements MapAdapter {
     }
     const points: ScreenPoint[] = (spec.data as FeatureCollection<PointFeature>).features.map((f) => {
       const [x, y] = project(f.geometry.coordinates, this.bounds);
-      return { id: f.properties.id, x, y, label: f.properties.label ?? f.properties.name, unesco: f.properties.unesco };
+      return { id: f.properties.id, x, y, label: f.properties.label ?? f.properties.name, unesco: f.properties.unesco, color: f.properties.color };
     });
     // Polomer v jednotkách viewBoxu (1000 × 600) ≈ pixely pri bežnej šírke mapy.
     const cluster = resolveClusterOptions(spec.cluster);
     const groups = cluster ? clusterPoints(points, cluster.radius) : points.map((p) => ({ ...p, count: 1, members: [p] }));
 
     for (const g of groups) {
-      if (g.count === 1) this.drawPoint(this.svg, g.members[0], spec.color);
+      if (g.count === 1) this.drawPoint(this.svg, g.members[0], g.members[0].color ?? spec.color);
       else this.drawCluster(this.svg, g, spec.color);
     }
   }

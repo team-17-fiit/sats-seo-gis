@@ -41,6 +41,9 @@ main{max-width:var(--page-width);margin:0 auto;padding:0 var(--space-3) var(--sp
 .map-legend li{display:flex;align-items:center;gap:var(--space-2)}
 .map-legend-line{width:24px;height:4px;border-radius:2px;box-shadow:0 0 0 1.5px #fff}
 .map-legend-unesco{width:14px;height:14px;border-radius:50%;border:3px solid #ffb300}
+.map-legend-point{width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 1.5px #fff}
+/* popup MapLibre má biele pozadie aj v tmavej téme – text musí byť tmavý (T3-10) */
+.maplibregl-popup-content{color:#14221b}
 #load-map{font:inherit;font-weight:600;padding:.8rem 1.2rem;border:0;background:var(--color-forest);color:var(--color-on-forest);cursor:pointer}
 #load-map:disabled{cursor:progress}
 #load-map:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}

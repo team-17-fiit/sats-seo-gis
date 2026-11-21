@@ -9,6 +9,7 @@ import Stripes from '@/components/Stripes';
 import { alternatesFor, mapTexts, pagePath, T, type Locale } from '@/lib/i18n';
 import { socialMetadata } from '@/lib/og';
 import type { FeatureCollection, PointFeature } from '@/lib/map';
+import { PEAK_COLOR, POI_GROUPS } from '@/lib/map/style';
 import { getPaths, trailName } from '@/lib/paths';
 import { getPeaks } from '@/lib/peaks';
 
@@ -54,7 +55,19 @@ export default function HomeView({ locale }: { locale: Locale }) {
             layers={[
               // trasy a miesta z vlastných dlaždíc (T3-09) pod vrcholmi, len ak ich nasadenie vyrobilo
               ...(TILES_URL ? [{ id: 'sats', kind: 'tiles' as const, url: TILES_URL, color: '#1f4d3a' }] : []),
-              { id: 'peaks', kind: 'points', color: '#c62828', data: peakLayer, cluster: true },
+              { id: 'peaks', kind: 'points', color: PEAK_COLOR, data: peakLayer, cluster: true },
+            ]}
+            // legenda (T3-10): vrcholy vždy; trasy (farba čiary), skupiny miest a UNESCO len keď mapa
+            // kreslí trasy a miesta z dlaždíc
+            legend={[
+              ...(TILES_URL ? paths.map((p) => ({ label: trailName(p, locale), color: p.colour })) : []),
+              { label: t.legendPeaks, color: PEAK_COLOR, kind: 'point' as const },
+              ...(TILES_URL
+                ? [
+                    ...POI_GROUPS.map((g) => ({ label: t.legendGroups[g.id], color: g.color, kind: 'point' as const })),
+                    { label: `⋆ ${t.unescoTitle}`, color: '#fff', unesco: true },
+                  ]
+                : []),
             ]}
           />
         </section>

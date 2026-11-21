@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import JsonLd from '@/components/JsonLd';
 import LangSwitch from '@/components/LangSwitch';
+import { POI_GROUPS, poiGroupOf } from '@/lib/map/style';
 import MapLoader from '@/components/MapLoader';
 import NearbyPois from '@/components/NearbyPois';
 import Stripes from '@/components/Stripes';
@@ -94,9 +95,15 @@ export default function TrailView({ locale, path }: { locale: Locale; path: Trai
               { id: 'path-line', kind: 'line', color: p.colour, dataUrl: withBasePath(`/geo/trasy/${p.slug}.json`) },
               { id: 'path-stops', kind: 'points', color: p.colour, data: stopsToGeoJSON(localizeStops(p, locale)), cluster: true },
             ]}
+            // legenda (T3-10): čiara trasy, skupiny zastávok podľa kategórie (len tie, čo na trase sú), UNESCO
             legend={[
               { label: name, color: p.colour },
-              ...(p.stops.some((s) => s.unesco) ? [{ label: `⋆ ${t.unescoTitle}`, color: p.colour, unesco: true }] : []),
+              ...POI_GROUPS.filter((g) => p.stops.some((s) => poiGroupOf(s.category).id === g.id)).map((g) => ({
+                label: t.legendGroups[g.id],
+                color: g.color,
+                kind: 'point' as const,
+              })),
+              ...(p.stops.some((s) => s.unesco) ? [{ label: `⋆ ${t.unescoTitle}`, color: '#fff', unesco: true }] : []),
             ]}
           />
           <p className="note">{t.trailGeometryNote}</p>
