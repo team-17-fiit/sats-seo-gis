@@ -43,7 +43,8 @@ export class StaticImageAdapter implements MapAdapter {
   }
 
   addLayer(spec: LayerSpec): void {
-    if (!this.svg || typeof spec.data === 'string') return; // URL dáta static adapter nesťahuje
+    // vektorové dlaždice bez WebGL nekreslíme; URL dáta static adapter nesťahuje
+    if (!this.svg || spec.kind === 'tiles' || typeof spec.data === 'string') return;
     if (spec.kind === 'line') {
       for (const f of spec.data.features) {
         const pts = f.geometry.coordinates.map((c) => project(c, this.bounds).join(',')).join(' ');

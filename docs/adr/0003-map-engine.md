@@ -28,6 +28,8 @@ MapLibre GL JS. Aplikácia **nikdy** neimportuje MapLibre priamo – iba rozhran
 - `FakeMapAdapter` – unit testy.
 
 Dlaždice: dočasne OpenFreeMap štýl; v 3-3Z vlastné PMTiles (tippecanoe, z5–z15) z PostGIS.
+Stav 3-3Z (T3-08, T3-09): vlastné PMTiles nesú naše vrstvy trás a miest a MapLibre ich číta cez protokol
+`pmtiles://` (HTTP Range, bez dlaždicového servera); podkladová mapa zostáva z OpenFreeMap.
 
 ## Dôsledky
 

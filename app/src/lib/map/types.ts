@@ -27,9 +27,17 @@ export type FeatureCollection<F> = { type: 'FeatureCollection'; features: F[] };
  */
 export type ClusterSpec = boolean | { radius?: number; maxZoom?: number };
 
+/**
+ * Vlastné vektorové dlaždice PMTiles (T3-09, ADR-0003) s vrstvami `paths` (čiary trás vo farbe `colour`)
+ * a `pois` (miesta, `tier` 1–3, `unesco`). `url` je cesta k súboru .pmtiles na tom istom webe.
+ * Vlastnosti prvkov sú rovnaké ako v marts.mart_tiles (migrácia 010).
+ */
+export type TilesLayerSpec = { id: string; kind: 'tiles'; url: string; color: string };
+
 export type LayerSpec =
   | { id: string; kind: 'points'; color: string; data: FeatureCollection<PointFeature> | string; cluster?: ClusterSpec }
-  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> };
+  | { id: string; kind: 'line'; color: string; data: FeatureCollection<LineFeature> }
+  | TilesLayerSpec;
 
 export type MapOptions = {
   center: LngLat;

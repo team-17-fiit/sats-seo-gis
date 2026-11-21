@@ -64,6 +64,38 @@ jobs:
       - name: Install
         run: npm ci
 
+      # Vlastné vektorové dlaždice (T3-09): trasy a miesta z exportu webu -> app/public/tiles/sats.pmtiles.
+      # tippecanoe nie je v apt, zostaví sa zo zdrojov raz a potom sa berie z cache.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: tippecanoe z cache
+        id: tippecanoe
+        uses: actions/cache@v4
+        with:
+          path: ~/tippecanoe
+          key: tippecanoe-2.79.0-${{ runner.os }}
+
+      - name: Zostaviť tippecanoe
+        if: steps.tippecanoe.outputs.cache-hit != 'true'
+        working-directory: ${{ runner.temp }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq libsqlite3-dev zlib1g-dev
+          git clone --depth 1 --branch 2.79.0 https://github.com/felt/tippecanoe.git
+          make -C tippecanoe -j"$(nproc)" tippecanoe
+          mkdir -p ~/tippecanoe && cp tippecanoe/tippecanoe ~/tippecanoe/
+
+      - name: Vlastné dlaždice PMTiles
+        working-directory: backend
+        run: |
+          export TIPPECANOE="$HOME/tippecanoe/tippecanoe"
+          python -m pipelines.export_tiles --from-static
+          python -m pipelines.build_tiles
+          mkdir -p ../app/public/tiles
+          cp ../data/processed/tiles/sats.pmtiles ../app/public/tiles/
+          echo "NEXT_PUBLIC_TILES=1" >> "$GITHUB_ENV"
+
       - name: Build (statický export)
         run: npm run build
 

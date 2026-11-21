@@ -8,6 +8,10 @@ export const SITE_NAME = 'SATS-SEO-GIS';
 export const BASE_PATH = (process.env.NEXT_PUBLIC_BASE_PATH ?? '').replace(/\/$/, '');
 export const withBasePath = (path: string): string => `${BASE_PATH}${path}`;
 
+// Vlastné dlaždice PMTiles (T3-09): vyrába ich workflow Deploy a nastaví NEXT_PUBLIC_TILES=1.
+// Lokálne a v CI súbor nie je, mapa vtedy kreslí len vrstvy z JSON ako doteraz.
+export const TILES_URL = process.env.NEXT_PUBLIC_TILES === '1' ? withBasePath('/tiles/sats.pmtiles') : null;
+
 export type SiteVerification = { google?: string; other?: Record<string, string> };
 
 export function siteVerification(google?: string, bing?: string): SiteVerification | undefined {
