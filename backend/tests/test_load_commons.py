@@ -20,6 +20,8 @@ def test_file_title_from_image_url():
 def test_plain_text_strips_html_from_artist():
     assert plain_text('<a href="//commons.wikimedia.org/wiki/User:Doko">Doko</a> Ing. Jozef') == "Doko Ing. Jozef"
     assert plain_text("&amp;  ") == "&"
+    assert plain_text('was <a href="x">Jurbox</a> at <a href="y">Wikipedia</a>.') == "was Jurbox at Wikipedia."
+    assert plain_text('<a href="x">Jojo</a>, <a href="y">en:Jojo_1</a>') == "Jojo, en:Jojo_1"
     assert plain_text("") is None and plain_text(None) is None
 
 

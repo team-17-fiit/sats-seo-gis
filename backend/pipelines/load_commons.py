@@ -38,7 +38,7 @@ def plain_text(value: str | None) -> str | None:
     """Pole Artist je HTML (odkaz na používateľa) – pre atribúciu stačí čistý text."""
     if not value:
         return None
-    text = " ".join(html.unescape(re.sub(r"<[^>]+>", " ", value)).split())
+    text = " ".join(html.unescape(re.sub(r"<[^>]+>", "", value)).split())
     return text or None
 
 

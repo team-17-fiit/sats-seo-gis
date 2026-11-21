@@ -65,23 +65,28 @@ export default function PlaceView({ locale, poi: p }: { locale: Locale; poi: Poi
       </header>
       <main id="main" tabIndex={-1}>
         {image && (
-          <figure className="place-image">
-            {/* statický export: obrázok ide priamo z Commons, next/image by ho aj tak neoptimalizoval */}
-            <picture>
-              {/* na mobile 500 px (LCP budget), na širšej obrazovke ostrejších 960 px */}
-              <source media="(min-width: 600px)" srcSet={poiImage(p, 960)?.src} />
-              <img src={image.src} alt={name} width={960} height={640} decoding="async" />
-            </picture>
-            <figcaption>
-              {t.photo}{image.author && <>: {image.author}</>}
-              {image.licence && (
-                <> · {image.licenceUrl
-                  ? <a href={image.licenceUrl} rel="license noopener noreferrer">{image.licence}</a>
-                  : image.licence}</>
-              )}
-              {' · '}<a href={image.page} rel="noopener noreferrer">Wikimedia Commons</a>
-            </figcaption>
-          </figure>
+          // Foto sa načíta až po rozbalení: lazy obrázok v zatvorenom <details> prehliadač nesťahuje, takže pri
+          // načítaní stránky nejde žiadna požiadavka na Wikimedia (cookies tretej strany – Lighthouse best practices).
+          <details className="place-image">
+            <summary><span className="show">{t.showPhoto}</span><span className="hide">{t.hidePhoto}</span></summary>
+            <figure>
+              {/* statický export: obrázok ide priamo z Commons, next/image by ho aj tak neoptimalizoval */}
+              <picture>
+                {/* na mobile 500 px, na širšej obrazovke ostrejších 960 px */}
+                <source media="(min-width: 600px)" srcSet={poiImage(p, 960)?.src} />
+                <img src={image.src} alt={name} width={960} height={640} loading="lazy" decoding="async" />
+              </picture>
+              <figcaption>
+                {t.photo}{image.author && <>: {image.author}</>}
+                {image.licence && (
+                  <> · {image.licenceUrl
+                    ? <a href={image.licenceUrl} rel="license noopener noreferrer">{image.licence}</a>
+                    : image.licence}</>
+                )}
+                {' · '}<a href={image.page} rel="noopener noreferrer">Wikimedia Commons</a>
+              </figcaption>
+            </figure>
+          </details>
         )}
 
         <p>{poiDescription(p, paths.map((x) => x.name_sk), locale)}</p>
