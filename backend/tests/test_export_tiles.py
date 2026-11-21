@@ -56,3 +56,51 @@ def test_mart_tiles_holds_only_public_content(db_url):
         assert cur.fetchone()[0] == 0
         cur.execute("SELECT count(*) FROM marts.mart_tiles WHERE licence = 'PROPRIETARY'")
         assert cur.fetchone()[0] == 0
+
+
+def test_static_rows_match_mart_shape():
+    from pipelines.export_tiles import static_rows
+
+    paths = [
+        {
+            "slug": "cesta-marie",
+            "name_sk": "Cesta Márie",
+            "name_en": "Way of Mary",
+            "colour": "#1565c0",
+            "theme": "pilgrim",
+            "licence": "CC-BY-4.0",
+            "segments": [[[17.1, 48.1], [17.2, 48.2]], [[17.2, 48.2]]],
+        }
+    ]
+    pois = [
+        {
+            "slug": "devin",
+            "name_sk": "Devín",
+            "name_en": "Devín",
+            "category": "castle",
+            "tier": 1,
+            "unesco": False,
+            "lat": 48.17,
+            "lon": 16.98,
+            "licence": "CC-BY-4.0",
+        }
+    ]
+    rows = static_rows(paths, pois)
+    # segment s jediným bodom nie je čiara – vynechá sa
+    assert [r[0] for r in rows] == ["paths", "pois"]
+    layer, props, licence, tier, geojson = rows[0]
+    assert set(props) == {"slug", "name_sk", "name_en", "colour", "theme"} and tier is None
+    assert json.loads(geojson)["type"] == "LineString"
+    layer, props, licence, tier, geojson = rows[1]
+    assert set(props) == {"slug", "name_sk", "name_en", "category", "tier", "unesco"}
+    assert tier == 1 and json.loads(geojson)["coordinates"] == [16.98, 48.17]
+    assert feature(props, licence, tier, json.loads(geojson))["tippecanoe"] == {"minzoom": MINZOOM[1]}
+
+
+def test_static_export_of_the_committed_web_data(tmp_path):
+    from pipelines.export_tiles import STATIC_DIR, static_rows
+
+    paths = json.loads((STATIC_DIR / "paths.json").read_text(encoding="utf-8"))
+    pois = json.loads((STATIC_DIR / "pois.json").read_text(encoding="utf-8"))
+    counts = write_layers(static_rows(paths, pois), tmp_path)
+    assert counts["paths"] > 0 and counts["pois"] == len(pois)

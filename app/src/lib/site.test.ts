@@ -57,3 +57,20 @@ describe('siteVerification', () => {
     expect(SITE_VERIFICATION).toEqual({ google: 'z-env' });
   });
 });
+
+describe('TILES_URL', () => {
+  it('bez vyrobených dlaždíc (lokálne, CI) je null – mapa kreslí len JSON vrstvy', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_TILES', '');
+    const { TILES_URL } = await import('./site');
+    expect(TILES_URL).toBeNull();
+  });
+
+  it('pri nasadení ukazuje na súbor pod podcestou webu', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_TILES', '1');
+    vi.stubEnv('NEXT_PUBLIC_BASE_PATH', '/sats-seo-gis');
+    const { TILES_URL } = await import('./site');
+    expect(TILES_URL).toBe('/sats-seo-gis/tiles/sats.pmtiles');
+  });
+});
