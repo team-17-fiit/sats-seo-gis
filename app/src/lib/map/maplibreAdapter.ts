@@ -4,6 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Protocol } from 'pmtiles';
 import { resolveClusterOptions } from './cluster';
 import { pmtilesSource } from './pmtilesSource';
+import { poiColorExpression } from './style';
 import {
   UNESCO_COLOR, type LayerSpec, type LngLat, type MapAdapter, type MapOptions, type TilesLayerSpec, type Unsubscribe,
 } from './types';
@@ -113,7 +114,7 @@ export class MapLibreAdapter implements MapAdapter {
       // UNESCO zastávka (⋆): väčší kruh s jantárovým okrajom
       paint: {
         'circle-radius': ['case', IS_UNESCO, 9, 7],
-        'circle-color': spec.color,
+        'circle-color': ['coalesce', ['get', 'color'], spec.color],
         'circle-stroke-width': ['case', IS_UNESCO, 3, 2],
         'circle-stroke-color': ['case', IS_UNESCO, UNESCO_COLOR, '#fff'],
       },
@@ -154,7 +155,8 @@ export class MapLibreAdapter implements MapAdapter {
       'source-layer': 'pois',
       paint: {
         'circle-radius': ['case', ['==', ['get', 'tier'], 1], 6, 4],
-        'circle-color': spec.color,
+        // farba podľa skupiny kategórie (T3-10, lib/map/style.ts)
+        'circle-color': poiColorExpression() as maplibregl.ExpressionSpecification,
         'circle-stroke-width': ['case', IS_UNESCO, 3, 1.5],
         'circle-stroke-color': ['case', IS_UNESCO, UNESCO_COLOR, '#fff'],
       },

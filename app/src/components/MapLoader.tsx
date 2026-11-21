@@ -34,7 +34,8 @@ type Props = {
 };
 
 export type MapTexts = { load: string; loading: string; error: string; legend: string };
-export type LegendItem = { label: string; color: string; unesco?: boolean };
+/** `kind`: 'line' = trasa (predvolené), 'point' = bod miesta alebo vrcholu; `unesco` = značka UNESCO (⋆). */
+export type LegendItem = { label: string; color: string; unesco?: boolean; kind?: 'line' | 'point' };
 
 const SK_TEXTS: MapTexts = {
   load: 'Zobraziť interaktívnu mapu',
@@ -107,7 +108,7 @@ export default function MapLoader({ layers, center = [19.7, 48.7], zoom = 6.5, l
           {legend.map((it) => (
             <li key={it.label}>
               <span
-                className={it.unesco ? 'map-legend-unesco' : 'map-legend-line'}
+                className={it.unesco ? 'map-legend-unesco' : it.kind === 'point' ? 'map-legend-point' : 'map-legend-line'}
                 style={{ background: it.color }}
                 aria-hidden="true"
               />
