@@ -57,8 +57,10 @@ export default function HomeView({ locale }: { locale: Locale }) {
               ...(TILES_URL ? [{ id: 'sats', kind: 'tiles' as const, url: TILES_URL, color: '#1f4d3a' }] : []),
               { id: 'peaks', kind: 'points', color: PEAK_COLOR, data: peakLayer, cluster: true },
             ]}
-            // legenda (T3-10): vrcholy vždy; skupiny miest a UNESCO len keď mapa kreslí miesta z dlaždíc
+            // legenda (T3-10): vrcholy vždy; trasy (farba čiary), skupiny miest a UNESCO len keď mapa
+            // kreslí trasy a miesta z dlaždíc
             legend={[
+              ...(TILES_URL ? paths.map((p) => ({ label: trailName(p, locale), color: p.colour })) : []),
               { label: t.legendPeaks, color: PEAK_COLOR, kind: 'point' as const },
               ...(TILES_URL
                 ? [
