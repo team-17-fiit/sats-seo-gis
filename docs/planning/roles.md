@@ -28,8 +28,6 @@ V šprinte 1-1Z boli riešitelia v Plane označení písmenami A–G. Oblasť ka
 | Richard Pukáč | E | tímový web, dizajn (tokeny, svetlá/tmavá téma), anglické texty, prvky stránky miesta | S1-4, S2-5, T2-15, T3-03, T3-13, T3-19, T3-23 |
 | Jan Porubský (do 3. 11.) | C | zdroje dát a licencie: licenčný register, import OSM, Natural Earth, GeoNames a rurAllure | S1-3, US-11, T1-03, T1-05 – T1-08 |
 
-V Plane sa účet `xpokornyv` (Vlastislav Pokorný) zobrazuje pod menom „Ivan Šport“; úlohy pridelené tomuto účtu sú v tabuľkách nižšie u Vlastislava Pokorného.
-
 ## Podiel práce podľa Plane
 
 - **Body** = body hotových story, ktorých je člen riešiteľom.
