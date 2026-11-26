@@ -2,8 +2,8 @@
 
 - **Šprint:** 3-3Z (9. 11. – 22. 11. 2026)
 - **Cieľ:** SEO (náhľady pri zdieľaní, drobčeková navigácia, verejná adresa), vlastné mapové dlaždice, údaje z Wikidata na webe, budgety v CI, dokumentácia ku kontrolnému bodu KB1
-- **Dátum stretnutia:** _doplniť_ · **Dátum zápisu:** 2026-11-26
-- **Prítomní:** _doplniť_ · **Zapisovateľ:** _doplniť_
+- **Dátum stretnutia:** 2026-11-22 (nedeľa) · **Dátum zápisu:** 2026-11-26
+- **Prítomní:** Leon Radó, Matúš Plško, Matúš Vrábel, Nikolas Kristin, Richard Pukáč, Vlastislav Pokorný · **Zapisovateľ:** Matúš Plško
 
 ## 1. User stories
 
@@ -94,7 +94,7 @@ Zdroj: posledný beh CI na `main` v šprinte – `CI` beh 44931782035 (commit `1
 | Story uzavrieť v Plane hneď po merge jej poslednej úlohy | čiastočne: S3-1 uzavretá 22. 11., hoci posledná úloha bola hotová 19. 11. |
 | Zapisovať odpracovaný čas k úlohám v Plane | nesplnené (export `0h 0m`) |
 | Povoliť GitHub Actions vytváranie PR alebo upraviť `sync-site.yml` | splnené (#47) |
-| Review a retro 3-3Z naplánovať na piatok 2. týždňa | _doplniť_ |
+| Review a retro 3-3Z naplánovať na piatok 2. týždňa | nesplnené: review bolo v nedeľu 22. 11., v posledný deň šprintu |
 
 **Akcie do 4-4Z**
 
@@ -103,4 +103,4 @@ Zdroj: posledný beh CI na `main` v šprinte – `CI` beh 44931782035 (commit `1
 | Story uzavrieť až po overení na nasadenom webe (Definition of Done) | riešiteľ story | priebežne |
 | Rozsah mapových úloh zúžiť už pri plánovaní, nie počas šprintu | Matúš Vrábel | 2026-11-23 |
 | Zapisovať odpracovaný čas k úlohám v Plane | celý tím | priebežne |
-| Posledný merge šprintu najneskôr v piatok 2. týždňa | celý tím | 2026-12-04 |
+| Posledný merge šprintu najneskôr v piatok 2. týždňa, review a retro 4-4Z v piatok 4. 12. | celý tím, Matúš Plško | 2026-12-04 |
