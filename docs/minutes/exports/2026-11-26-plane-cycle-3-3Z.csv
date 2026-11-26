@@ -1,0 +1,76 @@
+Project Name,Project Identifier,Parent,Identifier,Name,State Name,Priority,Assignees,Description,Created By Name,Start Date,Due Date,Completed At,Created At,Updated At,Archived At,Estimate,Labels,Cycle Name,Cycle Start Date,Cycle End Date,Module Name,Links,Relations,Comments,Issue Type,Total Time Logged,Worklogs,Customers,Initiatives
+SATS-SEO-GIS,SATSS,,SATSS-86,US-1a2 SSG pages for all paths,Done,medium,Nikolas Kristin,SSG stránky všetkých 7 trás (šablóna T2-09 z 2-2Z). V šprinte 1-1Z bola prevzatá len prvá stránka trasy (SATSS-11 US-1a); táto story sa preberá na začiatku 3-3Z.,Matúš Vrábel,,,2026-11-15T11:46:55.998307Z,2026-11-10T19:38:43.562864Z,2026-11-15T11:46:56.007317Z,,5,,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-81,SATSS-85,T3-24 oprava nájdených SEO chýb,Done,none,Ivan Šport,"oprava nájdených SEO chýb
+Riešiteľ: Nikolas Kristin · odhad: 4 h · patrí k: S3-7",Matúš Vrábel,,,2026-11-19T11:18:37.679298Z,2026-11-09T21:28:58.230460Z,2026-11-19T11:18:37.691623Z,,,web|seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-81,SATSS-84,"T3-23 kontrola interných odkazov a sitemap (rozbité odkazy, 404)",Done,none,Richard Pukáč,"kontrola interných odkazov a sitemap (rozbité odkazy, 404)
+Riešiteľ: Richard Pukáč · odhad: 3 h · patrí k: S3-7",Matúš Vrábel,,,2026-11-19T10:48:08.343822Z,2026-11-09T21:28:57.735527Z,2026-11-19T10:48:08.352062Z,,,seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-81,SATSS-83,"T3-22 automatický SEO test v CI: unikátne title a description, jeden H1, canonical, alt texty",Done,none,Ivan Šport,"automatický SEO test v CI: unikátne title a description, jeden H1, canonical, alt texty
+Riešiteľ: Vlastislav Pokorný · odhad: 5 h · patrí k: S3-7",Matúš Vrábel,,,2026-11-19T11:18:40.759044Z,2026-11-09T21:28:57.174059Z,2026-11-19T11:18:40.774461Z,,,ci|seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-81,SATSS-82,"T3-21 SEO audit všetkých typov stránok: title, description, H1, canonical, hreflang",Done,none,Ivan Šport,"SEO audit všetkých typov stránok: title, description, H1, canonical, hreflang
+Riešiteľ: Vlastislav Pokorný · odhad: 5 h · patrí k: S3-7",Matúš Vrábel,,,2026-11-19T11:18:43.513723Z,2026-11-09T21:28:56.753301Z,2026-11-19T11:18:43.527254Z,,,seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-81,S3-7 Kontrola SEO všetkých stránok,Done,none,Ivan Šport,"Audit SEO všetkých typov stránok (úvod, trasy, miesta, vrcholy, SK aj EN), automatická kontrola v CI a oprava nájdených chýb. Nadväzuje na spätnú väzbu vedúceho: väčší dôraz na SEO.
+Riešiteľ: Vlastislav Pokorný",Matúš Vrábel,,,2026-11-19T11:18:46.329038Z,2026-11-09T21:28:56.299086Z,2026-11-19T11:18:46.339456Z,,3,story|seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-80,T3-20 sprint review + retro + export 3-3Z,Done,none,Matúš Plško,"Podporná úloha šprintu.
+Riešiteľ: Matúš Plško · odhad: 3 h",Matúš Vrábel,,,2026-11-22T21:15:50.113072Z,2026-11-09T21:24:00.297119Z,2026-11-22T21:15:50.122549Z,,,pm,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-75,SATSS-79,T3-19 zápisnice a export úloh na tímovom webe,Done,none,Richard Pukáč,"zápisnice a export úloh na tímovom webe
+Riešiteľ: Richard Pukáč · odhad: 3 h · patrí k: S3-6",Matúš Vrábel,,,2026-11-22T21:16:26.459621Z,2026-11-09T21:23:59.834169Z,2026-11-22T21:16:26.473691Z,,,web|docs,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-75,SATSS-78,T3-18 kapitola 5.1 Mapa a vektorové dlaždice a 5.2 Dátová služba POI a ciest,Done,none,Matúš Plško,"kapitola moduly: mapa a dáta
+Riešiteľ: Matúš Plško · odhad: 6 h · patrí k: S3-6",Matúš Vrábel,,,2026-11-21T17:29:11.426194Z,2026-11-09T21:23:59.391808Z,2026-11-21T17:29:11.435845Z,,,docs,3-3Z,2026-11-09,2026-11-22,,,,Kapitoly 5.1 (Mapa a vektorové dlaždice) a 5.2 (Dátová služba POI a ciest) prepísal podľa aktuálneho stavu repozitára Matúš Vrábel. Doplnené citácie a nový záznam geonames do bibliografie.,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-75,SATSS-77,T3-17 roly a podiel práce po zmene zloženia tímu,Done,none,Matúš Plško,"roly a podiel práce po zmene zloženia tímu
+Riešiteľ: Matúš Plško · odhad: 3 h · patrí k: S3-6",Matúš Vrábel,,,2026-11-19T11:09:45.491660Z,2026-11-09T21:23:58.959670Z,2026-11-19T11:09:45.509241Z,,,docs,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-75,SATSS-76,"T3-16 šprinty 1–3 v dokumentácii (príbehy, úlohy, burndown)",Done,none,Matúš Plško,"šprinty 1–3 v dokumentácii (príbehy, úlohy, burndown)
+Riešiteľ: Matúš Plško · odhad: 6 h · patrí k: S3-6",Matúš Vrábel,,,2026-11-22T21:15:43.014688Z,2026-11-09T21:23:58.506404Z,2026-11-22T21:15:43.024671Z,,,docs,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-75,S3-6 Dokumentácia ku kontrolnému bodu KB1,Done,none,Matúš Plško,"Dokumentácia pre KB1: šprinty 1–3, roly a podiel práce, zápisnice a export úloh.
+Riešiteľ: Matúš Plško",Matúš Vrábel,,,2026-11-22T21:16:32.798772Z,2026-11-09T21:23:58.062964Z,2026-11-22T21:16:32.814228Z,,5,story|docs,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-72,SATSS-74,T3-15 automatická kontrola prístupnosti axe-core v E2E testoch,Done,none,Ivan Šport,"automatická kontrola prístupnosti axe-core v E2E testoch
+Riešiteľ: Vlastislav Pokorný · odhad: 5 h · patrí k: S3-5",Matúš Vrábel,,,2026-11-19T11:18:49.521623Z,2026-11-09T21:23:57.609803Z,2026-11-19T11:18:49.532047Z,,,ci,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-72,SATSS-73,"T3-14 budgety LCP, CLS a veľkosť JS v Lighthouse CI",Done,none,Ivan Šport,"budgety LCP, CLS a veľkosť JS v Lighthouse CI
+Riešiteľ: Vlastislav Pokorný · odhad: 5 h · patrí k: S3-5",Matúš Vrábel,,,2026-11-19T11:18:52.067656Z,2026-11-09T21:23:57.133907Z,2026-11-19T11:18:52.084230Z,,,ci,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-72,S3-5 Výkonnostné budgety a prístupnosť v CI,Done,none,Ivan Šport,"CI stráži nielen Lighthouse skóre, ale aj budgety LCP, CLS a veľkosť JS a kontroluje prístupnosť (K3, K4, K17).
+Riešiteľ: Vlastislav Pokorný",Matúš Vrábel,,,2026-11-19T11:18:54.882814Z,2026-11-09T21:23:56.642609Z,2026-11-19T11:18:54.895084Z,,5,ci|story,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-68,SATSS-71,"T3-13 zobrazenie obrázka, opisu a chráneného územia na stránke miesta",Done,none,Richard Pukáč,"zobrazenie obrázka, opisu a chráneného územia na stránke miesta
+Riešiteľ: Richard Pukáč · odhad: 6 h · patrí k: S3-4",Matúš Vrábel,,,2026-11-22T21:17:05.252222Z,2026-11-09T21:23:56.204579Z,2026-11-22T21:17:05.272298Z,,,web,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-68,SATSS-70,T3-12 autor a licencia obrázkov z Wikimedia Commons,Done,none,Leon Radó,"autor a licencia obrázkov z Wikimedia Commons
+Riešiteľ: Leon Radó · odhad: 5 h · patrí k: S3-4",Matúš Vrábel,,,2026-11-18T22:35:09.842946Z,2026-11-09T21:23:55.769322Z,2026-11-18T22:35:09.855716Z,,,dáta,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-68,SATSS-69,"T3-11 export image, opening_hours a protected_area do pois.json",Done,none,Leon Radó,"export image, opening_hours a protected_area do pois.json
+Riešiteľ: Leon Radó · odhad: 4 h · patrí k: S3-4",Matúš Vrábel,,,2026-11-18T22:34:14.551591Z,2026-11-09T21:23:55.324882Z,2026-11-18T22:34:14.563387Z,,,dáta,3-3Z,2026-11-09,2026-11-22,,,,"Leon, kód z #35 (T3-11, T3-12) aj zobrazenie z #46 (T3-13) sú v main a nasadené, ale na webe sa fotky ani chránené územia neukazujú. Dôvod: app/public/data/pois.json v repozitári je naposledy z 1. 11. – po #35 sa pipeline nad DB nespustila, takže všetkých 38 miest je bez image, image_author, image_licence a protected_area.
+Prosím spusti pipeline a pošli nový export v PR:
+make db
+make data
+git checkout -b data/refresh-pois-images
+git add app/public/data/pois.json app/public/data/paths.json
+git commit -m ""data: refresh exports with images and protected areas (T3-11)""
+Pozor: Wikidata ID má zatiaľ len 7 z 38 miest (Beckov, Červený Kameň, Levoča a Spišský hrad, Oravský hrad, SNG Bratislava, Trenčiansky hrad, kostol v Žehre), takže fotky pribudnú najviac tam, ak export nedoplní ďalšie ID z OSM. Po merge skontroluj napr. /miesta/oravsky-hrad/, že sa pri fotke zobrazí autor aj licencia.",,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-68,S3-4 Údaje z Wikidata na stránkach miest,Done,none,Leon Radó,"Opis, obrázok, otváracie hodiny a chránené územie z S2-3 sa dostanú až na stránky miest, obrázky s autorom a licenciou z Wikimedia Commons.
+Riešiteľ: Leon Radó",Matúš Vrábel,,,2026-11-21T17:46:08.128273Z,2026-11-09T21:23:54.858416Z,2026-11-22T13:43:33.394318Z,,5,web|story|dáta,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-63,SATSS-67,"T3-10 štýl mapy: farby trás, POI a vrcholov",Done,none,Matúš Vrábel,"štýl mapy: farby trás, POI a vrcholov
+Riešiteľ: Matúš Vrábel · odhad: 4 h · patrí k: S3-3",Matúš Vrábel,,,2026-11-21T17:12:21.560673Z,2026-11-09T21:23:54.417872Z,2026-11-21T17:12:21.570523Z,,,web,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-63,SATSS-66,T3-09 MapLibre adapter: trasy a miesta z vlastných PMTiles,Done,none,Matúš Vrábel,"Mapa na úvodnej stránke kreslí vrstvy paths a pois z vlastných PMTiles (protokol pmtiles://, HTTP Range). PR #51.
+Zúžený rozsah (rozhodnutie 21. 11.): podkladová mapa zostáva z OpenFreeMap; vlastný podklad je samostatná úloha do 4-4Z. Stránky trás a miest kreslia mapu z JSON (jedna trasa / jeden bod).
+Riešiteľ: Matúš Vrábel · odhad: 6 h · patrí k: S3-3",Matúš Vrábel,,,2026-11-21T17:12:21.926091Z,2026-11-09T21:23:53.949014Z,2026-11-21T17:12:21.937503Z,,,web,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-63,SATSS-65,T3-08 generovanie PMTiles cez tippecanoe (make tiles),Done,none,Matúš Vrábel,"generovanie PMTiles cez tippecanoe (make tiles)
+Riešiteľ: Matúš Vrábel · odhad: 6 h · patrí k: S3-3",Matúš Vrábel,,,2026-11-18T22:36:19.696374Z,2026-11-09T21:23:53.531877Z,2026-11-18T22:36:19.708842Z,,,dáta,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-63,SATSS-64,T3-07 export vrstiev z PostGIS pre generovanie dlaždíc,Done,none,Leon Radó,"export vrstiev z PostGIS pre generovanie dlaždíc
+Riešiteľ: Leon Radó · odhad: 5 h · patrí k: S3-3",Matúš Vrábel,,,2026-11-18T22:33:55.611060Z,2026-11-09T21:23:53.062273Z,2026-11-18T22:33:55.623391Z,,,dáta,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-63,S3-3 Vlastné mapové dlaždice PMTiles,Done,none,Matúš Vrábel,"Podkladová mapa z vlastných dlaždíc PMTiles (z5–z15) namiesto OpenFreeMap, podľa ADR-0003.
+Riešiteľ: Matúš Vrábel",Matúš Vrábel,,,2026-11-21T17:12:22.555827Z,2026-11-09T21:23:52.568463Z,2026-11-21T17:12:22.566746Z,,8,web|story|dáta,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-60,SATSS-62,"T3-06 ostrá doména v canonical, sitemap a robots + Google Search Console",Done,none,Nikolas Kristin,"ostrá doména v canonical, sitemap a robots + Google Search Console
+Riešiteľ: Nikolas Kristin · odhad: 4 h · patrí k: S3-2",Matúš Vrábel,,,2026-11-18T22:25:21.527199Z,2026-11-09T21:23:52.135400Z,2026-11-18T22:25:21.538518Z,,,seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-60,SATSS-61,T3-05 automatické nasadenie statického webu z main,Done,none,Matúš Vrábel,"automatické nasadenie statického webu z main
+Riešiteľ: Matúš Vrábel · odhad: 6 h · patrí k: S3-2",Matúš Vrábel,,,2026-11-18T22:32:39.429282Z,2026-11-09T21:23:51.664354Z,2026-11-18T22:32:39.436010Z,,,ci,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-60,S3-2 Web nasadený na verejnej adrese,Done,none,Matúš Vrábel,"Statický web sa po merge do main automaticky nasadí na verejnú adresu, aby sa dala merať indexácia (K5).
+Riešiteľ: Matúš Vrábel",Matúš Vrábel,,,2026-11-19T13:22:12.204944Z,2026-11-09T21:23:51.169627Z,2026-11-19T13:22:12.213492Z,,3,ci|web|story,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-55,SATSS-59,T3-04 kontrola Rich Results pre všetky typy stránok (K19),Done,none,Ivan Šport,"kontrola Rich Results pre všetky typy stránok (K19)
+Riešiteľ: Vlastislav Pokorný · odhad: 3 h · patrí k: S3-1",Matúš Vrábel,,,2026-11-19T11:18:57.376288Z,2026-11-09T21:23:50.664375Z,2026-11-19T11:18:57.388280Z,,,ci|seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-55,SATSS-58,T3-03 favicon a ikony PWA,Done,none,Richard Pukáč,"favicon a ikony PWA
+Riešiteľ: Richard Pukáč · odhad: 3 h · patrí k: S3-1",Matúš Vrábel,,,2026-11-22T21:17:09.462215Z,2026-11-09T21:23:50.004888Z,2026-11-22T21:17:09.472114Z,,,web,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-55,SATSS-57,"T3-02 BreadcrumbList JSON-LD pre trasy, miesta a vrcholy",Done,none,Nikolas Kristin,"BreadcrumbList JSON-LD pre trasy, miesta a vrcholy
+Riešiteľ: Nikolas Kristin · odhad: 5 h · patrí k: S3-1",Matúš Vrábel,,,2026-11-10T19:43:55.539027Z,2026-11-09T21:23:49.465400Z,2026-11-10T19:43:55.548288Z,,,seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,SATSS-55,SATSS-56,T3-01 og:image a og:url pre všetky typy stránok,Done,none,Nikolas Kristin,"og:image a og:url pre všetky typy stránok
+Riešiteľ: Nikolas Kristin · odhad: 6 h · patrí k: S3-1",Matúš Vrábel,,,2026-11-10T20:24:32.569212Z,2026-11-09T21:23:48.972532Z,2026-11-10T20:24:32.580274Z,,,seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-55,S3-1 SEO: náhľady pri zdieľaní a drobčeková navigácia,Done,none,Nikolas Kristin,"Stránky majú náhľadový obrázok a URL pri zdieľaní a štruktúrované dáta BreadcrumbList. Nadväzuje na spätnú väzbu vedúceho: väčší dôraz na SEO.
+Riešiteľ: Nikolas Kristin",Matúš Vrábel,,,2026-11-22T15:08:50.513285Z,2026-11-09T21:23:48.457140Z,2026-11-22T15:08:50.524014Z,,5,web|story|seo,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-26,T2-16 sprint review + retro,Done,medium,Matúš Plško,"Sprint review, retrospektíva a export úloh zo šprintu 2 do docs/minutes/.
+Riešiteľ: Matus Plsko · odhad: 2 h · patrí k: WP1",Matúš Vrábel,2026-10-26,2026-11-08,2026-11-21T15:34:08.832268Z,2026-10-31T09:55:04.456531Z,2026-11-21T15:34:08.841773Z,,,pm,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
+SATS-SEO-GIS,SATSS,,SATSS-22,S2-5 design system tokens,Done,medium,Richard Pukáč,"Jednotné farby, písma a medzery (dizajnové tokeny) pre svetlý aj tmavý režim.
+Riešiteľ: Richard Pukac · 5 body",Matúš Vrábel,2026-10-26,2026-11-08,2026-11-15T11:46:56.472878Z,2026-10-31T09:55:02.617065Z,2026-11-15T11:46:56.482139Z,,5,web|story,3-3Z,2026-11-09,2026-11-22,,,,,,0h 0m,,,
